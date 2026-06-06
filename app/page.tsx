@@ -92,11 +92,11 @@ function timeAgo(dateStr: string) {
 }
 
 const trendingTopics = [
-  { topic: 'Deion Sanders coaching staff', trend: '+245%' },
-  { topic: 'Travis Hunter 2024 season', trend: '+180%' },
-  { topic: 'Colorado Big 12 schedule', trend: '+95%' },
-  { topic: 'Shedeur Sanders NFL draft', trend: '+320%' },
-  { topic: 'CU recruiting class 2025', trend: '+140%' },
+  { topic: 'Julian Lewis 2026 QB battle', trend: '+312%' },
+  { topic: 'Deion Sanders health update', trend: '+210%' },
+  { topic: 'Brennan Marion "Go Go Offense"', trend: '+185%' },
+  { topic: 'Chris Marve new DC', trend: '+140%' },
+  { topic: 'CU 2026 transfer portal class', trend: '+175%' },
 ];
 
 export default async function HomePage() {
