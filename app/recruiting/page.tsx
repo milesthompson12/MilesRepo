@@ -31,207 +31,193 @@ interface Target {
 
 const commits2025: Commit[] = [
   {
-    name: 'Domata Peko Jr.',
-    position: 'EDGE',
-    stars: 5,
-    rating: 0.9105,
-    hometown: 'Calabasas',
-    state: 'CA',
-    height: '6\'4"',
-    weight: 230,
-    status: 'Signed',
-    date: 'Dec 4, 2025',
-    nationalRank: 38,
-    positionRank: 5,
+    name: 'Andre Adams',
+    position: 'QB',
+    stars: 4,
+    rating: 0.8934,
+    hometown: 'Antioch',
+    state: 'TN',
+    height: '6\'3"',
+    weight: 185,
+    status: 'Committed',
+    date: 'Apr 14, 2026',
+    nationalRank: 165,
+    positionRank: 15,
   },
   {
-    name: 'Carson Crawford',
-    position: 'LB',
-    stars: 5,
-    rating: 0.8962,
-    hometown: 'Carthage',
-    state: 'TX',
-    height: '6\'4"',
-    weight: 220,
-    status: 'Signed',
-    date: 'Dec 4, 2025',
-    nationalRank: 52,
-    positionRank: 4,
-  },
-  {
-    name: 'Preston Ashley',
+    name: 'Gabe Jenkins',
     position: 'S',
-    stars: 5,
-    rating: 0.8935,
-    hometown: 'Brandon',
-    state: 'MS',
-    height: '5\'10"',
-    weight: 180,
-    status: 'Signed',
-    date: 'Dec 4, 2025',
-    nationalRank: 61,
-    positionRank: 6,
+    stars: 4,
+    rating: 0.8912,
+    hometown: 'Pittsburgh',
+    state: 'PA',
+    height: '6\'2"',
+    weight: 187,
+    status: 'Committed',
+    date: 'Mar 22, 2026',
+    nationalRank: 186,
+    positionRank: 17,
   },
   {
-    name: 'Rodney Colton Jr.',
-    position: 'WR',
+    name: 'Li\'Marcus Jones',
+    position: 'OT',
     stars: 4,
     rating: 0.8876,
-    hometown: 'Baton Rouge',
-    state: 'LA',
-    height: '6\'0"',
-    weight: 180,
-    status: 'Signed',
-    date: 'Feb 4, 2026',
-    nationalRank: 148,
+    hometown: 'Brentwood',
+    state: 'TN',
+    height: '6\'5"',
+    weight: 285,
+    status: 'Committed',
+    date: 'May 18, 2026',
+    nationalRank: 171,
     positionRank: 22,
   },
   {
-    name: 'Cam Newton',
-    position: 'RB',
-    stars: 4,
-    rating: 0.8812,
-    hometown: 'Westlake Village',
-    state: 'CA',
-    height: '5\'11"',
-    weight: 200,
-    status: 'Enrolled',
-    date: 'Feb 4, 2026',
-    nationalRank: 167,
-    positionRank: 19,
-  },
-  {
-    name: 'Jacob Swain',
+    name: 'Jaiden Kelly-Murray',
     position: 'WR',
     stars: 4,
-    rating: 0.8791,
-    hometown: 'Austin',
-    state: 'TX',
-    height: '6\'2"',
-    weight: 188,
-    status: 'Enrolled',
-    date: 'Feb 4, 2026',
-    nationalRank: 174,
-    positionRank: 26,
-  },
-  {
-    name: 'Kaneal Sweetwyne',
-    position: 'QB',
-    stars: 4,
-    rating: 0.8956,
-    hometown: 'Las Vegas',
-    state: 'NV',
-    height: '6\'3"',
-    weight: 208,
-    status: 'Enrolled',
-    date: 'Dec 4, 2025',
-    nationalRank: 95,
-    positionRank: 8,
-  },
-  {
-    name: 'Joseph Peko',
-    position: 'DL',
-    stars: 3,
-    rating: 0.8634,
-    hometown: 'Calabasas',
-    state: 'CA',
-    height: '6\'3"',
-    weight: 280,
-    status: 'Signed',
-    date: 'Jan 9, 2026',
-    nationalRank: 298,
-    positionRank: 44,
-  },
-  {
-    name: 'Trey Marshall',
-    position: 'CB',
-    stars: 3,
-    rating: 0.8701,
-    hometown: 'Miami',
-    state: 'FL',
-    height: '6\'0"',
-    weight: 175,
-    status: 'Signed',
-    date: 'Dec 18, 2025',
-    nationalRank: 247,
+    rating: 0.8801,
+    hometown: 'Mt. Pleasant',
+    state: 'SC',
+    height: '5\'10"',
+    weight: 170,
+    status: 'Committed',
+    date: 'May 31, 2026',
+    nationalRank: 302,
     positionRank: 38,
   },
   {
-    name: 'Darius Hinton',
-    position: 'OT',
+    name: 'Ba\'Roc Willis',
+    position: 'LB',
     stars: 3,
-    rating: 0.8589,
-    hometown: 'Chandler',
-    state: 'AZ',
-    height: '6\'5"',
-    weight: 295,
-    status: 'Signed',
-    date: 'Feb 4, 2026',
-    nationalRank: 312,
-    positionRank: 48,
+    rating: 0.8712,
+    hometown: 'Pell City',
+    state: 'AL',
+    height: '6\'2"',
+    weight: 230,
+    status: 'Committed',
+    date: 'Apr 29, 2026',
+    nationalRank: 389,
+    positionRank: 37,
+  },
+  {
+    name: 'Kenny Fairley',
+    position: 'DL',
+    stars: 3,
+    rating: 0.8634,
+    hometown: 'Fairburn',
+    state: 'GA',
+    height: '6\'0"',
+    weight: 270,
+    status: 'Committed',
+    date: 'Mar 8, 2026',
+    nationalRank: 445,
+    positionRank: 52,
+  },
+  {
+    name: 'Davon Dericho',
+    position: 'CB',
+    stars: 3,
+    rating: 0.8598,
+    hometown: 'Miami',
+    state: 'FL',
+    height: '5\'11"',
+    weight: 170,
+    status: 'Committed',
+    date: 'Jan 27, 2026',
+    nationalRank: 593,
+    positionRank: 55,
+  },
+  {
+    name: 'Will Rasmussen',
+    position: 'CB',
+    stars: 3,
+    rating: 0.8521,
+    hometown: 'Orem',
+    state: 'UT',
+    height: '5\'10"',
+    weight: 180,
+    status: 'Committed',
+    date: 'Apr 5, 2026',
+    nationalRank: 620,
+    positionRank: 62,
+  },
+  {
+    name: 'Prince Washington',
+    position: 'CB',
+    stars: 3,
+    rating: 0.8489,
+    hometown: 'Houston',
+    state: 'TX',
+    height: '6\'1"',
+    weight: 185,
+    status: 'Committed',
+    date: 'May 10, 2026',
+    nationalRank: 648,
+    positionRank: 67,
   },
 ];
 
 const targets2025: Target[] = [
   {
-    name: 'Marcus Fieulleteau',
-    position: 'WR',
-    stars: 5,
-    rating: 0.9712,
-    hometown: 'West Palm Beach',
-    state: 'FL',
-    height: '6\'2"',
-    weight: 185,
-    topSchools: ['Colorado', 'Ohio State', 'Georgia', 'Alabama'],
-    cuInterest: 'High',
-  },
-  {
-    name: 'Elijah Griffin',
-    position: 'DL',
-    stars: 5,
-    rating: 0.9688,
-    hometown: 'Savannah',
-    state: 'GA',
-    height: '6\'4"',
-    weight: 265,
-    topSchools: ['Georgia', 'Colorado', 'Alabama', 'Texas'],
-    cuInterest: 'High',
-  },
-  {
-    name: 'Nathaniel Owusu-Boateng',
+    name: 'Joshua Dobson',
     position: 'CB',
     stars: 5,
-    rating: 0.9634,
-    hometown: 'Powder Springs',
-    state: 'GA',
+    rating: 0.9734,
+    hometown: 'Cornelius',
+    state: 'NC',
     height: '6\'1"',
-    weight: 178,
-    topSchools: ['Georgia', 'Ohio State', 'Colorado', 'LSU'],
-    cuInterest: 'Medium',
+    weight: 185,
+    topSchools: ['Texas A&M', 'Georgia', 'Colorado', 'Ohio State'],
+    cuInterest: 'Offered',
   },
   {
-    name: 'Savion Hiter',
+    name: 'Kylan Bobo',
+    position: 'RB',
+    stars: 3,
+    rating: 0.8745,
+    hometown: 'Tupelo',
+    state: 'MS',
+    height: '5\'11"',
+    weight: 205,
+    topSchools: ['Colorado', 'Arkansas', 'Ole Miss', 'Mississippi State'],
+    cuInterest: 'High',
+  },
+  {
+    name: 'Javian Jones-Priest',
     position: 'RB',
     stars: 4,
-    rating: 0.9145,
-    hometown: 'Daytona Beach',
-    state: 'FL',
-    height: '5\'11"',
-    weight: 210,
-    topSchools: ['Colorado', 'Florida', 'Georgia Tech', 'Tennessee'],
+    rating: 0.9012,
+    hometown: 'Desoto',
+    state: 'TX',
+    height: '5\'10"',
+    weight: 195,
+    topSchools: ['Colorado', 'SMU', 'Oklahoma State', 'TCU'],
     cuInterest: 'High',
   },
   {
-    name: 'Keelan Marion',
-    position: 'WR',
+    name: 'Kameron Roberson',
+    position: 'CB',
     stars: 4,
-    rating: 0.9023,
-    hometown: 'Las Vegas',
-    state: 'NV',
-    height: '6\'1"',
-    weight: 182,
-    topSchools: ['Colorado', 'UNLV', 'Utah', 'Arizona State'],
+    rating: 0.8934,
+    hometown: 'New Orleans',
+    state: 'LA',
+    height: '6\'0"',
+    weight: 178,
+    topSchools: ['Colorado', 'Houston', 'Vanderbilt', 'Iowa State'],
     cuInterest: 'High',
+  },
+  {
+    name: 'Bryce Woods',
+    position: 'DB',
+    stars: 4,
+    rating: 0.8889,
+    hometown: 'Atlanta',
+    state: 'GA',
+    height: '6\'0"',
+    weight: 185,
+    topSchools: ['Colorado', 'Mississippi State', 'Virginia Tech', 'Ohio State'],
+    cuInterest: 'Offered',
   },
 ];
 
@@ -291,9 +277,9 @@ export default function RecruitingPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-black text-white">
-          <span className="text-cu-gold">2026</span> Recruiting Class
+          <span className="text-cu-gold">2027</span> Recruiting Class
         </h1>
-        <p className="text-gray-400 mt-1">Colorado Buffaloes commits, targets, and class rankings</p>
+        <p className="text-gray-400 mt-1">Colorado Buffaloes commits, targets, and class rankings · as of June 6, 2026</p>
       </div>
 
       {/* Class Summary Cards */}
@@ -307,11 +293,11 @@ export default function RecruitingPage() {
           <div className="text-xs text-gray-400 mt-1 uppercase tracking-wide">Avg Stars</div>
         </div>
         <div className="bg-cu-gray rounded-2xl border border-cu-gold/20 p-4 text-center">
-          <div className="text-3xl font-black text-green-400">#67</div>
+          <div className="text-3xl font-black text-green-400">#37</div>
           <div className="text-xs text-gray-400 mt-1 uppercase tracking-wide">National Rank</div>
         </div>
         <div className="bg-cu-gray rounded-2xl border border-cu-gold/20 p-4 text-center">
-          <div className="text-3xl font-black text-blue-400">#15</div>
+          <div className="text-3xl font-black text-blue-400">#6</div>
           <div className="text-xs text-gray-400 mt-1 uppercase tracking-wide">Big 12 Rank</div>
         </div>
       </div>
@@ -322,7 +308,7 @@ export default function RecruitingPage() {
           <div>
             <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
               <span className="w-1 h-5 bg-cu-gold rounded-full inline-block" />
-              2026 Commitments
+              2027 Commitments
             </h2>
             <div className="space-y-3">
               {commits2025.map((commit, i) => (
@@ -473,9 +459,9 @@ export default function RecruitingPage() {
             </div>
             <div className="p-2">
               {[
-                { label: '247Sports CU Football', href: 'https://247sports.com/college/colorado/football/' },
-                { label: 'On3 CU Recruiting', href: 'https://www.on3.com/teams/colorado-buffaloes/football/recruiting/' },
-                { label: 'ESPN CU Recruiting', href: 'https://www.espn.com/college-football/team/recruiting/_/id/38' },
+                { label: '247Sports 2027 Commits', href: 'https://247sports.com/college/colorado/season/2027-football/commits/' },
+                { label: 'On3 CU 2027 Class', href: 'https://www.on3.com/college/colorado-buffaloes/football/2027/industry-comparison-commits/' },
+                { label: 'ESPN CU Recruiting', href: 'https://www.espn.com/college-sports/football/recruiting/school/_/id/38/class/2027' },
               ].map(link => (
                 <a
                   key={link.href}
@@ -500,9 +486,10 @@ export default function RecruitingPage() {
               </h3>
             </div>
             <div className="p-4 space-y-2 text-xs text-gray-400">
-              <p>🔥 3 five-stars signed: Peko Jr., Crawford, Ashley lead class</p>
-              <p>🏈 56 total additions between portal + high school in 2026</p>
-              <p>📍 56% of class from out of state; coaching staff ties driving South/Southeast pipeline</p>
+              <p>🔥 Class jumped to #37 nationally after big May–June push</p>
+              <p>🌎 Every 2027 commit is from a different state — true national reach</p>
+              <p>⭐ RB Kylan Bobo visiting June 12–14 with CU as frontrunner</p>
+              <p>🎯 5-star CB Joshua Dobson offered — Texas A&M still leads</p>
             </div>
           </div>
         </div>
