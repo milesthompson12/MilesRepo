@@ -1,369 +1,1043 @@
-import { Shield, Zap, Star } from 'lucide-react';
+'use client';
 
-interface DepthPlayer {
+import { useState, useCallback } from 'react';
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  DragOverlay,
+  DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDroppable,
+} from '@dnd-kit/core';
+import { useDraggable } from '@dnd-kit/core';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface Player {
   name: string;
   number: string;
   year: string;
-  note?: string;
+  rank: number;
+  posGroup: string; // QB | RB | WR | TE | OT | OG | C | DL | LB | CB | S
 }
 
-interface DepthPosition {
-  position: string;
-  positionFull: string;
-  players: DepthPlayer[];
+interface FieldSlot {
+  id: string;
+  label: string;
+  posGroup: string[]; // accepted position groups
+  x: number; // % from left
+  y: number; // % from top
+  playerId: string | null;
 }
 
-const offensiveDepth: DepthPosition[] = [
-  {
-    position: 'QB',
-    positionFull: 'Quarterback',
-    players: [
-      { name: 'Julian "JuJu" Lewis', number: '1', year: 'SO', note: 'Starter' },
-      { name: 'Isaac Wilson', number: '10', year: 'JR', note: 'Transfer - Utah' },
-      { name: 'Kaneal Sweetwyne', number: '12', year: 'FR' },
-    ],
-  },
-  {
-    position: 'RB',
-    positionFull: 'Running Back',
-    players: [
-      { name: 'Richard Young', number: '4', year: 'SO', note: 'Transfer - Alabama' },
-      { name: 'Damian Henderson II', number: '22', year: 'JR', note: 'Transfer - Sacramento State' },
-      { name: 'Jaquail Smith', number: '25', year: 'JR', note: 'Transfer - Sacramento State' },
-      { name: 'Cam Newton', number: '5', year: 'FR' },
-    ],
-  },
-  {
-    position: 'WR1',
-    positionFull: 'Wide Receiver (X)',
-    players: [
-      { name: 'Danny Scudero', number: '11', year: 'SR', note: 'Transfer - San Jose State' },
-      { name: 'Ernest Campbell', number: '16', year: 'JR' },
-      { name: 'Jacob Swain', number: '18', year: 'FR' },
-    ],
-  },
-  {
-    position: 'WR2',
-    positionFull: 'Wide Receiver (Z)',
-    players: [
-      { name: 'DeAndre Moore Jr.', number: '6', year: 'SO', note: 'Transfer - Texas' },
-      { name: 'Hykeem Williams', number: '13', year: 'JR' },
-      { name: 'Kam Perry', number: '3', year: 'SO' },
-    ],
-  },
-  {
-    position: 'WR3',
-    positionFull: 'Slot Receiver (H)',
-    players: [
-      { name: 'Joseph Williams', number: '8', year: 'JR', note: 'Starter' },
-      { name: 'Rodney Colton Jr.', number: '15', year: 'FR' },
-    ],
-  },
-  {
-    position: 'TE',
-    positionFull: 'Tight End',
-    players: [
-      { name: 'Zach Atkins', number: '88', year: 'SR', note: 'Starter' },
-      { name: 'Brady Russell', number: '85', year: 'SO' },
-    ],
-  },
-  {
-    position: 'LT',
-    positionFull: 'Left Tackle',
-    players: [
-      { name: 'Jayvon McFadden', number: '74', year: 'SO', note: 'Transfer - Ohio State' },
-      { name: 'Jake Wray', number: '73', year: 'SR' },
-    ],
-  },
-  {
-    position: 'LG',
-    positionFull: 'Left Guard',
-    players: [
-      { name: 'Gerad Christian-Lichtenhan', number: '56', year: 'JR', note: 'Starter' },
-      { name: 'Austin Smith', number: '53', year: 'SR' },
-    ],
-  },
-  {
-    position: 'C',
-    positionFull: 'Center',
-    players: [
-      { name: 'Caleb Krings', number: '51', year: 'GR', note: 'Starter' },
-      { name: 'Tyler Brown', number: '60', year: 'JR' },
-    ],
-  },
-  {
-    position: 'RG',
-    positionFull: 'Right Guard',
-    players: [
-      { name: 'Andrew Coker', number: '66', year: 'SR', note: 'Transfer - Georgia Tech' },
-      { name: 'Darius Hinton', number: '72', year: 'FR' },
-    ],
-  },
-  {
-    position: 'RT',
-    positionFull: 'Right Tackle',
-    players: [
-      { name: 'Frank Fillip', number: '77', year: 'GR', note: 'Starter' },
-      { name: 'Savion Washington', number: '75', year: 'SR' },
-    ],
-  },
-];
+type Side = 'offense' | 'defense';
 
-const defensiveDepth: DepthPosition[] = [
-  {
-    position: 'EDGE',
-    positionFull: 'Edge Rusher (L)',
-    players: [
-      { name: 'Domata Peko Jr.', number: '91', year: 'FR', note: '5-Star Signee' },
-      { name: 'Jaden Navarrette', number: '94', year: 'JR' },
-      { name: 'Lamar Smark', number: '90', year: 'JR' },
-    ],
-  },
-  {
-    position: 'DT',
-    positionFull: 'Defensive Tackle (NT)',
-    players: [
-      { name: 'D.J. Moore', number: '95', year: 'SR', note: 'Transfer - Coastal Carolina' },
-      { name: 'Joseph Peko', number: '97', year: 'FR' },
-      { name: 'Dashawn Belen', number: '93', year: 'SR' },
-    ],
-  },
-  {
-    position: 'DT',
-    positionFull: 'Defensive Tackle (3T)',
-    players: [
-      { name: 'Brandon Hopper', number: '99', year: 'SR', note: 'Transfer - Tulane' },
-      { name: 'Jordan Domineck', number: '92', year: 'GR' },
-    ],
-  },
-  {
-    position: 'EDGE',
-    positionFull: 'Edge Rusher (R)',
-    players: [
-      { name: 'Jaylen Boots', number: '49', year: 'SR', note: 'Starter' },
-      { name: 'Michael Closson', number: '41', year: 'SO' },
-    ],
-  },
-  {
-    position: 'WILL',
-    positionFull: 'Will Linebacker',
-    players: [
-      { name: 'Liona Lefau', number: '24', year: 'SR', note: 'Transfer — 60+ tkls in 2025' },
-      { name: 'Carson Crawford', number: '43', year: 'FR', note: '5-Star Signee' },
-      { name: 'Taje McCoy', number: '37', year: 'JR' },
-    ],
-  },
-  {
-    position: 'MIKE',
-    positionFull: 'Mike Linebacker',
-    players: [
-      { name: 'Gideon Lampron', number: '21', year: 'SR', note: 'Transfer — 60+ tkls in 2025' },
-      { name: 'Tyler Martinez', number: '45', year: 'SR', note: 'Transfer' },
-    ],
-  },
-  {
-    position: 'CB',
-    positionFull: 'Cornerback (L)',
-    players: [
-      { name: 'Preston Hodge', number: '7', year: 'JR', note: 'Starter' },
-      { name: 'RJ Johnson', number: '30', year: 'SO' },
-      { name: 'Markari Vickers', number: '26', year: 'JR' },
-    ],
-  },
-  {
-    position: 'CB',
-    positionFull: 'Cornerback (R)',
-    players: [
-      { name: 'Justin Eaglin', number: '28', year: 'SR', note: 'Transfer' },
-      { name: 'Cree Thomas', number: '20', year: 'SR', note: 'Transfer' },
-      { name: 'Jason Stokes Jr.', number: '23', year: 'SO' },
-    ],
-  },
-  {
-    position: 'FS',
-    positionFull: 'Free Safety',
-    players: [
-      { name: 'Boo Carter', number: '2', year: 'JR', note: 'Transfer - Tennessee' },
-      { name: 'Naeten Mitchell', number: '19', year: 'SR', note: 'Transfer' },
-      { name: 'Ben Fineseth', number: '31', year: 'JR', note: 'Returner' },
-    ],
-  },
-  {
-    position: 'SS',
-    positionFull: 'Strong Safety',
-    players: [
-      { name: 'Jah Jah Boyd', number: '14', year: 'SR', note: 'Transfer - Indiana' },
-      { name: 'Randon Fontenette', number: '33', year: 'SR', note: 'Transfer' },
-      { name: 'Preston Ashley', number: '9', year: 'FR', note: '5-Star Signee' },
-    ],
-  },
-];
+// ─── Roster data ──────────────────────────────────────────────────────────────
 
-const specialTeamsDepth: DepthPosition[] = [
-  {
-    position: 'PK',
-    positionFull: 'Placekicker',
-    players: [
-      { name: 'Alejandro Mata', number: '96', year: 'GR', note: 'Starter' },
-      { name: 'Cole Becker', number: '98', year: 'JR' },
-    ],
-  },
-  {
-    position: 'P',
-    positionFull: 'Punter',
-    players: [
-      { name: 'CJ Velarde', number: '47', year: 'JR', note: 'Starter' },
-      { name: 'Luke Brauer', number: '48', year: 'SO' },
-    ],
-  },
-  {
-    position: 'KR',
-    positionFull: 'Kick Returner',
-    players: [
-      { name: 'Richard Young', number: '4', year: 'SO', note: 'Starter' },
-      { name: 'Kam Perry', number: '3', year: 'SO' },
-    ],
-  },
-  {
-    position: 'PR',
-    positionFull: 'Punt Returner',
-    players: [
-      { name: 'Hykeem Williams', number: '13', year: 'JR', note: 'Starter' },
-      { name: 'Danny Scudero', number: '11', year: 'SR' },
-    ],
-  },
-];
+const rawRoster: Record<string, Omit<Player, 'posGroup'>[]> = {
+  QB: [
+    { name: 'Julian Lewis', number: '1', year: 'SO', rank: 1 },
+    { name: 'Isaac Wilson', number: '10', year: 'JR', rank: 2 },
+    { name: 'Kaneal Sweetwyne', number: '12', year: 'FR', rank: 3 },
+  ],
+  RB: [
+    { name: 'Richard Young', number: '4', year: 'SO', rank: 1 },
+    { name: 'Damian Henderson II', number: '22', year: 'JR', rank: 2 },
+    { name: 'Jaquail Smith', number: '25', year: 'JR', rank: 3 },
+    { name: 'Cam Newton', number: '5', year: 'FR', rank: 4 },
+  ],
+  WR: [
+    { name: 'Danny Scudero', number: '11', year: 'SR', rank: 1 },
+    { name: 'DeAndre Moore Jr.', number: '6', year: 'SO', rank: 2 },
+    { name: 'Joseph Williams', number: '8', year: 'JR', rank: 3 },
+    { name: 'Hykeem Williams', number: '13', year: 'JR', rank: 4 },
+    { name: 'Ernest Campbell', number: '16', year: 'JR', rank: 5 },
+    { name: 'Rodney Colton Jr.', number: '15', year: 'FR', rank: 6 },
+    { name: 'Jacob Swain', number: '18', year: 'FR', rank: 7 },
+    { name: 'Kam Perry', number: '3', year: 'SO', rank: 8 },
+  ],
+  TE: [
+    { name: 'Zach Atkins', number: '88', year: 'SR', rank: 1 },
+    { name: 'Brady Russell', number: '85', year: 'SO', rank: 2 },
+  ],
+  OT: [
+    { name: 'Jayvon McFadden', number: '74', year: 'SO', rank: 1 },
+    { name: 'Frank Fillip', number: '77', year: 'GR', rank: 2 },
+    { name: 'Jake Wray', number: '73', year: 'SR', rank: 3 },
+    { name: 'Savion Washington', number: '75', year: 'SR', rank: 4 },
+  ],
+  OG: [
+    { name: 'Gerad Christian-Lichtenhan', number: '56', year: 'JR', rank: 1 },
+    { name: 'Andrew Coker', number: '66', year: 'SR', rank: 2 },
+    { name: 'Darius Hinton', number: '72', year: 'FR', rank: 3 },
+  ],
+  C: [
+    { name: 'Caleb Krings', number: '51', year: 'GR', rank: 1 },
+    { name: 'Tyler Brown', number: '60', year: 'JR', rank: 2 },
+  ],
+  DL: [
+    { name: 'Brandon Hopper', number: '99', year: 'SR', rank: 1 },
+    { name: 'D.J. Moore', number: '95', year: 'SR', rank: 2 },
+    { name: 'Domata Peko Jr.', number: '91', year: 'FR', rank: 3 },
+    { name: 'Joseph Peko', number: '97', year: 'FR', rank: 4 },
+    { name: 'Dashawn Belen', number: '93', year: 'SR', rank: 5 },
+    { name: 'Jordan Domineck', number: '92', year: 'GR', rank: 6 },
+    { name: 'Jaylen Boots', number: '49', year: 'SR', rank: 7 },
+    { name: 'Jaden Navarrette', number: '94', year: 'JR', rank: 8 },
+    { name: 'Lamar Smark', number: '90', year: 'JR', rank: 9 },
+    { name: 'Michael Closson', number: '41', year: 'SO', rank: 10 },
+  ],
+  LB: [
+    { name: 'Liona Lefau', number: '24', year: 'SR', rank: 1 },
+    { name: 'Gideon Lampron', number: '21', year: 'SR', rank: 2 },
+    { name: 'Tyler Martinez', number: '45', year: 'SR', rank: 3 },
+    { name: 'Carson Crawford', number: '43', year: 'FR', rank: 4 },
+    { name: 'Taje McCoy', number: '37', year: 'JR', rank: 5 },
+  ],
+  CB: [
+    { name: 'Preston Hodge', number: '7', year: 'JR', rank: 1 },
+    { name: 'Justin Eaglin', number: '28', year: 'SR', rank: 2 },
+    { name: 'Cree Thomas', number: '20', year: 'SR', rank: 3 },
+    { name: 'Jason Stokes Jr.', number: '23', year: 'SO', rank: 4 },
+    { name: 'RJ Johnson', number: '30', year: 'SO', rank: 5 },
+    { name: 'Markari Vickers', number: '26', year: 'JR', rank: 6 },
+    { name: 'Emory Floyd', number: '29', year: 'SO', rank: 7 },
+  ],
+  S: [
+    { name: 'Boo Carter', number: '2', year: 'JR', rank: 1 },
+    { name: 'Jah Jah Boyd', number: '14', year: 'SR', rank: 2 },
+    { name: 'Randon Fontenette', number: '33', year: 'SR', rank: 3 },
+    { name: 'Naeten Mitchell', number: '19', year: 'SR', rank: 4 },
+    { name: 'Ben Fineseth', number: '31', year: 'JR', rank: 5 },
+    { name: 'Preston Ashley', number: '9', year: 'FR', rank: 6 },
+  ],
+};
 
-function YearBadge({ year }: { year: string }) {
-  const colors: Record<string, string> = {
-    FR: 'bg-green-900/40 text-green-400',
-    SO: 'bg-blue-900/40 text-blue-400',
-    JR: 'bg-purple-900/40 text-purple-400',
-    SR: 'bg-orange-900/40 text-orange-400',
-    GR: 'bg-red-900/40 text-red-400',
-  };
+// Flatten into a keyed map: "QB-1" → Player
+function buildPlayerMap(): Record<string, Player> {
+  const map: Record<string, Player> = {};
+  for (const [posGroup, players] of Object.entries(rawRoster)) {
+    for (const p of players) {
+      map[`${posGroup}-${p.rank}`] = { ...p, posGroup };
+    }
+  }
+  return map;
+}
+
+const PLAYER_MAP = buildPlayerMap();
+
+// ─── Formation definitions ────────────────────────────────────────────────────
+
+// Each slot: id, label, accepted pos groups, x/y %
+type FormationSlots = FieldSlot[];
+
+// Offense formations — field is oriented offense at bottom (y=100 = line of scrimmage area)
+function makeOffenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
+  const LOS_Y = 72; // line of scrimmage y-position
+  const OL_Y = LOS_Y;
+
+  const olSlots: Omit<FieldSlot, 'playerId'>[] = [
+    { id: 'LT', label: 'LT', posGroup: ['OT'], x: 28, y: OL_Y },
+    { id: 'LG', label: 'LG', posGroup: ['OG'], x: 36, y: OL_Y },
+    { id: 'C', label: 'C', posGroup: ['C'], x: 44, y: OL_Y },
+    { id: 'RG', label: 'RG', posGroup: ['OG'], x: 52, y: OL_Y },
+    { id: 'RT', label: 'RT', posGroup: ['OT'], x: 60, y: OL_Y },
+  ];
+
+  if (formation === 'Spread') {
+    return [
+      ...olSlots,
+      { id: 'TE', label: 'TE', posGroup: ['TE'], x: 68, y: OL_Y },
+      { id: 'QB', label: 'QB', posGroup: ['QB'], x: 44, y: LOS_Y + 10 },
+      { id: 'RB', label: 'RB', posGroup: ['RB'], x: 58, y: LOS_Y + 10 },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 12, y: LOS_Y - 2 },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 82, y: LOS_Y - 2 },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 20, y: LOS_Y + 6 },
+    ];
+  }
+  if (formation === 'Pistol') {
+    return [
+      ...olSlots,
+      { id: 'TE', label: 'TE', posGroup: ['TE'], x: 68, y: OL_Y },
+      { id: 'QB', label: 'QB', posGroup: ['QB'], x: 44, y: LOS_Y + 7 },
+      { id: 'RB', label: 'RB', posGroup: ['RB'], x: 44, y: LOS_Y + 16 },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 12, y: LOS_Y - 2 },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 82, y: LOS_Y - 2 },
+    ];
+  }
+  if (formation === 'Pro Set') {
+    return [
+      ...olSlots,
+      { id: 'TE', label: 'TE', posGroup: ['TE'], x: 68, y: OL_Y },
+      { id: 'QB', label: 'QB', posGroup: ['QB'], x: 44, y: LOS_Y + 8 },
+      { id: 'FB', label: 'RB', posGroup: ['RB'], x: 36, y: LOS_Y + 16 },
+      { id: 'RB', label: 'RB', posGroup: ['RB'], x: 52, y: LOS_Y + 16 },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 12, y: LOS_Y - 2 },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 82, y: LOS_Y - 2 },
+    ];
+  }
+  if (formation === 'Trips') {
+    return [
+      ...olSlots,
+      { id: 'QB', label: 'QB', posGroup: ['QB'], x: 44, y: LOS_Y + 10 },
+      { id: 'RB', label: 'RB', posGroup: ['RB'], x: 58, y: LOS_Y + 10 },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 12, y: LOS_Y - 2 },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 74, y: LOS_Y - 2 },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 82, y: LOS_Y + 4 },
+      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 82, y: LOS_Y - 10 },
+    ];
+  }
+  if (formation === 'Empty') {
+    return [
+      ...olSlots,
+      { id: 'QB', label: 'QB', posGroup: ['QB'], x: 44, y: LOS_Y + 10 },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 10, y: LOS_Y - 4 },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 20, y: LOS_Y + 2 },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 74, y: LOS_Y - 4 },
+      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 82, y: LOS_Y + 2 },
+      { id: 'WR5', label: 'WR', posGroup: ['WR'], x: 44, y: LOS_Y + 18 },
+    ];
+  }
+  return [];
+}
+
+function makeDefenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
+  const LOS_Y = 28;
+
+  if (formation === '4-2-5') {
+    return [
+      { id: 'DL1', label: 'DE', posGroup: ['DL'], x: 26, y: LOS_Y },
+      { id: 'DL2', label: 'DT', posGroup: ['DL'], x: 36, y: LOS_Y },
+      { id: 'DL3', label: 'DT', posGroup: ['DL'], x: 52, y: LOS_Y },
+      { id: 'DL4', label: 'DE', posGroup: ['DL'], x: 62, y: LOS_Y },
+      { id: 'LB1', label: 'LB', posGroup: ['LB'], x: 36, y: LOS_Y + 14 },
+      { id: 'LB2', label: 'LB', posGroup: ['LB'], x: 52, y: LOS_Y + 14 },
+      { id: 'CB1', label: 'CB', posGroup: ['CB'], x: 10, y: LOS_Y - 4 },
+      { id: 'CB2', label: 'CB', posGroup: ['CB'], x: 78, y: LOS_Y - 4 },
+      { id: 'CB3', label: 'NB', posGroup: ['CB'], x: 20, y: LOS_Y + 10 },
+      { id: 'S1', label: 'SS', posGroup: ['S'], x: 44, y: LOS_Y + 26 },
+      { id: 'S2', label: 'FS', posGroup: ['S'], x: 44, y: LOS_Y + 38 },
+    ];
+  }
+  if (formation === '3-4') {
+    return [
+      { id: 'DL1', label: 'DE', posGroup: ['DL'], x: 28, y: LOS_Y },
+      { id: 'DL2', label: 'NT', posGroup: ['DL'], x: 44, y: LOS_Y },
+      { id: 'DL3', label: 'DE', posGroup: ['DL'], x: 60, y: LOS_Y },
+      { id: 'LB1', label: 'OLB', posGroup: ['LB'], x: 18, y: LOS_Y + 10 },
+      { id: 'LB2', label: 'ILB', posGroup: ['LB'], x: 36, y: LOS_Y + 10 },
+      { id: 'LB3', label: 'ILB', posGroup: ['LB'], x: 52, y: LOS_Y + 10 },
+      { id: 'LB4', label: 'OLB', posGroup: ['LB'], x: 70, y: LOS_Y + 10 },
+      { id: 'CB1', label: 'CB', posGroup: ['CB'], x: 10, y: LOS_Y - 4 },
+      { id: 'CB2', label: 'CB', posGroup: ['CB'], x: 78, y: LOS_Y - 4 },
+      { id: 'S1', label: 'SS', posGroup: ['S'], x: 36, y: LOS_Y + 26 },
+      { id: 'S2', label: 'FS', posGroup: ['S'], x: 52, y: LOS_Y + 26 },
+    ];
+  }
+  if (formation === '4-3') {
+    return [
+      { id: 'DL1', label: 'DE', posGroup: ['DL'], x: 26, y: LOS_Y },
+      { id: 'DL2', label: 'DT', posGroup: ['DL'], x: 37, y: LOS_Y },
+      { id: 'DL3', label: 'DT', posGroup: ['DL'], x: 51, y: LOS_Y },
+      { id: 'DL4', label: 'DE', posGroup: ['DL'], x: 62, y: LOS_Y },
+      { id: 'LB1', label: 'WLB', posGroup: ['LB'], x: 28, y: LOS_Y + 14 },
+      { id: 'LB2', label: 'MLB', posGroup: ['LB'], x: 44, y: LOS_Y + 14 },
+      { id: 'LB3', label: 'SLB', posGroup: ['LB'], x: 60, y: LOS_Y + 14 },
+      { id: 'CB1', label: 'CB', posGroup: ['CB'], x: 10, y: LOS_Y - 4 },
+      { id: 'CB2', label: 'CB', posGroup: ['CB'], x: 78, y: LOS_Y - 4 },
+      { id: 'S1', label: 'SS', posGroup: ['S'], x: 36, y: LOS_Y + 28 },
+      { id: 'S2', label: 'FS', posGroup: ['S'], x: 52, y: LOS_Y + 28 },
+    ];
+  }
+  if (formation === 'Nickel') {
+    return [
+      { id: 'DL1', label: 'DE', posGroup: ['DL'], x: 26, y: LOS_Y },
+      { id: 'DL2', label: 'DT', posGroup: ['DL'], x: 36, y: LOS_Y },
+      { id: 'DL3', label: 'DT', posGroup: ['DL'], x: 52, y: LOS_Y },
+      { id: 'DL4', label: 'DE', posGroup: ['DL'], x: 62, y: LOS_Y },
+      { id: 'LB1', label: 'LB', posGroup: ['LB'], x: 44, y: LOS_Y + 12 },
+      { id: 'CB1', label: 'CB', posGroup: ['CB'], x: 10, y: LOS_Y - 4 },
+      { id: 'CB2', label: 'CB', posGroup: ['CB'], x: 78, y: LOS_Y - 4 },
+      { id: 'CB3', label: 'NB', posGroup: ['CB'], x: 20, y: LOS_Y + 8 },
+      { id: 'S1', label: 'SS', posGroup: ['S'], x: 36, y: LOS_Y + 26 },
+      { id: 'S2', label: 'FS', posGroup: ['S'], x: 52, y: LOS_Y + 26 },
+      { id: 'S3', label: 'DB', posGroup: ['S', 'CB'], x: 44, y: LOS_Y + 38 },
+    ];
+  }
+  if (formation === 'Dime') {
+    return [
+      { id: 'DL1', label: 'DE', posGroup: ['DL'], x: 26, y: LOS_Y },
+      { id: 'DL2', label: 'DT', posGroup: ['DL'], x: 36, y: LOS_Y },
+      { id: 'DL3', label: 'DT', posGroup: ['DL'], x: 52, y: LOS_Y },
+      { id: 'DL4', label: 'DE', posGroup: ['DL'], x: 62, y: LOS_Y },
+      { id: 'CB1', label: 'CB', posGroup: ['CB'], x: 10, y: LOS_Y - 4 },
+      { id: 'CB2', label: 'CB', posGroup: ['CB'], x: 78, y: LOS_Y - 4 },
+      { id: 'CB3', label: 'CB', posGroup: ['CB'], x: 20, y: LOS_Y + 8 },
+      { id: 'S1', label: 'SS', posGroup: ['S'], x: 30, y: LOS_Y + 24 },
+      { id: 'S2', label: 'FS', posGroup: ['S'], x: 44, y: LOS_Y + 30 },
+      { id: 'S3', label: 'DB', posGroup: ['S', 'CB'], x: 58, y: LOS_Y + 24 },
+      { id: 'S4', label: 'DB', posGroup: ['S', 'CB'], x: 44, y: LOS_Y + 42 },
+    ];
+  }
+  return [];
+}
+
+// ─── Auto-assign logic ────────────────────────────────────────────────────────
+
+function autoAssign(slots: Omit<FieldSlot, 'playerId'>[]): FieldSlot[] {
+  // Track how many of each posGroup have been used
+  const usageCount: Record<string, number> = {};
+
+  return slots.map((slot) => {
+    // Find the best available player for this slot
+    let bestPlayerId: string | null = null;
+
+    for (const pg of slot.posGroup) {
+      const players = rawRoster[pg] ?? [];
+      for (const player of players) {
+        const pid = `${pg}-${player.rank}`;
+        // Check if already used by a previous slot
+        const alreadyUsed = Object.values(usageCount).includes(player.rank) &&
+          // refine: track by pid
+          false;
+        void alreadyUsed; // suppress warning
+        if (!usageCount[pid]) {
+          bestPlayerId = pid;
+          break;
+        }
+      }
+      if (bestPlayerId) break;
+    }
+
+    if (bestPlayerId) usageCount[bestPlayerId] = 1;
+    return { ...slot, playerId: bestPlayerId };
+  });
+}
+
+// Better auto-assign: track used pids in a Set
+function autoAssignSlots(slotDefs: Omit<FieldSlot, 'playerId'>[]): FieldSlot[] {
+  const used = new Set<string>();
+
+  return slotDefs.map((slot) => {
+    let chosen: string | null = null;
+    for (const pg of slot.posGroup) {
+      const players = (rawRoster[pg] ?? []).slice().sort((a, b) => a.rank - b.rank);
+      for (const p of players) {
+        const pid = `${pg}-${p.rank}`;
+        if (!used.has(pid)) {
+          chosen = pid;
+          break;
+        }
+      }
+      if (chosen) break;
+    }
+    if (chosen) used.add(chosen);
+    return { ...slot, playerId: chosen };
+  });
+}
+
+// ─── Formation configs ────────────────────────────────────────────────────────
+
+const OFFENSE_FORMATIONS = ['Spread', 'Pistol', 'Pro Set', 'Trips', 'Empty'] as const;
+const DEFENSE_FORMATIONS = ['4-2-5', '3-4', '4-3', 'Nickel', 'Dime'] as const;
+type OffenseFormation = typeof OFFENSE_FORMATIONS[number];
+type DefenseFormation = typeof DEFENSE_FORMATIONS[number];
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+const YEAR_COLORS: Record<string, string> = {
+  FR: 'bg-emerald-900/60 text-emerald-300',
+  SO: 'bg-sky-900/60 text-sky-300',
+  JR: 'bg-violet-900/60 text-violet-300',
+  SR: 'bg-orange-900/60 text-orange-300',
+  GR: 'bg-rose-900/60 text-rose-300',
+};
+
+function getInitials(name: string) {
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('');
+}
+
+function PlayerAvatar({
+  player,
+  size = 'md',
+}: {
+  player: Player;
+  size?: 'sm' | 'md';
+}) {
+  const initials = getInitials(player.name);
+  const sz = size === 'sm' ? 'w-8 h-8 text-xs' : 'w-10 h-10 text-sm';
   return (
-    <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${colors[year] || 'bg-gray-700 text-gray-400'}`}>
-      {year}
-    </span>
+    <div
+      className={`${sz} rounded-full bg-cu-gold/20 border border-cu-gold/50 flex items-center justify-center font-black text-cu-gold flex-shrink-0`}
+    >
+      {initials}
+    </div>
   );
 }
 
-function DepthGroup({ group }: { group: DepthPosition }) {
+// A draggable player card placed on a field slot
+function DraggablePlayerCard({
+  slotId,
+  player,
+  isOver,
+}: {
+  slotId: string;
+  player: Player;
+  isOver: boolean;
+}) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `drag-${slotId}`,
+    data: { slotId, playerId: player ? `${player.posGroup}-${player.rank}` : null },
+  });
+
   return (
-    <div className="bg-cu-gray rounded-xl border border-cu-gold/10 hover:border-cu-gold/25 transition-all overflow-hidden">
-      <div className="bg-cu-black/50 px-3 py-2 border-b border-cu-gold/10 flex items-center gap-2">
-        <span className="text-cu-gold font-black text-xs uppercase tracking-wide w-10 flex-shrink-0">
-          {group.position}
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      className={`
+        absolute flex flex-col items-center cursor-grab active:cursor-grabbing select-none
+        ${isDragging ? 'opacity-30' : ''}
+        ${isOver ? 'scale-110' : ''}
+        transition-transform
+      `}
+      style={{ touchAction: 'none' }}
+    >
+      <div
+        className={`
+          flex flex-col items-center bg-black/80 border rounded-lg px-1.5 py-1 gap-0.5 shadow-lg min-w-[56px]
+          ${isOver ? 'border-cu-gold shadow-cu-gold/40' : 'border-cu-gold/40'}
+        `}
+      >
+        <PlayerAvatar player={player} size="sm" />
+        <span className="text-cu-gold font-black text-[9px] leading-tight">#{player.number}</span>
+        <span className="text-white font-semibold text-[8px] leading-tight text-center max-w-[56px] truncate w-full text-center">
+          {player.name.split(' ').slice(-1)[0]}
         </span>
-        <span className="text-gray-500 text-xs">{group.positionFull}</span>
-      </div>
-      <div className="p-2 space-y-1">
-        {group.players.map((player, i) => (
-          <div
-            key={i}
-            className={`flex items-center gap-3 px-2 py-1.5 rounded-lg ${i === 0 ? 'bg-cu-gold/5 border border-cu-gold/20' : ''}`}
-          >
-            <span className="text-xs text-gray-600 w-4 flex-shrink-0 font-bold">{i + 1}</span>
-            <span className="text-cu-gold font-bold text-xs w-6 flex-shrink-0">#{player.number}</span>
-            <span className={`text-sm font-medium flex-1 ${i === 0 ? 'text-white' : 'text-gray-400'}`}>
-              {player.name}
-            </span>
-            <YearBadge year={player.year} />
-            {player.note && i === 0 && (
-              <span className="hidden md:block text-xs text-cu-gold/60 truncate max-w-[120px]">{player.note}</span>
-            )}
-            {i === 0 && (
-              <Star size={10} className="text-cu-gold fill-cu-gold flex-shrink-0" />
-            )}
-          </div>
-        ))}
+        <span
+          className={`text-[7px] font-bold px-1 rounded ${YEAR_COLORS[player.year] ?? 'bg-gray-700 text-gray-400'}`}
+        >
+          {player.year}
+        </span>
       </div>
     </div>
   );
 }
 
-export default function DepthChartPage() {
+// A droppable empty slot
+function EmptySlotCard({
+  slotId,
+  label,
+  isOver,
+}: {
+  slotId: string;
+  label: string;
+  isOver: boolean;
+}) {
+  const { setNodeRef } = useDroppable({ id: `drop-${slotId}` });
   return (
-    <div className="max-w-7xl mx-auto">
+    <div
+      ref={setNodeRef}
+      className={`
+        absolute flex flex-col items-center justify-center
+        w-14 h-14 rounded-lg border-2 border-dashed
+        ${isOver ? 'border-cu-gold bg-cu-gold/10' : 'border-white/20 bg-white/5'}
+        transition-all
+      `}
+    >
+      <span className="text-white/40 text-[10px] font-bold">{label}</span>
+    </div>
+  );
+}
+
+// Wrapper that is both draggable and droppable
+function FieldSlotNode({
+  slot,
+  player,
+  activeSlotId,
+  overSlotId,
+}: {
+  slot: FieldSlot;
+  player: Player | null;
+  activeSlotId: string | null;
+  overSlotId: string | null;
+}) {
+  const { setNodeRef: dropRef, isOver } = useDroppable({ id: `drop-${slot.id}` });
+
+  // center the card: shift left/up by half the card width/height
+  const style: React.CSSProperties = {
+    position: 'absolute',
+    left: `${slot.x}%`,
+    top: `${slot.y}%`,
+    transform: 'translate(-50%, -50%)',
+    zIndex: activeSlotId === slot.id ? 50 : 10,
+  };
+
+  return (
+    <div ref={dropRef} style={style}>
+      {player ? (
+        <DraggablePlayerCard
+          slotId={slot.id}
+          player={player}
+          isOver={isOver || overSlotId === slot.id}
+        />
+      ) : (
+        <EmptySlotCard
+          slotId={slot.id}
+          label={slot.label}
+          isOver={isOver || overSlotId === slot.id}
+        />
+      )}
+      {/* Always show position label below */}
+      {player && (
+        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[8px] font-bold text-cu-gold/70 whitespace-nowrap">
+          {slot.label}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Football field SVG background ───────────────────────────────────────────
+
+function FieldBackground({ side }: { side: Side }) {
+  // Shows 50% of the field relevant to the unit
+  // Offense: bottom half (own 40 to opponent 35 roughly)
+  // Defense: top half
+  const lines = Array.from({ length: 6 }, (_, i) => i); // 6 horizontal lines
+
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      {/* Field base */}
+      <rect x="0" y="0" width="100" height="100" fill="#1a6b2f" />
+
+      {/* End zone */}
+      {side === 'offense' ? (
+        <rect x="0" y="0" width="100" height="12" fill="#145222" />
+      ) : (
+        <rect x="0" y="88" width="100" height="12" fill="#145222" />
+      )}
+
+      {/* BUFFS text in end zone */}
+      {side === 'offense' ? (
+        <text
+          x="50"
+          y="8"
+          textAnchor="middle"
+          fontSize="6"
+          fontWeight="bold"
+          fill="#CFB227"
+          opacity="0.6"
+          fontFamily="sans-serif"
+          letterSpacing="3"
+        >
+          BUFFS
+        </text>
+      ) : (
+        <text
+          x="50"
+          y="95"
+          textAnchor="middle"
+          fontSize="6"
+          fontWeight="bold"
+          fill="#CFB227"
+          opacity="0.6"
+          fontFamily="sans-serif"
+          letterSpacing="3"
+        >
+          BUFFS
+        </text>
+      )}
+
+      {/* Yard lines */}
+      {lines.map((i) => {
+        const y = 15 + i * 14;
+        return (
+          <g key={i}>
+            <line x1="0" y1={y} x2="100" y2={y} stroke="white" strokeWidth="0.3" opacity="0.5" />
+            {/* Hash marks */}
+            <line x1="30" y1={y - 1} x2="30" y2={y + 1} stroke="white" strokeWidth="0.3" opacity="0.4" />
+            <line x1="70" y1={y - 1} x2="70" y2={y + 1} stroke="white" strokeWidth="0.3" opacity="0.4" />
+          </g>
+        );
+      })}
+
+      {/* Sideline markers */}
+      <line x1="3" y1="12" x2="3" y2="88" stroke="white" strokeWidth="0.5" opacity="0.4" />
+      <line x1="97" y1="12" x2="97" y2="88" stroke="white" strokeWidth="0.5" opacity="0.4" />
+
+      {/* Line of scrimmage highlight */}
+      {side === 'offense' ? (
+        <line x1="0" y1="74" x2="100" y2="74" stroke="#CFB227" strokeWidth="0.5" opacity="0.4" strokeDasharray="3,2" />
+      ) : (
+        <line x1="0" y1="26" x2="100" y2="26" stroke="#CFB227" strokeWidth="0.5" opacity="0.4" strokeDasharray="3,2" />
+      )}
+    </svg>
+  );
+}
+
+// ─── Bench (remaining players) ────────────────────────────────────────────────
+
+function BenchSection({
+  benchPlayers,
+  selectedBench,
+  onSelectBench,
+}: {
+  benchPlayers: Player[];
+  selectedBench: string | null;
+  onSelectBench: (pid: string | null) => void;
+}) {
+  const byPos: Record<string, Player[]> = {};
+  for (const p of benchPlayers) {
+    if (!byPos[p.posGroup]) byPos[p.posGroup] = [];
+    byPos[p.posGroup].push(p);
+  }
+
+  return (
+    <div className="mt-4">
+      <h3 className="text-cu-gold/70 text-xs font-bold uppercase tracking-wide mb-2">
+        Bench / Reserves
+      </h3>
+      <div className="overflow-x-auto">
+        <div className="flex gap-4 pb-2 min-w-max">
+          {Object.entries(byPos).map(([pos, players]) => (
+            <div key={pos} className="flex flex-col gap-1">
+              <span className="text-gray-500 text-[9px] font-bold uppercase tracking-wider text-center">{pos}</span>
+              <div className="flex gap-1">
+                {players.map((p) => {
+                  const pid = `${p.posGroup}-${p.rank}`;
+                  const isSelected = selectedBench === pid;
+                  return (
+                    <button
+                      key={pid}
+                      onClick={() => onSelectBench(isSelected ? null : pid)}
+                      className={`
+                        flex flex-col items-center p-1.5 rounded-lg border transition-all min-w-[52px]
+                        ${isSelected
+                          ? 'border-cu-gold bg-cu-gold/10 shadow-lg shadow-cu-gold/20'
+                          : 'border-white/10 bg-cu-gray hover:border-cu-gold/30'
+                        }
+                      `}
+                      title={`${p.name} #${p.number} — click then tap a field slot to swap`}
+                    >
+                      <PlayerAvatar player={p} size="sm" />
+                      <span className="text-[8px] text-cu-gold font-bold mt-0.5">#{p.number}</span>
+                      <span className="text-[7px] text-gray-300 truncate max-w-[48px]">{p.name.split(' ').slice(-1)[0]}</span>
+                      <span className={`text-[6px] font-bold px-0.5 rounded mt-0.5 ${YEAR_COLORS[p.year] ?? ''}`}>{p.year}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+          {benchPlayers.length === 0 && (
+            <span className="text-gray-600 text-xs italic">All players are on the field</span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Player info panel (click on field player) ───────────────────────────────
+
+function PlayerInfoPanel({ player, onClose }: { player: Player; onClose: () => void }) {
+  return (
+    <div className="absolute top-2 right-2 z-50 bg-black/90 border border-cu-gold/50 rounded-xl p-3 shadow-2xl w-40">
+      <button
+        onClick={onClose}
+        className="absolute top-1 right-2 text-gray-500 hover:text-white text-xs"
+        aria-label="Close"
+      >
+        ✕
+      </button>
+      <div className="flex flex-col items-center gap-1">
+        <PlayerAvatar player={player} size="md" />
+        <span className="text-cu-gold font-black text-sm">#{player.number}</span>
+        <span className="text-white font-bold text-xs text-center">{player.name}</span>
+        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${YEAR_COLORS[player.year] ?? ''}`}>{player.year}</span>
+        <span className="text-gray-500 text-[9px]">{player.posGroup} · Rank #{player.rank}</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main page ────────────────────────────────────────────────────────────────
+
+export default function DepthChartPage() {
+  const [side, setSide] = useState<Side>('offense');
+  const [offenseFormation, setOffenseFormation] = useState<OffenseFormation>('Spread');
+  const [defenseFormation, setDefenseFormation] = useState<DefenseFormation>('4-2-5');
+
+  // slots state: keyed by formation+side for memoization
+  const getInitialSlots = useCallback(
+    (s: Side, of_: OffenseFormation, df: DefenseFormation): FieldSlot[] => {
+      const defs =
+        s === 'offense' ? makeOffenseSlots(of_) : makeDefenseSlots(df);
+      return autoAssignSlots(defs);
+    },
+    []
+  );
+
+  const [offenseSlots, setOffenseSlots] = useState<Record<OffenseFormation, FieldSlot[]>>(() => {
+    const map = {} as Record<OffenseFormation, FieldSlot[]>;
+    for (const f of OFFENSE_FORMATIONS) {
+      map[f] = autoAssignSlots(makeOffenseSlots(f));
+    }
+    return map;
+  });
+
+  const [defenseSlots, setDefenseSlots] = useState<Record<DefenseFormation, FieldSlot[]>>(() => {
+    const map = {} as Record<DefenseFormation, FieldSlot[]>;
+    for (const f of DEFENSE_FORMATIONS) {
+      map[f] = autoAssignSlots(makeDefenseSlots(f));
+    }
+    return map;
+  });
+
+  // suppress unused
+  void getInitialSlots;
+
+  const currentSlots: FieldSlot[] =
+    side === 'offense' ? offenseSlots[offenseFormation] : defenseSlots[defenseFormation];
+
+  function setCurrentSlots(slots: FieldSlot[]) {
+    if (side === 'offense') {
+      setOffenseSlots((prev) => ({ ...prev, [offenseFormation]: slots }));
+    } else {
+      setDefenseSlots((prev) => ({ ...prev, [defenseFormation]: slots }));
+    }
+  }
+
+  // DnD
+  const [activeSlotId, setActiveSlotId] = useState<string | null>(null);
+  const [overSlotId, setOverSlotId] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } })
+  );
+
+  function handleDragStart(event: DragStartEvent) {
+    const slotId = (event.active.data.current as { slotId: string })?.slotId;
+    setActiveSlotId(slotId ?? null);
+  }
+
+  function handleDragOver(event: DragOverEvent) {
+    if (event.over) {
+      const dropId = String(event.over.id);
+      const slotId = dropId.replace('drop-', '');
+      setOverSlotId(slotId);
+    } else {
+      setOverSlotId(null);
+    }
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    setActiveSlotId(null);
+    setOverSlotId(null);
+
+    const { active, over } = event;
+    if (!over) return;
+
+    const fromSlotId = (active.data.current as { slotId: string })?.slotId;
+    const toSlotId = String(over.id).replace('drop-', '');
+
+    if (!fromSlotId || fromSlotId === toSlotId) return;
+
+    // Find both slots
+    const slots = [...currentSlots];
+    const fromIdx = slots.findIndex((s) => s.id === fromSlotId);
+    const toIdx = slots.findIndex((s) => s.id === toSlotId);
+    if (fromIdx === -1 || toIdx === -1) return;
+
+    const fromSlot = slots[fromIdx];
+    const toSlot = slots[toIdx];
+
+    // Check compatibility: can the fromSlot player go to toSlot?
+    const fromPlayerId = fromSlot.playerId;
+    const toPlayerId = toSlot.playerId;
+
+    if (fromPlayerId) {
+      const fromPlayer = PLAYER_MAP[fromPlayerId];
+      if (fromPlayer && !toSlot.posGroup.includes(fromPlayer.posGroup)) {
+        // incompatible — don't swap
+        return;
+      }
+    }
+    if (toPlayerId) {
+      const toPlayer = PLAYER_MAP[toPlayerId];
+      if (toPlayer && !fromSlot.posGroup.includes(toPlayer.posGroup)) {
+        return;
+      }
+    }
+
+    // Swap player IDs
+    slots[fromIdx] = { ...fromSlot, playerId: toPlayerId };
+    slots[toIdx] = { ...toSlot, playerId: fromPlayerId };
+    setCurrentSlots(slots);
+  }
+
+  // Bench click-to-swap
+  const [selectedBench, setSelectedBench] = useState<string | null>(null);
+  const [selectedField, setSelectedField] = useState<string | null>(null);
+  const [infoPlayer, setInfoPlayer] = useState<Player | null>(null);
+
+  function handleFieldSlotClick(slotId: string) {
+    // If a bench player is selected, swap it into this slot
+    if (selectedBench) {
+      const slots = [...currentSlots];
+      const targetIdx = slots.findIndex((s) => s.id === slotId);
+      if (targetIdx === -1) return;
+
+      const targetSlot = slots[targetIdx];
+      const benchPlayer = PLAYER_MAP[selectedBench];
+      if (!benchPlayer) return;
+
+      // Check compatibility
+      if (!targetSlot.posGroup.includes(benchPlayer.posGroup)) {
+        setSelectedBench(null);
+        return;
+      }
+
+      // Find if bench player is already in some slot (shouldn't be, bench = not on field)
+      // The bench player is not on any slot. The slot's current player goes to bench (just removed from slot).
+      slots[targetIdx] = { ...targetSlot, playerId: selectedBench };
+      setCurrentSlots(slots);
+      setSelectedBench(null);
+      return;
+    }
+
+    // Otherwise toggle field slot selection for info
+    if (selectedField === slotId) {
+      setSelectedField(null);
+      setInfoPlayer(null);
+    } else {
+      setSelectedField(slotId);
+      const slot = currentSlots.find((s) => s.id === slotId);
+      if (slot?.playerId) {
+        setInfoPlayer(PLAYER_MAP[slot.playerId] ?? null);
+      } else {
+        setInfoPlayer(null);
+      }
+    }
+  }
+
+  // Compute bench = all players not in any current slot
+  const onFieldIds = new Set(currentSlots.map((s) => s.playerId).filter(Boolean) as string[]);
+  const benchPlayers: Player[] = [];
+
+  for (const [posGroup, players] of Object.entries(rawRoster)) {
+    for (const p of players) {
+      const pid = `${posGroup}-${p.rank}`;
+      if (!onFieldIds.has(pid)) {
+        // Only show players of relevant posGroups for this side
+        const relevantGroups =
+          side === 'offense'
+            ? ['QB', 'RB', 'WR', 'TE', 'OT', 'OG', 'C']
+            : ['DL', 'LB', 'CB', 'S'];
+        if (relevantGroups.includes(posGroup)) {
+          benchPlayers.push({ ...p, posGroup });
+        }
+      }
+    }
+  }
+
+  // Reset info when switching sides/formations
+  function switchSide(s: Side) {
+    setSide(s);
+    setSelectedBench(null);
+    setSelectedField(null);
+    setInfoPlayer(null);
+  }
+
+  const activePlayer = activeSlotId
+    ? PLAYER_MAP[currentSlots.find((s) => s.id === activeSlotId)?.playerId ?? '']
+    : null;
+
+  return (
+    <div className="max-w-5xl mx-auto">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="text-3xl font-black text-white">
           <span className="text-cu-gold">Depth</span> Chart
         </h1>
-        <p className="text-gray-400 mt-1">2026 Colorado Buffaloes projected starters and backups · as of June 2026</p>
+        <p className="text-gray-400 mt-1 text-sm">
+          Interactive 2026 field view — drag players to swap positions
+        </p>
       </div>
+
+      {/* Side tabs */}
+      <div className="flex gap-2 mb-4">
+        {(['offense', 'defense'] as Side[]).map((s) => (
+          <button
+            key={s}
+            onClick={() => switchSide(s)}
+            className={`
+              px-5 py-2 rounded-full font-bold text-sm capitalize transition-all
+              ${side === s
+                ? 'bg-cu-gold text-black shadow-lg shadow-cu-gold/30'
+                : 'bg-cu-gray text-gray-400 hover:text-white border border-white/10'
+              }
+            `}
+          >
+            {s}
+          </button>
+        ))}
+      </div>
+
+      {/* Formation selector */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {(side === 'offense' ? OFFENSE_FORMATIONS : DEFENSE_FORMATIONS).map((f) => {
+          const active =
+            side === 'offense' ? offenseFormation === f : defenseFormation === f;
+          return (
+            <button
+              key={f}
+              onClick={() => {
+                if (side === 'offense') setOffenseFormation(f as OffenseFormation);
+                else setDefenseFormation(f as DefenseFormation);
+                setSelectedBench(null);
+                setSelectedField(null);
+                setInfoPlayer(null);
+              }}
+              className={`
+                px-3 py-1 rounded-lg text-xs font-bold border transition-all
+                ${active
+                  ? 'bg-cu-gold/20 border-cu-gold text-cu-gold'
+                  : 'bg-cu-gray border-white/10 text-gray-400 hover:border-cu-gold/30 hover:text-cu-gold/70'
+                }
+              `}
+            >
+              {f}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Hint */}
+      {selectedBench && (
+        <div className="mb-3 px-3 py-1.5 bg-cu-gold/10 border border-cu-gold/30 rounded-lg text-xs text-cu-gold">
+          Bench player selected — click a field slot to swap in
+        </div>
+      )}
+
+      {/* Field */}
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        <div
+          className="relative w-full bg-green-800 rounded-2xl overflow-hidden border border-green-600/30 shadow-2xl"
+          style={{ paddingBottom: '65%' }}
+          onClick={(e) => {
+            // Deselect info if clicking field background
+            const target = e.target as HTMLElement;
+            if (target.closest('[data-slot]') === null && selectedField) {
+              setSelectedField(null);
+              setInfoPlayer(null);
+            }
+          }}
+        >
+          <FieldBackground side={side} />
+
+          {/* Slot nodes */}
+          <div className="absolute inset-0">
+            {currentSlots.map((slot) => {
+              const player = slot.playerId ? (PLAYER_MAP[slot.playerId] ?? null) : null;
+              return (
+                <div
+                  key={slot.id}
+                  data-slot={slot.id}
+                  onClick={() => handleFieldSlotClick(slot.id)}
+                  style={{
+                    position: 'absolute',
+                    left: `${slot.x}%`,
+                    top: `${slot.y}%`,
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: 10,
+                  }}
+                >
+                  <FieldSlotNode
+                    slot={slot}
+                    player={player}
+                    activeSlotId={activeSlotId}
+                    overSlotId={overSlotId}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Player info panel */}
+          {infoPlayer && (
+            <PlayerInfoPanel
+              player={infoPlayer}
+              onClose={() => { setInfoPlayer(null); setSelectedField(null); }}
+            />
+          )}
+
+          {/* Formation label overlay */}
+          <div className="absolute bottom-2 left-3 text-[10px] text-white/30 font-bold select-none">
+            {side === 'offense' ? offenseFormation : defenseFormation}
+          </div>
+
+          {/* Side label */}
+          <div className="absolute top-2 left-3 text-[10px] text-white/30 font-bold uppercase select-none">
+            {side}
+          </div>
+        </div>
+
+        {/* DragOverlay */}
+        <DragOverlay>
+          {activePlayer ? (
+            <div className="flex flex-col items-center bg-black/90 border border-cu-gold rounded-lg px-2 py-1.5 shadow-2xl shadow-cu-gold/30 gap-1">
+              <PlayerAvatar player={activePlayer} size="sm" />
+              <span className="text-cu-gold font-black text-[10px]">#{activePlayer.number}</span>
+              <span className="text-white text-[9px] font-semibold">{activePlayer.name.split(' ').slice(-1)[0]}</span>
+            </div>
+          ) : null}
+        </DragOverlay>
+      </DndContext>
+
+      {/* Bench */}
+      <BenchSection
+        benchPlayers={benchPlayers}
+        selectedBench={selectedBench}
+        onSelectBench={setSelectedBench}
+      />
 
       {/* Legend */}
-      <div className="flex flex-wrap gap-4 mb-6 bg-cu-gray rounded-xl p-4 border border-cu-gold/20">
-        <div className="flex items-center gap-2 text-xs text-gray-400">
-          <div className="w-8 h-4 rounded bg-cu-gold/5 border border-cu-gold/20" />
-          <span>Starter (Row 1)</span>
+      <div className="mt-6 flex flex-wrap gap-4 bg-cu-gray rounded-xl p-3 border border-cu-gold/10 text-xs text-gray-400">
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-3 rounded-full bg-cu-gold/20 border border-cu-gold/50" />
+          <span>Drag to swap field positions</span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-gray-400">
-          {['FR', 'SO', 'JR', 'SR', 'GR'].map(y => <YearBadge key={y} year={y} />)}
-          <span>Year in program</span>
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-3 rounded-full bg-cu-gold/10 border border-cu-gold/30" />
+          <span>Click bench player → click slot to swap in</span>
         </div>
-        <div className="ml-auto text-xs text-gray-500 italic">
-          * Projected depth chart — subject to change
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-3 rounded-full bg-green-800 border border-cu-gold/30" />
+          <span>Gold dashed line = line of scrimmage</span>
         </div>
-      </div>
-
-      {/* Offense */}
-      <section className="mb-8">
-        <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-          <Zap size={18} className="text-cu-gold" />
-          <span>Offense</span>
-          <span className="text-xs text-gray-500 font-normal ml-1">— "Go Go Offense" (OC Brennan Marion)</span>
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {offensiveDepth.map((group, i) => (
-            <DepthGroup key={i} group={group} />
-          ))}
-        </div>
-      </section>
-
-      {/* Defense */}
-      <section className="mb-8">
-        <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-          <Shield size={18} className="text-cu-gold" />
-          <span>Defense</span>
-          <span className="text-xs text-gray-500 font-normal ml-1">— 4-2-5 Base</span>
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {defensiveDepth.map((group, i) => (
-            <DepthGroup key={i} group={group} />
-          ))}
-        </div>
-      </section>
-
-      {/* Special Teams */}
-      <section>
-        <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-          <Star size={18} className="text-cu-gold" />
-          <span>Special Teams</span>
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-          {specialTeamsDepth.map((group, i) => (
-            <DepthGroup key={i} group={group} />
-          ))}
-        </div>
-      </section>
-
-      {/* Notes */}
-      <div className="mt-8 bg-cu-gray rounded-xl border border-cu-gold/20 p-4">
-        <h3 className="text-cu-gold font-bold text-sm mb-3">Notable Players — 2026</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-400">
-          <div>
-            <span className="text-white font-semibold">Julian "JuJu" Lewis #1</span> — Redshirt sophomore QB entering his first full year as starter. Posted 589 yds, 4 TDs, 0 INTs in limited 2025 action. Under OC Brennan Marion's "Go Go Offense."
-          </div>
-          <div>
-            <span className="text-white font-semibold">Liona Lefau & Gideon Lampron</span> — Transfer LB duo each recorded 60+ tackles in 2025. Form the backbone of DC Chris Marve's revamped defense.
-          </div>
-          <div>
-            <span className="text-white font-semibold">Danny Scudero #11</span> — Top-3 nationally ranked receiver (On3) transferred from San Jose State. Expected to be Lewis's go-to target in the slot-heavy "Go Go" scheme.
-          </div>
-        </div>
+        {['FR', 'SO', 'JR', 'SR', 'GR'].map((y) => (
+          <span key={y} className={`px-1.5 py-0.5 rounded font-bold text-[10px] ${YEAR_COLORS[y]}`}>{y}</span>
+        ))}
       </div>
     </div>
   );
