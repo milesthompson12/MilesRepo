@@ -18,76 +18,113 @@ interface Player {
   headshot?: string;
 }
 
-// Official 2026 CU Buffaloes roster sourced from cubuffs.com
+// Official 2026 CU Buffaloes Spring Football Roster — sourced from official PDF
 const OFFICIAL_ROSTER: Player[] = [
   // QUARTERBACKS
-  { jersey: '1',  name: 'Julian "JuJu" Lewis',    position: 'QB', positionGroup: 'Quarterbacks',    year: 'SO',  height: '6\'1"',  weight: '195', hometown: 'Norcross, GA' },
-  { jersey: '10', name: 'Isaac Wilson',            position: 'QB', positionGroup: 'Quarterbacks',    year: 'JR',  height: '6\'2"',  weight: '205', hometown: 'St. George, UT',   previousSchool: 'Utah' },
-  { jersey: '12', name: 'Kaneal Sweetwyne',        position: 'QB', positionGroup: 'Quarterbacks',    year: 'FR',  height: '6\'3"',  weight: '208', hometown: 'Las Vegas, NV' },
+  { jersey: '7',  name: 'Dominiq Ponder',        position: 'QB', positionGroup: 'Quarterbacks',   year: 'JR', height: "6'5\"",  weight: '200', hometown: 'Opa Locka, FL / Carol City',        previousSchool: 'Bethune Cookman/Georgia Tech' },
+  { jersey: '10', name: 'Julian Lewis',           position: 'QB', positionGroup: 'Quarterbacks',   year: 'FR', height: "6'1\"",  weight: '190', hometown: 'Carrollton, GA / Carrollton' },
+  { jersey: '14', name: 'Kaneal Sweetwyne',       position: 'QB', positionGroup: 'Quarterbacks',   year: 'FR', height: "6'3\"",  weight: '195', hometown: 'Lehi, UT / Skyridge' },
+  { jersey: '16', name: 'Isaac Wilson',           position: 'QB', positionGroup: 'Quarterbacks',   year: 'So', height: "6'0\"",  weight: '210', hometown: 'Draper, UT / Corner Canyon',        previousSchool: 'Utah' },
   // RUNNING BACKS
-  { jersey: '4',  name: 'Richard Young',           position: 'RB', positionGroup: 'Running Backs',   year: 'SO',  height: '5\'10"', weight: '199', hometown: 'Buford, GA',       previousSchool: 'Alabama' },
-  { jersey: '5',  name: 'Cam Newton',              position: 'RB', positionGroup: 'Running Backs',   year: 'FR',  height: '5\'11"', weight: '200', hometown: 'Westlake Village, CA' },
-  { jersey: '22', name: 'Damian Henderson II',     position: 'RB', positionGroup: 'Running Backs',   year: 'JR',  height: '5\'9"',  weight: '195', hometown: 'Las Vegas, NV',    previousSchool: 'Sacramento State' },
-  { jersey: '25', name: 'Jaquail Smith',           position: 'RB', positionGroup: 'Running Backs',   year: 'JR',  height: '5\'10"', weight: '202', hometown: 'Lithonia, GA',     previousSchool: 'Sacramento State' },
+  { jersey: '9',  name: 'Richard Young',          position: 'RB', positionGroup: 'Running Backs',  year: 'JR', height: "5'11\"", weight: '210', hometown: 'Lehigh Acres, FL / Lehigh',          previousSchool: 'Alabama' },
+  { jersey: '20', name: 'DeKalon Taylor',         position: 'RB', positionGroup: 'Running Backs',  year: 'SR', height: "5'9\"",  weight: '165', hometown: 'Longview, TX / Longview',            previousSchool: 'Incarnate Word' },
+  { jersey: '23', name: 'JaQuail Smith',          position: 'RB', positionGroup: 'Running Backs',  year: 'So', height: "5'11\"", weight: '170', hometown: 'Orlando, FL / Jones',                previousSchool: 'Sacramento State' },
+  { jersey: '26', name: 'Damian Henderson II',    position: 'RB', positionGroup: 'Running Backs',  year: 'JR', height: "6'2\"",  weight: '205', hometown: 'Los Alamitos, CA / Los Alamitos',    previousSchool: 'Colorado State/Sacramento State' },
+  { jersey: '27', name: 'Bryce Hicks',            position: 'RB', positionGroup: 'Running Backs',  year: 'So', height: "5'9\"",  weight: '185', hometown: 'Atlanta, GA / Carrollton',            previousSchool: 'West Georgia' },
+  { jersey: '29', name: 'Micah Welch',            position: 'RB', positionGroup: 'Running Backs',  year: 'JR', height: "5'9\"",  weight: '215', hometown: 'Milledgeville, GA / Baldwin' },
+  { jersey: '34', name: 'Titus Bautista',         position: 'RB', positionGroup: 'Running Backs',  year: 'So', height: "5'10\"", weight: '185', hometown: 'Chicago, IL / DePaul College Prep' },
+  { jersey: '37', name: 'Leonardo Valle',         position: 'RB', positionGroup: 'Running Backs',  year: 'FR', height: "6'1\"",  weight: '210', hometown: 'Richmond Hill, GA / Richmond Hill' },
   // WIDE RECEIVERS
-  { jersey: '3',  name: 'Kam Perry',               position: 'WR', positionGroup: 'Wide Receivers',  year: 'SO',  height: '5\'11"', weight: '175', hometown: 'Plantation, FL' },
-  { jersey: '6',  name: 'DeAndre Moore Jr.',       position: 'WR', positionGroup: 'Wide Receivers',  year: 'SO',  height: '5\'11"', weight: '185', hometown: 'Sachse, TX',       previousSchool: 'Texas' },
-  { jersey: '8',  name: 'Joseph Williams',         position: 'WR', positionGroup: 'Wide Receivers',  year: 'JR',  height: '6\'1"',  weight: '185', hometown: 'Stone Mountain, GA' },
-  { jersey: '11', name: 'Danny Scudero',           position: 'WR', positionGroup: 'Wide Receivers',  year: 'SR',  height: '5\'9"',  weight: '172', hometown: 'Fresno, CA',       previousSchool: 'San Jose State' },
-  { jersey: '13', name: 'Hykeem Williams',         position: 'WR', positionGroup: 'Wide Receivers',  year: 'JR',  height: '5\'11"', weight: '178', hometown: 'Fort Lauderdale, FL' },
-  { jersey: '15', name: 'Rodney Colton Jr.',       position: 'WR', positionGroup: 'Wide Receivers',  year: 'FR',  height: '6\'0"',  weight: '180', hometown: 'Baton Rouge, LA' },
-  { jersey: '16', name: 'Ernest Campbell',         position: 'WR', positionGroup: 'Wide Receivers',  year: 'JR',  height: '6\'0"',  weight: '182', hometown: 'Daytona Beach, FL' },
-  { jersey: '18', name: 'Jacob Swain',             position: 'WR', positionGroup: 'Wide Receivers',  year: 'FR',  height: '6\'2"',  weight: '188', hometown: 'Austin, TX' },
+  { jersey: '3',  name: 'DeAndre Moore Jr.',      position: 'WR', positionGroup: 'Wide Receivers', year: 'SR', height: "6'0\"",  weight: '190', hometown: 'Bellflower, CA / St. John Bosco',    previousSchool: 'Texas' },
+  { jersey: '4',  name: 'Ernest Campbell',        position: 'WR', positionGroup: 'Wide Receivers', year: 'So', height: "5'9\"",  weight: '145', hometown: 'Refugio, TX / Refugio',              previousSchool: 'Texas A&M/Sacramento St.' },
+  { jersey: '5',  name: 'Hykeem Williams',        position: 'WR', positionGroup: 'Wide Receivers', year: 'SR', height: "6'2\"",  weight: '220', hometown: 'Fort Lauderdale, FL / Stranahan',     previousSchool: 'Florida State' },
+  { jersey: '6',  name: 'Quentin Gibson',         position: 'WR', positionGroup: 'Wide Receivers', year: 'So', height: "5'9\"",  weight: '155', hometown: 'Fort Worth, TX / North Crowley' },
+  { jersey: '7',  name: 'Kam Perry',              position: 'WR', positionGroup: 'Wide Receivers', year: 'SR', height: "5'9\"",  weight: '170', hometown: 'Marietta, GA / Marietta',            previousSchool: 'Indiana/Miami (Ohio)' },
+  { jersey: '8',  name: 'Joseph Williams',        position: 'WR', positionGroup: 'Wide Receivers', year: 'JR', height: "6'2\"",  weight: '200', hometown: 'Arlington, TX / Mansfield Summit',   previousSchool: 'Tulsa' },
+  { jersey: '13', name: 'Kaleb Mathis',           position: 'WR', positionGroup: 'Wide Receivers', year: 'JR', height: "5'9\"",  weight: '165', hometown: 'Arlington, TX / Grace Prep' },
+  { jersey: '14', name: 'Quanell Farrakhan Jr.',  position: 'WR', positionGroup: 'Wide Receivers', year: 'So', height: "6'1\"",  weight: '180', hometown: 'Houston, TX / North Shore' },
+  { jersey: '17', name: 'Christian Ward',         position: 'WR', positionGroup: 'Wide Receivers', year: 'FR', height: "6'3\"",  weight: '205', hometown: 'Carrollton, GA / IMG Academy' },
+  { jersey: '18', name: 'Danny Scudero',          position: 'WR', positionGroup: 'Wide Receivers', year: 'SR', height: "5'9\"",  weight: '175', hometown: 'San Jose, CA / Archbishop Mitty',    previousSchool: 'Sacramento State/San Jose State' },
+  { jersey: '22', name: 'Tagert Bardin',          position: 'WR', positionGroup: 'Wide Receivers', year: 'JR', height: "6'0\"",  weight: '160', hometown: 'Durango, CO / Durango' },
+  { jersey: '32', name: 'Alex Ward',              position: 'WR', positionGroup: 'Wide Receivers', year: 'FR', height: "6'1\"",  weight: '180', hometown: 'Carrollton, GA / IMG Academy' },
+  { jersey: '36', name: 'Carson Westbrook',       position: 'WR', positionGroup: 'Wide Receivers', year: 'So', height: "5'11\"", weight: '170', hometown: 'Ellaville, GA / Schley County' },
   // TIGHT ENDS
-  { jersey: '85', name: 'Brady Russell',           position: 'TE', positionGroup: 'Tight Ends',      year: 'SO',  height: '6\'4"',  weight: '245', hometown: 'Bountiful, UT' },
-  { jersey: '88', name: 'Zach Atkins',             position: 'TE', positionGroup: 'Tight Ends',      year: 'SR',  height: '6\'5"',  weight: '250', hometown: 'Scottsdale, AZ' },
+  { jersey: '82', name: 'Ben Gula',               position: 'TE', positionGroup: 'Tight Ends',     year: 'FR', height: "6'5\"",  weight: '285', hometown: 'Weston, FL / Cypress Bay' },
+  { jersey: '83', name: 'Zayne DeSouza',          position: 'TE', positionGroup: 'Tight Ends',     year: 'FR', height: "6'6\"",  weight: '260', hometown: 'Loveland, CO / Loveland' },
+  { jersey: '85', name: 'Zach Atkins',            position: 'TE', positionGroup: 'Tight Ends',     year: 'SR', height: "6'4\"",  weight: '240', hometown: 'Olathe, KS / Blue Valley Southwest', previousSchool: 'Northwest Missouri State' },
+  { jersey: '86', name: 'Brady Kopetz',           position: 'TE', positionGroup: 'Tight Ends',     year: 'SR', height: "6'4\"",  weight: '270', hometown: 'Portland, OR / Lincoln' },
+  { jersey: '87', name: 'Charlie Williams',       position: 'TE', positionGroup: 'Tight Ends',     year: 'JR', height: "6'4\"",  weight: '245', hometown: 'Aspen, CO / IMG Academy',            previousSchool: 'UNLV' },
+  { jersey: '88', name: 'Corbin Laisure',         position: 'TE', positionGroup: 'Tight Ends',     year: 'FR', height: "6'5\"",  weight: '250', hometown: 'Bluff City, TN / Science Hill' },
+  { jersey: '89', name: 'Fisher Clements',        position: 'TE', positionGroup: 'Tight Ends',     year: 'GR', height: "6'7\"",  weight: '265', hometown: 'Hattiesburg, MS / Mountain View (Idaho)', previousSchool: 'Northern Colorado' },
   // OFFENSIVE LINE
-  { jersey: '51', name: 'Caleb Krings',            position: 'C',  positionGroup: 'Offensive Line',  year: 'GR',  height: '6\'3"',  weight: '305', hometown: 'Katy, TX' },
-  { jersey: '56', name: 'Gerad Christian-Lichtenhan', position: 'OG', positionGroup: 'Offensive Line', year: 'JR', height: '6\'5"', weight: '310', hometown: 'Phoenix, AZ' },
-  { jersey: '60', name: 'Tyler Brown',             position: 'OG', positionGroup: 'Offensive Line',  year: 'JR',  height: '6\'3"',  weight: '295', hometown: 'San Diego, CA' },
-  { jersey: '66', name: 'Andrew Coker',            position: 'OG', positionGroup: 'Offensive Line',  year: 'SR',  height: '6\'4"',  weight: '305', hometown: 'Atlanta, GA',      previousSchool: 'Georgia Tech' },
-  { jersey: '72', name: 'Darius Hinton',           position: 'OT', positionGroup: 'Offensive Line',  year: 'FR',  height: '6\'5"',  weight: '295', hometown: 'Chandler, AZ' },
-  { jersey: '73', name: 'Jake Wray',               position: 'OT', positionGroup: 'Offensive Line',  year: 'SR',  height: '6\'6"',  weight: '300', hometown: 'Chandler, AZ' },
-  { jersey: '74', name: 'Jayvon McFadden',         position: 'OT', positionGroup: 'Offensive Line',  year: 'SO',  height: '6\'3"',  weight: '295', hometown: 'Columbus, OH',     previousSchool: 'Ohio State' },
-  { jersey: '75', name: 'Savion Washington',       position: 'OT', positionGroup: 'Offensive Line',  year: 'SR',  height: '6\'5"',  weight: '308', hometown: 'Columbia, SC' },
-  { jersey: '77', name: 'Frank Fillip',            position: 'OT', positionGroup: 'Offensive Line',  year: 'GR',  height: '6\'6"',  weight: '310', hometown: 'Southlake, TX' },
+  { jersey: '51', name: 'Chauncey Gooden',        position: 'OL', positionGroup: 'Offensive Line', year: 'FR', height: "6'3\"",  weight: '380', hometown: 'Nashville, TN / Lipscomb Academy' },
+  { jersey: '52', name: 'Andre Roye Jr.',         position: 'OL', positionGroup: 'Offensive Line', year: 'SR', height: "6'6\"",  weight: '295', hometown: 'District Heights, MD / St. Frances', previousSchool: 'Maryland' },
+  { jersey: '53', name: 'Larry Johnson III',      position: 'OL', positionGroup: 'Offensive Line', year: 'SR', height: "6'7\"",  weight: '350', hometown: 'Savannah, GA / Jenkins',             previousSchool: 'Hutchinson CC/Tennessee' },
+  { jersey: '54', name: 'Taj White',              position: 'OL', positionGroup: 'Offensive Line', year: 'SR', height: "6'5\"",  weight: '310', hometown: 'Jersey City, NJ / Hudson Catholic',  previousSchool: 'Rutgers' },
+  { jersey: '55', name: 'Bo Hughley',             position: 'OL', positionGroup: 'Offensive Line', year: 'JR', height: "6'7\"",  weight: '295', hometown: 'Fairburn, GA / Langston Hughes',     previousSchool: 'Georgia' },
+  { jersey: '56', name: 'Phillip Houston',        position: 'OL', positionGroup: 'Offensive Line', year: 'SR', height: "6'5\"",  weight: '280', hometown: 'McKinney, TX / McKinney Boyd',       previousSchool: 'Navarro College/FIU' },
+  { jersey: '57', name: 'Leon Bell',              position: 'OL', positionGroup: 'Offensive Line', year: 'GR', height: "6'8\"",  weight: '330', hometown: 'Dickinson, TX / Dickinson',          previousSchool: 'Kilgore CC/Mississippi State/California' },
+  { jersey: '58', name: 'Demetrius Hunter',       position: 'OL', positionGroup: 'Offensive Line', year: 'GR', height: "6'2\"",  weight: '310', hometown: 'Orange, TX / West Orange-Stark',     previousSchool: 'Houston' },
+  { jersey: '59', name: 'Yahya Attia',            position: 'OL', positionGroup: 'Offensive Line', year: 'So', height: "6'4\"",  weight: '340', hometown: 'London, England / NFL Academy' },
+  { jersey: '62', name: 'Sean Kinney',            position: 'OL', positionGroup: 'Offensive Line', year: 'JR', height: "6'2\"",  weight: '305', hometown: 'Nazareth, PA / Nazareth',            previousSchool: 'Lafayette' },
+  { jersey: '71', name: 'Jayvon McFadden',        position: 'OL', positionGroup: 'Offensive Line', year: 'FR', height: "6'3\"",  weight: '295', hometown: 'Upper Marlboro, MD / Riverdale Baptist', previousSchool: 'Ohio State' },
+  { jersey: '72', name: 'Xavier Payne',           position: 'OL', positionGroup: 'Offensive Line', year: 'FR', height: "6'7\"",  weight: '320', hometown: 'Canandaigua, NY / Jones' },
+  { jersey: '73', name: 'Jose Soto',              position: 'OL', positionGroup: 'Offensive Line', year: 'JR', height: "6'3\"",  weight: '310', hometown: 'Tulare, CA / Tulare Western',        previousSchool: 'Sacramento State' },
+  { jersey: '75', name: 'Jayven Richardson',      position: 'OL', positionGroup: 'Offensive Line', year: 'SR', height: "6'6\"",  weight: '315', hometown: 'Gonzales, LA / East Ascension',      previousSchool: 'Hutchinson CC/Missouri' },
+  { jersey: '78', name: 'Hudson Steber',          position: 'OL', positionGroup: 'Offensive Line', year: 'FR', height: "6'3\"",  weight: '270', hometown: 'Evergreen, CO / Evergreen' },
   // DEFENSIVE LINE
-  { jersey: '41', name: 'Michael Closson',         position: 'DE', positionGroup: 'Defensive Line',  year: 'SO',  height: '6\'3"',  weight: '250', hometown: 'Houston, TX' },
-  { jersey: '49', name: 'Jaylen Boots',            position: 'DE', positionGroup: 'Defensive Line',  year: 'SR',  height: '6\'3"',  weight: '255', hometown: 'Richmond, VA' },
-  { jersey: '90', name: 'Lamar Smark',             position: 'DE', positionGroup: 'Defensive Line',  year: 'JR',  height: '6\'4"',  weight: '245', hometown: 'Tallahassee, FL' },
-  { jersey: '91', name: 'Domata Peko Jr.',         position: 'DE', positionGroup: 'Defensive Line',  year: 'FR',  height: '6\'4"',  weight: '230', hometown: 'Calabasas, CA' },
-  { jersey: '92', name: 'Jordan Domineck',         position: 'DT', positionGroup: 'Defensive Line',  year: 'GR',  height: '6\'3"',  weight: '290', hometown: 'Lawrenceville, GA' },
-  { jersey: '93', name: 'Dashawn Belen',           position: 'DT', positionGroup: 'Defensive Line',  year: 'SR',  height: '6\'2"',  weight: '285', hometown: 'Las Vegas, NV' },
-  { jersey: '94', name: 'Jaden Navarrette',        position: 'DE', positionGroup: 'Defensive Line',  year: 'JR',  height: '6\'4"',  weight: '250', hometown: 'Glendale, AZ' },
-  { jersey: '95', name: 'D.J. Moore',              position: 'DT', positionGroup: 'Defensive Line',  year: 'SR',  height: '6\'2"',  weight: '298', hometown: 'Conway, SC',       previousSchool: 'Coastal Carolina' },
-  { jersey: '97', name: 'Joseph Peko',             position: 'DT', positionGroup: 'Defensive Line',  year: 'FR',  height: '6\'3"',  weight: '280', hometown: 'Calabasas, CA' },
-  { jersey: '99', name: 'Brandon Hopper',          position: 'DT', positionGroup: 'Defensive Line',  year: 'SR',  height: '6\'3"',  weight: '285', hometown: 'New Orleans, LA',  previousSchool: 'Tulane' },
+  { jersey: '27', name: 'Domata Peko Jr.',        position: 'DE', positionGroup: 'Defensive Line', year: 'JR', height: "6'4\"",  weight: '235', hometown: 'Calabasas, CA / Calabasas',          previousSchool: 'Ventura College' },
+  { jersey: '41', name: 'Kylan Salter',           position: 'DE', positionGroup: 'Defensive Line', year: 'JR', height: "6'2\"",  weight: '230', hometown: 'Cedar Hill, TX / Cedar Hill',        previousSchool: 'TCU' },
+  { jersey: '45', name: 'Vili Taufatofua',        position: 'DL', positionGroup: 'Defensive Line', year: 'SR', height: "6'3\"",  weight: '260', hometown: 'Auckland, New Zealand / Mount Roskill', previousSchool: 'NMMI/Utah/San Jose State' },
+  { jersey: '49', name: 'Quency Wiggins',         position: 'DE', positionGroup: 'Defensive Line', year: 'SR', height: "6'5\"",  weight: '255', hometown: 'Baton Rouge, LA / Madison Prep',    previousSchool: 'LSU' },
+  { jersey: '52', name: 'Immanuel Ezeogu',        position: 'DE', positionGroup: 'Defensive Line', year: 'So', height: "6'2\"",  weight: '240', hometown: 'Suffolk, VA / Nansemond River',      previousSchool: 'James Madison' },
+  { jersey: '53', name: 'Toby Anene',             position: 'DE', positionGroup: 'Defensive Line', year: 'SR', height: "6'4\"",  weight: '260', hometown: 'St. Paul, MN / East Ridge',          previousSchool: 'North Dakota State' },
+  { jersey: '56', name: 'Lamont Lester Jr.',      position: 'DL', positionGroup: 'Defensive Line', year: 'So', height: "6'2\"",  weight: '230', hometown: 'Ramsey, NJ / Don Bosco Prep',        previousSchool: 'Monmouth' },
+  { jersey: '88', name: 'Samu Taumanupepe',       position: 'DL', positionGroup: 'Defensive Line', year: 'JR', height: "6'3\"",  weight: '375', hometown: 'Humble, TX / Atascocita',            previousSchool: 'Texas A&M/Baylor' },
+  { jersey: '90', name: 'Tyler Moore',            position: 'DL', positionGroup: 'Defensive Line', year: 'JR', height: "5'10\"", weight: '290', hometown: 'Locust Grove, GA / Luella',           previousSchool: 'Tennessee State/Coastal Carolina' },
+  { jersey: '91', name: 'Sedrick Smith',          position: 'DL', positionGroup: 'Defensive Line', year: 'JR', height: "6'4\"",  weight: '320', hometown: 'Atlanta, GA / South Atlanta',         previousSchool: 'SC State/Alabama A&M/Maryland' },
+  { jersey: '94', name: 'Josiah Manu',            position: 'DL', positionGroup: 'Defensive Line', year: 'FR', height: "6'5\"",  weight: '295', hometown: 'Loveland, CO / Thompson Valley' },
+  { jersey: '95', name: 'Yamil Talib',            position: 'DE', positionGroup: 'Defensive Line', year: 'So', height: "6'2\"",  weight: '240', hometown: 'Richardson, TX / Richardson Berkner', previousSchool: 'Oklahoma State/Charlotte' },
+  { jersey: '96', name: 'Balansama Kamara',       position: 'DE', positionGroup: 'Defensive Line', year: 'SR', height: "6'3\"",  weight: '260', hometown: 'Philadelphia, PA / Central',          previousSchool: 'Temple/Hutchinson CC/Albany' },
+  { jersey: '97', name: 'Santana Hopper',         position: 'DL', positionGroup: 'Defensive Line', year: 'SR', height: "6'2\"",  weight: '265', hometown: 'Shelby, NC / Shelby',                previousSchool: 'Appalachian State/Tulane' },
+  { jersey: '98', name: 'Ezra Christensen',       position: 'DL', positionGroup: 'Defensive Line', year: 'SR', height: "6'2\"",  weight: '280', hometown: 'Poway, CA / Poway',                  previousSchool: 'SD Mesa/Fresno State/New Mexico State' },
+  { jersey: '99', name: 'Dylan Manuel',           position: 'DL', positionGroup: 'Defensive Line', year: 'FR', height: "6'1\"",  weight: '300', hometown: 'Stockbridge, GA / Stockbridge',       previousSchool: 'Appalachian State' },
   // LINEBACKERS
-  { jersey: '21', name: 'Gideon Lampron',          position: 'LB', positionGroup: 'Linebackers',     year: 'SR',  height: '6\'2"',  weight: '228', hometown: 'Southlake, TX',    previousSchool: 'Florida Atlantic' },
-  { jersey: '24', name: 'Liona Lefau',             position: 'LB', positionGroup: 'Linebackers',     year: 'SR',  height: '6\'1"',  weight: '225', hometown: 'Temecula, CA',     previousSchool: 'Temple' },
-  { jersey: '37', name: 'Taje McCoy',              position: 'LB', positionGroup: 'Linebackers',     year: 'JR',  height: '6\'1"',  weight: '220', hometown: 'Mesquite, TX' },
-  { jersey: '43', name: 'Carson Crawford',         position: 'LB', positionGroup: 'Linebackers',     year: 'FR',  height: '6\'4"',  weight: '220', hometown: 'Carthage, TX' },
-  { jersey: '45', name: 'Tyler Martinez',          position: 'LB', positionGroup: 'Linebackers',     year: 'SR',  height: '6\'2"',  weight: '235', hometown: 'Albuquerque, NM',  previousSchool: 'Texas A&M' },
-  // CORNERBACKS
-  { jersey: '7',  name: 'Preston Hodge',           position: 'CB', positionGroup: 'Defensive Backs', year: 'JR',  height: '5\'11"', weight: '178', hometown: 'Buford, GA' },
-  { jersey: '20', name: 'Cree Thomas',             position: 'CB', positionGroup: 'Defensive Backs', year: 'SR',  height: '5\'10"', weight: '172', hometown: 'Tallahassee, FL',  previousSchool: 'Sacramento State' },
-  { jersey: '23', name: 'Jason Stokes Jr.',        position: 'CB', positionGroup: 'Defensive Backs', year: 'SO',  height: '5\'11"', weight: '175', hometown: 'Miami, FL' },
-  { jersey: '26', name: 'Markari Vickers',         position: 'CB', positionGroup: 'Defensive Backs', year: 'JR',  height: '6\'0"',  weight: '178', hometown: 'Rockledge, FL' },
-  { jersey: '28', name: 'Justin Eaglin',           position: 'CB', positionGroup: 'Defensive Backs', year: 'SR',  height: '5\'11"', weight: '175', hometown: 'DeSoto, TX',       previousSchool: 'Georgia Tech' },
-  { jersey: '29', name: 'Emory Floyd',             position: 'CB', positionGroup: 'Defensive Backs', year: 'SO',  height: '6\'0"',  weight: '175', hometown: 'Carrollton, TX' },
-  { jersey: '30', name: 'RJ Johnson',              position: 'CB', positionGroup: 'Defensive Backs', year: 'SO',  height: '5\'10"', weight: '170', hometown: 'Powder Springs, GA' },
-  // SAFETIES
-  { jersey: '2',  name: 'Boo Carter',              position: 'S',  positionGroup: 'Defensive Backs', year: 'JR',  height: '6\'0"',  weight: '190', hometown: 'Knoxville, TN',    previousSchool: 'Tennessee' },
-  { jersey: '9',  name: 'Preston Ashley',          position: 'S',  positionGroup: 'Defensive Backs', year: 'FR',  height: '5\'10"', weight: '180', hometown: 'Brandon, MS' },
-  { jersey: '14', name: 'Jah Jah Boyd',            position: 'S',  positionGroup: 'Defensive Backs', year: 'SR',  height: '6\'1"',  weight: '200', hometown: 'Lake City, FL',    previousSchool: 'Indiana' },
-  { jersey: '19', name: 'Naeten Mitchell',         position: 'S',  positionGroup: 'Defensive Backs', year: 'SR',  height: '6\'0"',  weight: '195', hometown: 'Houston, TX',      previousSchool: 'Texas A&M' },
-  { jersey: '31', name: 'Ben Fineseth',            position: 'S',  positionGroup: 'Defensive Backs', year: 'JR',  height: '6\'1"',  weight: '198', hometown: 'Scottsdale, AZ' },
-  { jersey: '33', name: 'Randon Fontenette',       position: 'S',  positionGroup: 'Defensive Backs', year: 'SR',  height: '6\'0"',  weight: '200', hometown: 'Port Arthur, TX',  previousSchool: 'Texas A&M' },
+  { jersey: '17', name: 'Liona Lefau',            position: 'LB', positionGroup: 'Linebackers',    year: 'SR', height: "6'1\"",  weight: '230', hometown: 'Kahuka, HI / Kahuku',                previousSchool: 'Texas' },
+  { jersey: '35', name: 'Tyler Martinez',         position: 'LB', positionGroup: 'Linebackers',    year: 'SR', height: "6'1\"",  weight: '220', hometown: 'Albuquerque, NM / Volcano Vista',    previousSchool: 'NMMI/New Mexico State' },
+  { jersey: '40', name: 'Colby Johnson',          position: 'LB', positionGroup: 'Linebackers',    year: 'FR', height: "6'2\"",  weight: '195', hometown: 'Sammamish, WA / Eastlake' },
+  { jersey: '44', name: 'Gideon Lampron',         position: 'LB', positionGroup: 'Linebackers',    year: 'SR', height: "6'0\"",  weight: '220', hometown: 'LaGrange, OH / Keystone',            previousSchool: 'Dayton/Bowling Green' },
+  { jersey: '50', name: 'Rodney Colton Jr.',      position: 'LB', positionGroup: 'Linebackers',    year: 'FR', height: "6'1\"",  weight: '225', hometown: 'Newnan, GA / Newnan' },
+  { jersey: '51', name: 'Carson Crawford',        position: 'LB', positionGroup: 'Linebackers',    year: 'FR', height: "6'4\"",  weight: '220', hometown: 'Carthage, TX / Carthage' },
+  { jersey: '54', name: 'Bo LaPenna',             position: 'LB', positionGroup: 'Linebackers',    year: 'SR', height: "6'1\"",  weight: '235', hometown: 'Commerce City, CO / Adams City' },
+  { jersey: '55', name: 'Gage Goldberg',          position: 'LB', positionGroup: 'Linebackers',    year: 'So', height: "6'0\"",  weight: '210', hometown: 'Boerne, TX / Champion' },
+  // DEFENSIVE BACKS
+  { jersey: '4',  name: 'Naeten Mitchell',        position: 'DB', positionGroup: 'Defensive Backs', year: 'JR', height: "5'10\"", weight: '175', hometown: 'Temple, TX / Temple',               previousSchool: 'New Mexico State' },
+  { jersey: '5',  name: 'RJ Johnson',             position: 'DB', positionGroup: 'Defensive Backs', year: 'JR', height: "6'2\"",  weight: '185', hometown: "McDonough, GA / Eagle's Landing" },
+  { jersey: '6',  name: 'Boo Carter',             position: 'DB', positionGroup: 'Defensive Backs', year: 'JR', height: "5'11\"", weight: '200', hometown: 'Chattanooga, TN / Bradley Central',  previousSchool: 'Tennessee' },
+  { jersey: '7',  name: 'Randon Fontenette',      position: 'DB', positionGroup: 'Defensive Backs', year: 'SR', height: "6'2\"",  weight: '220', hometown: 'Freeport, TX / Brazosport',          previousSchool: 'TCU/Vanderbilt' },
+  { jersey: '8',  name: 'Emory Floyd',            position: 'DB', positionGroup: 'Defensive Backs', year: 'SR', height: "6'1\"",  weight: '195', hometown: 'Powder Springs, GA / Hillgrove',     previousSchool: 'South Carolina/Appalachian State' },
+  { jersey: '9',  name: 'Jaydan Hardy',           position: 'DB', positionGroup: 'Defensive Backs', year: 'FR', height: "5'10\"", weight: '180', hometown: 'Lewisville, TX / Lewisville',        previousSchool: 'Oklahoma' },
+  { jersey: '10', name: 'Makari Vickers',         position: 'DB', positionGroup: 'Defensive Backs', year: 'JR', height: "6'1\"",  weight: '190', hometown: 'Tallahassee, FL / Robert F. Munroe', previousSchool: 'Oklahoma' },
+  { jersey: '13', name: 'Jason Stokes Jr.',       position: 'DB', positionGroup: 'Defensive Backs', year: 'So', height: "6'2\"",  weight: '185', hometown: 'Pflugerville, TX / Weiss',           previousSchool: 'Utah' },
+  { jersey: '15', name: 'Jah Jah Boyd',           position: 'DB', positionGroup: 'Defensive Backs', year: 'So', height: "5'11\"", weight: '190', hometown: 'Philadelphia, PA / Roman Catholic',   previousSchool: 'Indiana' },
+  { jersey: '18', name: 'Paul Omodia',            position: 'DB', positionGroup: 'Defensive Backs', year: 'JR', height: "6'2\"",  weight: '200', hometown: 'Richmond, TX / Fort Bend Bush',      previousSchool: 'Illinois State/Lamar' },
+  { jersey: '20', name: 'Cree Thomas',            position: 'DB', positionGroup: 'Defensive Backs', year: 'FR', height: "6'1\"",  weight: '190', hometown: 'Phoenix, AZ / Brophy Prep',          previousSchool: 'Notre Dame' },
+  { jersey: '25', name: 'Mojo Williams Jr.',      position: 'DB', positionGroup: 'Defensive Backs', year: 'FR', height: "5'11\"", weight: '170', hometown: 'New Orleans, LA / Edna Karr' },
+  { jersey: '26', name: 'Braylon Edwards',        position: 'DB', positionGroup: 'Defensive Backs', year: 'FR', height: "5'11\"", weight: '180', hometown: 'Duncanville, TX / Duncanville' },
+  { jersey: '28', name: 'Ben Finneseth',          position: 'DB', positionGroup: 'Defensive Backs', year: 'SR', height: "6'2\"",  weight: '205', hometown: 'Durango, CO / Durango' },
+  { jersey: '30', name: 'Justin Eaglin',          position: 'DB', positionGroup: 'Defensive Backs', year: 'SR', height: "6'1\"",  weight: '175', hometown: 'Fayetteville, NC / Pine Forest',     previousSchool: 'James Madison' },
+  { jersey: '31', name: 'Preston Ashley',         position: 'CB', positionGroup: 'Defensive Backs', year: 'FR', height: "5'11\"", weight: '185', hometown: 'Brandon, MS / Brandon' },
+  { jersey: '33', name: 'Kole Mathis',            position: 'DB', positionGroup: 'Defensive Backs', year: 'So', height: "5'8\"",  weight: '140', hometown: 'Arlington, TX / Fairview' },
+  { jersey: '39', name: 'Donavon Stephens',       position: 'DB', positionGroup: 'Defensive Backs', year: 'FR', height: "5'10\"", weight: '170', hometown: 'Alpharetta, GA / Collins Hill',      previousSchool: 'Georgia Military Institute' },
   // SPECIALISTS
-  { jersey: '47', name: 'CJ Velarde',              position: 'P',  positionGroup: 'Specialists',     year: 'JR',  height: '6\'2"',  weight: '205', hometown: 'Albuquerque, NM' },
-  { jersey: '48', name: 'Luke Brauer',             position: 'P',  positionGroup: 'Specialists',     year: 'SO',  height: '6\'1"',  weight: '195', hometown: 'Denver, CO' },
-  { jersey: '96', name: 'Alejandro Mata',          position: 'K',  positionGroup: 'Specialists',     year: 'GR',  height: '5\'11"', weight: '185', hometown: 'San Antonio, TX' },
-  { jersey: '98', name: 'Cole Becker',             position: 'K',  positionGroup: 'Specialists',     year: 'JR',  height: '6\'0"',  weight: '190', hometown: 'Aurora, CO' },
+  { jersey: '35', name: 'Damon Greaves',          position: 'P',  positionGroup: 'Specialists',     year: 'SR', height: "6'1\"",  weight: '190', hometown: 'Busselton, Australia / Prokick Australia', previousSchool: 'Kansas' },
+  { jersey: '38', name: 'Daniel Gerlach',         position: 'P',  positionGroup: 'Specialists',     year: 'JR', height: "6'0\"",  weight: '160', hometown: 'Boulder, CO / Boulder',              previousSchool: 'Colby College' },
+  { jersey: '46', name: 'Elliot Arnold',          position: 'PK', positionGroup: 'Specialists',     year: 'FR', height: "5'10\"", weight: '165', hometown: 'Chattanooga, TN / McCallie' },
+  { jersey: '45', name: 'Luke Whiting',           position: 'SN', positionGroup: 'Specialists',     year: 'JR', height: "6'4\"",  weight: '225', hometown: 'Holiday, UT / Olympus',             previousSchool: 'Idaho State/FAU/Georgia Tech' },
+  { jersey: '50', name: 'Trey Young',             position: 'SN', positionGroup: 'Specialists',     year: 'So', height: "5'10\"", weight: '195', hometown: 'San Juan Capistrano, CA / San Juan Hills', previousSchool: 'Saddleback' },
+  { jersey: '60', name: 'Josh McCormick',         position: 'PK', positionGroup: 'Specialists',     year: 'GR', height: "6'0\"",  weight: '220', hometown: 'Austin, TX / Akins',                previousSchool: 'Oregon State/William & Mary/Grambling State' },
+  { jersey: '61', name: 'Aiden DeCorte',          position: 'SN', positionGroup: 'Specialists',     year: 'JR', height: "6'1\"",  weight: '300', hometown: 'Jackson, MI / Jackson',              previousSchool: 'Central Michigan' },
 ];
 
 const POSITION_FILTERS = ['All', 'QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'DB', 'K/P'];
@@ -97,11 +134,11 @@ const POSITION_FILTER_MAP: Record<string, string[]> = {
   'RB': ['RB', 'FB'],
   'WR': ['WR'],
   'TE': ['TE'],
-  'OL': ['OT', 'OG', 'C'],
-  'DL': ['DE', 'DT', 'NT'],
+  'OL': ['OL', 'OT', 'OG', 'C'],
+  'DL': ['DE', 'DL', 'DT', 'NT'],
   'LB': ['LB', 'ILB', 'OLB'],
-  'DB': ['CB', 'S', 'FS', 'SS', 'DB'],
-  'K/P': ['K', 'P', 'LS'],
+  'DB': ['CB', 'DB', 'S', 'FS', 'SS'],
+  'K/P': ['K', 'P', 'PK', 'SN', 'LS'],
 };
 
 interface EspnAthlete {
@@ -112,6 +149,7 @@ interface EspnAthlete {
 }
 
 function YearBadge({ year }: { year: string }) {
+  const upper = year.toUpperCase();
   const colors: Record<string, string> = {
     FR: 'bg-green-900/60 text-green-400',
     SO: 'bg-blue-900/60 text-blue-400',
@@ -120,8 +158,8 @@ function YearBadge({ year }: { year: string }) {
     GR: 'bg-red-900/60 text-red-400',
   };
   return (
-    <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${colors[year] || 'bg-gray-700 text-gray-400'}`}>
-      {year}
+    <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${colors[upper] || 'bg-gray-700 text-gray-400'}`}>
+      {upper}
     </span>
   );
 }
@@ -198,6 +236,9 @@ export default function RosterPage() {
 
   const transfers = OFFICIAL_ROSTER.filter(p => p.previousSchool);
 
+  // suppress unused warning
+  void SkeletonRow;
+
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header */}
@@ -229,12 +270,12 @@ export default function RosterPage() {
           <span className="ml-auto text-gray-500 text-xs">{transfers.length} transfers on roster</span>
         </div>
         <div className="flex flex-wrap gap-2">
-          {transfers.map(p => (
-            <div key={p.jersey} className="flex items-center gap-2 bg-cu-black/50 rounded-lg px-3 py-1.5 border border-cu-gold/10">
+          {transfers.map((p, i) => (
+            <div key={`${p.jersey}-${p.name}-${i}`} className="flex items-center gap-2 bg-cu-black/50 rounded-lg px-3 py-1.5 border border-cu-gold/10">
               <span className="text-cu-gold font-bold text-xs">#{p.jersey}</span>
               <span className="text-white text-xs font-medium">{p.name}</span>
               <span className="text-gray-500 text-xs">{p.position}</span>
-              <span className="text-gray-600 text-xs">← {p.previousSchool}</span>
+              <span className="text-gray-600 text-xs">&#8592; {p.previousSchool}</span>
             </div>
           ))}
         </div>
@@ -265,7 +306,7 @@ export default function RosterPage() {
           <span className="ml-auto text-gray-500 text-xs flex items-center gap-1">
             <Users size={12} />
             {filtered.length} players
-            {loadingHeadshots && <span className="text-gray-600 ml-1">(loading photos…)</span>}
+            {loadingHeadshots && <span className="text-gray-600 ml-1">(loading photos&hellip;)</span>}
           </span>
         </div>
       </div>
@@ -295,7 +336,7 @@ export default function RosterPage() {
                     .sort((a, b) => parseInt(a.jersey) - parseInt(b.jersey))
                     .map((player, i) => (
                       <tr
-                        key={player.jersey}
+                        key={`${player.jersey}-${player.name}`}
                         className={`border-b border-gray-800/50 hover:bg-cu-gold/5 transition-colors ${i % 2 === 0 ? '' : 'bg-black/20'}`}
                       >
                         <td className="px-3 py-3 text-cu-gold font-black text-sm w-10">
@@ -343,7 +384,7 @@ export default function RosterPage() {
 
       {/* Footer note */}
       <div className="mt-6 text-center text-gray-600 text-xs">
-        Roster sourced from{' '}
+        Roster sourced from official 2026 Spring Football Roster PDF{' '}
         <a href="https://cubuffs.com/sports/football/roster" target="_blank" rel="noopener noreferrer" className="text-cu-gold/60 hover:text-cu-gold underline">
           cubuffs.com
         </a>

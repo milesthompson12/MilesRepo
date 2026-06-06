@@ -37,82 +37,118 @@ type Side = 'offense' | 'defense';
 
 // ─── Roster data ──────────────────────────────────────────────────────────────
 
+// Players sourced exclusively from official 2026 Spring Football Roster PDF
 const rawRoster: Record<string, Omit<Player, 'posGroup'>[]> = {
   QB: [
-    { name: 'Julian Lewis', number: '1', year: 'SO', rank: 1 },
-    { name: 'Isaac Wilson', number: '10', year: 'JR', rank: 2 },
-    { name: 'Kaneal Sweetwyne', number: '12', year: 'FR', rank: 3 },
+    { name: 'Julian Lewis',     number: '10', year: 'FR', rank: 1 },
+    { name: 'Isaac Wilson',     number: '16', year: 'SO', rank: 2 },
+    { name: 'Dominiq Ponder',   number: '7',  year: 'JR', rank: 3 },
+    { name: 'Kaneal Sweetwyne', number: '14', year: 'FR', rank: 4 },
   ],
   RB: [
-    { name: 'Richard Young', number: '4', year: 'SO', rank: 1 },
-    { name: 'Damian Henderson II', number: '22', year: 'JR', rank: 2 },
-    { name: 'Jaquail Smith', number: '25', year: 'JR', rank: 3 },
-    { name: 'Cam Newton', number: '5', year: 'FR', rank: 4 },
+    { name: 'Richard Young',      number: '9',  year: 'JR', rank: 1 },
+    { name: 'Damian Henderson II',number: '26', year: 'JR', rank: 2 },
+    { name: 'JaQuail Smith',      number: '23', year: 'SO', rank: 3 },
+    { name: 'Micah Welch',        number: '29', year: 'JR', rank: 4 },
+    { name: 'Bryce Hicks',        number: '27', year: 'SO', rank: 5 },
+    { name: 'DeKalon Taylor',     number: '20', year: 'SR', rank: 6 },
+    { name: 'Titus Bautista',     number: '34', year: 'SO', rank: 7 },
+    { name: 'Leonardo Valle',     number: '37', year: 'FR', rank: 8 },
   ],
   WR: [
-    { name: 'Danny Scudero', number: '11', year: 'SR', rank: 1 },
-    { name: 'DeAndre Moore Jr.', number: '6', year: 'SO', rank: 2 },
-    { name: 'Joseph Williams', number: '8', year: 'JR', rank: 3 },
-    { name: 'Hykeem Williams', number: '13', year: 'JR', rank: 4 },
-    { name: 'Ernest Campbell', number: '16', year: 'JR', rank: 5 },
-    { name: 'Rodney Colton Jr.', number: '15', year: 'FR', rank: 6 },
-    { name: 'Jacob Swain', number: '18', year: 'FR', rank: 7 },
-    { name: 'Kam Perry', number: '3', year: 'SO', rank: 8 },
+    { name: 'Danny Scudero',        number: '18', year: 'SR', rank: 1 },
+    { name: 'DeAndre Moore Jr.',    number: '3',  year: 'SR', rank: 2 },
+    { name: 'Joseph Williams',      number: '8',  year: 'JR', rank: 3 },
+    { name: 'Hykeem Williams',      number: '5',  year: 'SR', rank: 4 },
+    { name: 'Kam Perry',            number: '7',  year: 'SR', rank: 5 },
+    { name: 'Quentin Gibson',       number: '6',  year: 'SO', rank: 6 },
+    { name: 'Kaleb Mathis',         number: '13', year: 'JR', rank: 7 },
+    { name: 'Quanell Farrakhan Jr.',number: '14', year: 'SO', rank: 8 },
+    { name: 'Christian Ward',       number: '17', year: 'FR', rank: 9 },
+    { name: 'Tagert Bardin',        number: '22', year: 'JR', rank: 10 },
+    { name: 'Carson Westbrook',     number: '36', year: 'SO', rank: 11 },
+    { name: 'Alex Ward',            number: '32', year: 'FR', rank: 12 },
+    { name: 'Ernest Campbell',      number: '4',  year: 'SO', rank: 13 },
   ],
   TE: [
-    { name: 'Zach Atkins', number: '88', year: 'SR', rank: 1 },
-    { name: 'Brady Russell', number: '85', year: 'SO', rank: 2 },
+    { name: 'Zach Atkins',    number: '85', year: 'SR', rank: 1 },
+    { name: 'Brady Kopetz',   number: '86', year: 'SR', rank: 2 },
+    { name: 'Charlie Williams',number:'87', year: 'JR', rank: 3 },
+    { name: 'Fisher Clements',number: '89', year: 'GR', rank: 4 },
+    { name: 'Ben Gula',       number: '82', year: 'FR', rank: 5 },
+    { name: 'Corbin Laisure', number: '88', year: 'FR', rank: 6 },
+    { name: 'Zayne DeSouza',  number: '83', year: 'FR', rank: 7 },
   ],
   OT: [
-    { name: 'Jayvon McFadden', number: '74', year: 'SO', rank: 1 },
-    { name: 'Frank Fillip', number: '77', year: 'GR', rank: 2 },
-    { name: 'Jake Wray', number: '73', year: 'SR', rank: 3 },
-    { name: 'Savion Washington', number: '75', year: 'SR', rank: 4 },
+    { name: 'Larry Johnson III',  number: '53', year: 'SR', rank: 1 },
+    { name: 'Jayven Richardson',  number: '75', year: 'SR', rank: 2 },
+    { name: 'Andre Roye Jr.',     number: '52', year: 'SR', rank: 3 },
+    { name: 'Jayvon McFadden',    number: '71', year: 'FR', rank: 4 },
+    { name: 'Xavier Payne',       number: '72', year: 'FR', rank: 5 },
+    { name: 'Hudson Steber',      number: '78', year: 'FR', rank: 6 },
   ],
   OG: [
-    { name: 'Gerad Christian-Lichtenhan', number: '56', year: 'JR', rank: 1 },
-    { name: 'Andrew Coker', number: '66', year: 'SR', rank: 2 },
-    { name: 'Darius Hinton', number: '72', year: 'FR', rank: 3 },
+    { name: 'Taj White',        number: '54', year: 'SR', rank: 1 },
+    { name: 'Bo Hughley',       number: '55', year: 'JR', rank: 2 },
+    { name: 'Phillip Houston',  number: '56', year: 'SR', rank: 3 },
+    { name: 'Sean Kinney',      number: '62', year: 'JR', rank: 4 },
+    { name: 'Chauncey Gooden',  number: '51', year: 'FR', rank: 5 },
+    { name: 'Jose Soto',        number: '73', year: 'JR', rank: 6 },
   ],
   C: [
-    { name: 'Caleb Krings', number: '51', year: 'GR', rank: 1 },
-    { name: 'Tyler Brown', number: '60', year: 'JR', rank: 2 },
+    { name: 'Leon Bell',       number: '57', year: 'GR', rank: 1 },
+    { name: 'Demetrius Hunter',number: '58', year: 'GR', rank: 2 },
+    { name: 'Yahya Attia',     number: '59', year: 'SO', rank: 3 },
   ],
   DL: [
-    { name: 'Brandon Hopper', number: '99', year: 'SR', rank: 1 },
-    { name: 'D.J. Moore', number: '95', year: 'SR', rank: 2 },
-    { name: 'Domata Peko Jr.', number: '91', year: 'FR', rank: 3 },
-    { name: 'Joseph Peko', number: '97', year: 'FR', rank: 4 },
-    { name: 'Dashawn Belen', number: '93', year: 'SR', rank: 5 },
-    { name: 'Jordan Domineck', number: '92', year: 'GR', rank: 6 },
-    { name: 'Jaylen Boots', number: '49', year: 'SR', rank: 7 },
-    { name: 'Jaden Navarrette', number: '94', year: 'JR', rank: 8 },
-    { name: 'Lamar Smark', number: '90', year: 'JR', rank: 9 },
-    { name: 'Michael Closson', number: '41', year: 'SO', rank: 10 },
+    { name: 'Quency Wiggins',    number: '49', year: 'SR', rank: 1 },
+    { name: 'Toby Anene',        number: '53', year: 'SR', rank: 2 },
+    { name: 'Santana Hopper',    number: '97', year: 'SR', rank: 3 },
+    { name: 'Domata Peko Jr.',   number: '27', year: 'JR', rank: 4 },
+    { name: 'Kylan Salter',      number: '41', year: 'JR', rank: 5 },
+    { name: 'Immanuel Ezeogu',   number: '52', year: 'SO', rank: 6 },
+    { name: 'Yamil Talib',       number: '95', year: 'SO', rank: 7 },
+    { name: 'Balansama Kamara',  number: '96', year: 'SR', rank: 8 },
+    { name: 'Vili Taufatofua',   number: '45', year: 'SR', rank: 9 },
+    { name: 'Samu Taumanupepe',  number: '88', year: 'JR', rank: 10 },
+    { name: 'Lamont Lester Jr.', number: '56', year: 'SO', rank: 11 },
+    { name: 'Tyler Moore',       number: '90', year: 'JR', rank: 12 },
+    { name: 'Sedrick Smith',     number: '91', year: 'JR', rank: 13 },
+    { name: 'Josiah Manu',       number: '94', year: 'FR', rank: 14 },
+    { name: 'Ezra Christensen',  number: '98', year: 'SR', rank: 15 },
+    { name: 'Dylan Manuel',      number: '99', year: 'FR', rank: 16 },
   ],
   LB: [
-    { name: 'Liona Lefau', number: '24', year: 'SR', rank: 1 },
-    { name: 'Gideon Lampron', number: '21', year: 'SR', rank: 2 },
-    { name: 'Tyler Martinez', number: '45', year: 'SR', rank: 3 },
-    { name: 'Carson Crawford', number: '43', year: 'FR', rank: 4 },
-    { name: 'Taje McCoy', number: '37', year: 'JR', rank: 5 },
+    { name: 'Liona Lefau',       number: '17', year: 'SR', rank: 1 },
+    { name: 'Tyler Martinez',    number: '35', year: 'SR', rank: 2 },
+    { name: 'Gideon Lampron',    number: '44', year: 'SR', rank: 3 },
+    { name: 'Carson Crawford',   number: '51', year: 'FR', rank: 4 },
+    { name: 'Rodney Colton Jr.', number: '50', year: 'FR', rank: 5 },
+    { name: 'Bo LaPenna',        number: '54', year: 'SR', rank: 6 },
+    { name: 'Gage Goldberg',     number: '55', year: 'SO', rank: 7 },
+    { name: 'Colby Johnson',     number: '40', year: 'FR', rank: 8 },
   ],
   CB: [
-    { name: 'Preston Hodge', number: '7', year: 'JR', rank: 1 },
-    { name: 'Justin Eaglin', number: '28', year: 'SR', rank: 2 },
-    { name: 'Cree Thomas', number: '20', year: 'SR', rank: 3 },
-    { name: 'Jason Stokes Jr.', number: '23', year: 'SO', rank: 4 },
-    { name: 'RJ Johnson', number: '30', year: 'SO', rank: 5 },
-    { name: 'Markari Vickers', number: '26', year: 'JR', rank: 6 },
-    { name: 'Emory Floyd', number: '29', year: 'SO', rank: 7 },
+    { name: 'Justin Eaglin',    number: '30', year: 'SR', rank: 1 },
+    { name: 'Boo Carter',       number: '6',  year: 'JR', rank: 2 },
+    { name: 'Randon Fontenette',number: '7',  year: 'SR', rank: 3 },
+    { name: 'Preston Ashley',   number: '31', year: 'FR', rank: 4 },
+    { name: 'Naeten Mitchell',  number: '4',  year: 'JR', rank: 5 },
+    { name: 'Makari Vickers',   number: '10', year: 'JR', rank: 6 },
+    { name: 'Jason Stokes Jr.', number: '13', year: 'SO', rank: 7 },
+    { name: 'Cree Thomas',      number: '20', year: 'FR', rank: 8 },
+    { name: 'Mojo Williams Jr.',number: '25', year: 'FR', rank: 9 },
+    { name: 'Braylon Edwards',  number: '26', year: 'FR', rank: 10 },
+    { name: 'Kole Mathis',      number: '33', year: 'SO', rank: 11 },
+    { name: 'Donavon Stephens', number: '39', year: 'FR', rank: 12 },
   ],
   S: [
-    { name: 'Boo Carter', number: '2', year: 'JR', rank: 1 },
-    { name: 'Jah Jah Boyd', number: '14', year: 'SR', rank: 2 },
-    { name: 'Randon Fontenette', number: '33', year: 'SR', rank: 3 },
-    { name: 'Naeten Mitchell', number: '19', year: 'SR', rank: 4 },
-    { name: 'Ben Fineseth', number: '31', year: 'JR', rank: 5 },
-    { name: 'Preston Ashley', number: '9', year: 'FR', rank: 6 },
+    { name: 'Emory Floyd',    number: '8',  year: 'SR', rank: 1 },
+    { name: 'Ben Finneseth',  number: '28', year: 'SR', rank: 2 },
+    { name: 'RJ Johnson',     number: '5',  year: 'JR', rank: 3 },
+    { name: 'Jah Jah Boyd',   number: '15', year: 'SO', rank: 4 },
+    { name: 'Paul Omodia',    number: '18', year: 'JR', rank: 5 },
+    { name: 'Jaydan Hardy',   number: '9',  year: 'FR', rank: 6 },
   ],
 };
 
@@ -413,17 +449,17 @@ function DraggablePlayerCard({
     >
       <div
         className={`
-          flex flex-col items-center bg-black/80 border rounded-lg px-1.5 py-1 gap-0.5 shadow-lg min-w-[56px]
-          ${isOver ? 'border-cu-gold shadow-cu-gold/40' : 'border-cu-gold/40'}
+          flex flex-col items-center bg-black/85 border rounded-xl px-2 py-1.5 gap-1 shadow-lg min-w-[72px]
+          ${isOver ? 'border-cu-gold shadow-cu-gold/40' : 'border-cu-gold/50'}
         `}
       >
         <PlayerAvatar player={player} size="sm" />
-        <span className="text-cu-gold font-black text-[9px] leading-tight">#{player.number}</span>
-        <span className="text-white font-semibold text-[8px] leading-tight text-center max-w-[56px] truncate w-full text-center">
+        <span className="text-cu-gold font-black text-xs leading-tight">#{player.number}</span>
+        <span className="text-white font-semibold text-[10px] leading-tight text-center max-w-[72px] w-full text-center line-clamp-2">
           {player.name.split(' ').slice(-1)[0]}
         </span>
         <span
-          className={`text-[7px] font-bold px-1 rounded ${YEAR_COLORS[player.year] ?? 'bg-gray-700 text-gray-400'}`}
+          className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${YEAR_COLORS[player.year] ?? 'bg-gray-700 text-gray-400'}`}
         >
           {player.year}
         </span>
@@ -448,12 +484,12 @@ function EmptySlotCard({
       ref={setNodeRef}
       className={`
         absolute flex flex-col items-center justify-center
-        w-14 h-14 rounded-lg border-2 border-dashed
+        w-[72px] h-[72px] rounded-xl border-2 border-dashed
         ${isOver ? 'border-cu-gold bg-cu-gold/10' : 'border-white/20 bg-white/5'}
         transition-all
       `}
     >
-      <span className="text-white/40 text-[10px] font-bold">{label}</span>
+      <span className="text-white/40 text-xs font-bold">{label}</span>
     </div>
   );
 }
@@ -943,7 +979,7 @@ export default function DepthChartPage() {
       >
         <div
           className="relative w-full bg-green-800 rounded-2xl overflow-hidden border border-green-600/30 shadow-2xl"
-          style={{ paddingBottom: '65%' }}
+          style={{ minHeight: '560px', paddingBottom: '0' }}
           onClick={(e) => {
             // Deselect info if clicking field background
             const target = e.target as HTMLElement;
