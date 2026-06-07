@@ -162,152 +162,160 @@ const PLAYER_MAP = buildPlayerMap();
 
 // ─── Formation definitions ────────────────────────────────────────────────────
 
-// Offense: end zone at top (y=0). LOS at y=50. Players fill y=38–78 (middle of field).
+// Offense: end zone at top (y=0). OL line at y=52. Receivers up at y=30 (their own
+// row), QB at y=68, backs at y=82. Rows are >=15% apart and same-row items >=12%
+// apart so the ~60px cards never overlap.
 function makeOffenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
-  const LOS_Y = 50;
+  const LINE = 52;   // offensive line row
+  const WR_Y = 30;   // receiver row (well above the line)
+  const QB_Y = 68;   // quarterback row
+  const BACK_Y = 82; // running back row
 
   const olSlots: Omit<FieldSlot, 'playerId'>[] = [
-    { id: 'LT', label: 'LT', posGroup: ['OL'], x: 24, y: LOS_Y },
-    { id: 'LG', label: 'LG', posGroup: ['OL'], x: 35, y: LOS_Y },
-    { id: 'C',  label: 'C',  posGroup: ['OL'], x: 46, y: LOS_Y },
-    { id: 'RG', label: 'RG', posGroup: ['OL'], x: 57, y: LOS_Y },
-    { id: 'RT', label: 'RT', posGroup: ['OL'], x: 68, y: LOS_Y },
+    { id: 'LT', label: 'LT', posGroup: ['OL'], x: 22, y: LINE },
+    { id: 'LG', label: 'LG', posGroup: ['OL'], x: 34, y: LINE },
+    { id: 'C',  label: 'C',  posGroup: ['OL'], x: 46, y: LINE },
+    { id: 'RG', label: 'RG', posGroup: ['OL'], x: 58, y: LINE },
+    { id: 'RT', label: 'RT', posGroup: ['OL'], x: 70, y: LINE },
   ];
 
   if (formation === 'Spread') {
     return [
       ...olSlots,
-      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 80, y: LOS_Y },
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: LOS_Y + 16 },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 64, y: LOS_Y + 16 },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: LOS_Y - 2 },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 92, y: LOS_Y - 2 },
-      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 17, y: LOS_Y - 2 },
+      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 82, y: LINE },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: QB_Y },
+      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 60, y: QB_Y },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: WR_Y },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 24, y: WR_Y },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 92, y: WR_Y },
     ];
   }
   if (formation === 'Pistol') {
     return [
       ...olSlots,
-      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 80, y: LOS_Y },
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: LOS_Y + 14 },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 46, y: LOS_Y + 28 },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: LOS_Y - 2 },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 92, y: LOS_Y - 2 },
+      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 82, y: LINE },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: QB_Y },
+      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 46, y: BACK_Y },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: WR_Y },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 92, y: WR_Y },
     ];
   }
   if (formation === 'Pro Set') {
     return [
       ...olSlots,
-      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 80, y: LOS_Y },
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: LOS_Y + 14 },
-      { id: 'FB',  label: 'RB', posGroup: ['RB'], x: 36, y: LOS_Y + 28 },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 58, y: LOS_Y + 28 },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: LOS_Y - 2 },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 92, y: LOS_Y - 2 },
+      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 82, y: LINE },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: QB_Y },
+      { id: 'FB',  label: 'RB', posGroup: ['RB'], x: 38, y: BACK_Y },
+      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 56, y: BACK_Y },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: WR_Y },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 92, y: WR_Y },
     ];
   }
   if (formation === 'Trips') {
     return [
       ...olSlots,
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: LOS_Y + 16 },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 64, y: LOS_Y + 16 },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: LOS_Y - 2 },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 90, y: LOS_Y - 2 },
-      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 80, y: LOS_Y - 2 },
-      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 70, y: LOS_Y - 2 },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: QB_Y },
+      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 60, y: QB_Y },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: WR_Y },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 70, y: WR_Y },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 82, y: WR_Y },
+      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 94, y: WR_Y },
     ];
   }
   if (formation === 'Empty') {
     return [
       ...olSlots,
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: LOS_Y + 16 },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 6,  y: LOS_Y - 2 },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 17, y: LOS_Y - 2 },
-      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 94, y: LOS_Y - 2 },
-      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 83, y: LOS_Y - 2 },
-      { id: 'WR5', label: 'WR', posGroup: ['WR'], x: 30, y: LOS_Y - 2 },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: QB_Y },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 6,  y: WR_Y },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 20, y: WR_Y },
+      { id: 'WR5', label: 'WR', posGroup: ['WR'], x: 46, y: WR_Y },
+      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 80, y: WR_Y },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 94, y: WR_Y },
     ];
   }
   return [];
 }
 
-// Defense: end zone at bottom (y=100). LOS at y=35. Players fill y=20–78 (middle of field).
+// Defense: end zone at bottom (y=100). D-line at y=30, LBs at y=48, nickel at y=60,
+// safeties deep at y=66–80, corners wide at y=24. Rows are >=14% apart and same-row
+// items >=12% apart so the ~60px cards never overlap.
 function makeDefenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
-  const LOS_Y = 35;
+  const LINE = 30;  // defensive line row
+  const CB_Y = 24;  // cornerbacks wide, slightly off the line
 
   if (formation === '4-2-5') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 20, y: LOS_Y },
-      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 34, y: LOS_Y },
-      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LOS_Y },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 72, y: LOS_Y },
-      { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 34, y: LOS_Y + 16 },
-      { id: 'LB2', label: 'LB',  posGroup: ['LB'], x: 58, y: LOS_Y + 16 },
-      { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 8,  y: LOS_Y - 6 },
-      { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 84, y: LOS_Y - 6 },
-      { id: 'CB3', label: 'NB',  posGroup: ['CB'], x: 18, y: LOS_Y + 12 },
-      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 40, y: LOS_Y + 30 },
-      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 60, y: LOS_Y + 30 },
+      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 22, y: LINE },
+      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
+      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
+      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 74, y: LINE },
+      { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 38, y: 48 },
+      { id: 'LB2', label: 'LB',  posGroup: ['LB'], x: 58, y: 48 },
+      { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
+      { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 94, y: CB_Y },
+      { id: 'CB3', label: 'NB',  posGroup: ['CB'], x: 20, y: 48 },
+      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 36, y: 68 },
+      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 60, y: 68 },
     ];
   }
   if (formation === '3-4') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 24, y: LOS_Y },
-      { id: 'DL2', label: 'NT',  posGroup: ['DL'], x: 46, y: LOS_Y },
-      { id: 'DL3', label: 'DE',  posGroup: ['DL'], x: 68, y: LOS_Y },
-      { id: 'LB1', label: 'OLB', posGroup: ['LB'], x: 10, y: LOS_Y + 14 },
-      { id: 'LB2', label: 'ILB', posGroup: ['LB'], x: 34, y: LOS_Y + 14 },
-      { id: 'LB3', label: 'ILB', posGroup: ['LB'], x: 58, y: LOS_Y + 14 },
-      { id: 'LB4', label: 'OLB', posGroup: ['LB'], x: 82, y: LOS_Y + 14 },
-      { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 8,  y: LOS_Y - 6 },
-      { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 84, y: LOS_Y - 6 },
-      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 36, y: LOS_Y + 30 },
-      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 56, y: LOS_Y + 30 },
+      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 30, y: LINE },
+      { id: 'DL2', label: 'NT',  posGroup: ['DL'], x: 50, y: LINE },
+      { id: 'DL3', label: 'DE',  posGroup: ['DL'], x: 70, y: LINE },
+      { id: 'LB1', label: 'OLB', posGroup: ['LB'], x: 12, y: 48 },
+      { id: 'LB2', label: 'ILB', posGroup: ['LB'], x: 38, y: 48 },
+      { id: 'LB3', label: 'ILB', posGroup: ['LB'], x: 62, y: 48 },
+      { id: 'LB4', label: 'OLB', posGroup: ['LB'], x: 88, y: 48 },
+      { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
+      { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 94, y: CB_Y },
+      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 38, y: 68 },
+      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 62, y: 68 },
     ];
   }
   if (formation === '4-3') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 22, y: LOS_Y },
-      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 36, y: LOS_Y },
-      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 56, y: LOS_Y },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 70, y: LOS_Y },
-      { id: 'LB1', label: 'WLB', posGroup: ['LB'], x: 26, y: LOS_Y + 16 },
-      { id: 'LB2', label: 'MLB', posGroup: ['LB'], x: 46, y: LOS_Y + 16 },
-      { id: 'LB3', label: 'SLB', posGroup: ['LB'], x: 66, y: LOS_Y + 16 },
-      { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 8,  y: LOS_Y - 6 },
-      { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 84, y: LOS_Y - 6 },
-      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 36, y: LOS_Y + 32 },
-      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 56, y: LOS_Y + 32 },
+      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 22, y: LINE },
+      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
+      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
+      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 74, y: LINE },
+      { id: 'LB1', label: 'WLB', posGroup: ['LB'], x: 26, y: 48 },
+      { id: 'LB2', label: 'MLB', posGroup: ['LB'], x: 50, y: 48 },
+      { id: 'LB3', label: 'SLB', posGroup: ['LB'], x: 74, y: 48 },
+      { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
+      { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 94, y: CB_Y },
+      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 38, y: 68 },
+      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 62, y: 68 },
     ];
   }
   if (formation === 'Nickel') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 20, y: LOS_Y },
-      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 34, y: LOS_Y },
-      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LOS_Y },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 72, y: LOS_Y },
-      { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 46, y: LOS_Y + 14 },
-      { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 8,  y: LOS_Y - 6 },
-      { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 84, y: LOS_Y - 6 },
-      { id: 'CB3', label: 'NB',  posGroup: ['CB'], x: 18, y: LOS_Y + 10 },
-      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 34, y: LOS_Y + 28 },
-      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 58, y: LOS_Y + 28 },
-      { id: 'S3',  label: 'DB',  posGroup: ['S', 'CB'], x: 46, y: LOS_Y + 42 },
+      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 22, y: LINE },
+      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
+      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
+      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 74, y: LINE },
+      { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 46, y: 48 },
+      { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
+      { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 94, y: CB_Y },
+      { id: 'CB3', label: 'NB',  posGroup: ['CB'], x: 20, y: 48 },
+      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 34, y: 66 },
+      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 58, y: 66 },
+      { id: 'S3',  label: 'DB',  posGroup: ['S', 'CB'], x: 46, y: 82 },
     ];
   }
   if (formation === 'Dime') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 20, y: LOS_Y },
-      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 34, y: LOS_Y },
-      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LOS_Y },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 72, y: LOS_Y },
-      { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 8,  y: LOS_Y - 6 },
-      { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 84, y: LOS_Y - 6 },
-      { id: 'CB3', label: 'CB',  posGroup: ['CB'], x: 18, y: LOS_Y + 10 },
-      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 28, y: LOS_Y + 26 },
-      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 46, y: LOS_Y + 34 },
-      { id: 'S3',  label: 'DB',  posGroup: ['S', 'CB'], x: 64, y: LOS_Y + 26 },
-      { id: 'S4',  label: 'DB',  posGroup: ['S', 'CB'], x: 46, y: LOS_Y + 44 },
+      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 22, y: LINE },
+      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
+      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
+      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 74, y: LINE },
+      { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
+      { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 94, y: CB_Y },
+      { id: 'CB3', label: 'NB',  posGroup: ['CB'], x: 20, y: 46 },
+      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 30, y: 64 },
+      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 50, y: 64 },
+      { id: 'S3',  label: 'DB',  posGroup: ['S', 'CB'], x: 70, y: 64 },
+      { id: 'S4',  label: 'DB',  posGroup: ['S', 'CB'], x: 50, y: 82 },
     ];
   }
   return [];
@@ -381,7 +389,7 @@ function PlayerAvatar({
   size?: 'sm' | 'md';
 }) {
   const initials = getInitials(player.name);
-  const sz = size === 'sm' ? 'w-9 h-9 text-xs' : 'w-10 h-10 text-sm';
+  const sz = size === 'sm' ? 'w-8 h-8 text-[10px]' : 'w-10 h-10 text-sm';
   return (
     <div
       className={`${sz} rounded-full bg-cu-gold/20 border border-cu-gold/50 flex items-center justify-center font-black text-cu-gold flex-shrink-0`}
@@ -421,17 +429,17 @@ function DraggablePlayerCard({
     >
       <div
         className={`
-          flex flex-col items-center bg-black/85 border rounded-xl px-2 py-1.5 gap-0.5 shadow-lg min-w-[72px]
+          flex flex-col items-center bg-black/85 border rounded-lg px-1 py-1 gap-0.5 shadow-lg w-[58px]
           ${isOver ? 'border-cu-gold shadow-cu-gold/40' : 'border-cu-gold/50'}
         `}
       >
         <PlayerAvatar player={player} size="sm" />
-        <span className="text-cu-gold font-black text-sm leading-tight">#{player.number}</span>
-        <span className="text-white font-semibold text-xs leading-tight text-center w-full truncate max-w-[68px]">
+        <span className="text-cu-gold font-black text-xs leading-none">#{player.number}</span>
+        <span className="text-white font-semibold text-[9px] leading-none text-center w-full truncate">
           {getLastName(player.name)}
         </span>
         <span
-          className={`text-[8px] font-bold px-1.5 rounded ${YEAR_COLORS[player.year] ?? 'bg-gray-700 text-gray-400'}`}
+          className={`text-[7px] font-bold px-1 rounded leading-none ${YEAR_COLORS[player.year] ?? 'bg-gray-700 text-gray-400'}`}
         >
           {player.year}
         </span>
@@ -456,7 +464,7 @@ function EmptySlotCard({
       ref={setNodeRef}
       className={`
         absolute flex flex-col items-center justify-center
-        w-[72px] h-[72px] rounded-xl border-2 border-dashed
+        w-[58px] h-[58px] rounded-lg border-2 border-dashed
         ${isOver ? 'border-cu-gold bg-cu-gold/10' : 'border-white/20 bg-white/5'}
         transition-all
       `}
@@ -566,19 +574,19 @@ function FieldBackground({ side }: { side: Side }) {
 
       {/* Line of scrimmage highlight */}
       {side === 'offense' ? (
-        <line x1="0" y1="50" x2="100" y2="50" stroke="#CFB227" strokeWidth="0.6" opacity="0.5" strokeDasharray="3,2" />
+        <line x1="0" y1="52" x2="100" y2="52" stroke="#CFB227" strokeWidth="0.6" opacity="0.5" strokeDasharray="3,2" />
       ) : (
-        <line x1="0" y1="35" x2="100" y2="35" stroke="#CFB227" strokeWidth="0.6" opacity="0.5" strokeDasharray="3,2" />
+        <line x1="0" y1="30" x2="100" y2="30" stroke="#CFB227" strokeWidth="0.6" opacity="0.5" strokeDasharray="3,2" />
       )}
 
       {/* LINE OF SCRIMMAGE label */}
       {side === 'offense' ? (
-        <text x="50" y="48.5" textAnchor="middle" fontSize="2.2" fill="#CFB227" opacity="0.7"
+        <text x="50" y="50.5" textAnchor="middle" fontSize="2.2" fill="#CFB227" opacity="0.7"
           fontFamily="sans-serif" letterSpacing="1" fontWeight="bold">
           LINE OF SCRIMMAGE
         </text>
       ) : (
-        <text x="50" y="33.5" textAnchor="middle" fontSize="2.2" fill="#CFB227" opacity="0.7"
+        <text x="50" y="28.5" textAnchor="middle" fontSize="2.2" fill="#CFB227" opacity="0.7"
           fontFamily="sans-serif" letterSpacing="1" fontWeight="bold">
           LINE OF SCRIMMAGE
         </text>
@@ -763,15 +771,7 @@ export default function DepthChartPage() {
     const fromPlayerId = fromSlot.playerId;
     const toPlayerId = toSlot.playerId;
 
-    if (fromPlayerId) {
-      const fromPlayer = PLAYER_MAP[fromPlayerId];
-      if (fromPlayer && !toSlot.posGroup.includes(fromPlayer.posGroup)) return;
-    }
-    if (toPlayerId) {
-      const toPlayer = PLAYER_MAP[toPlayerId];
-      if (toPlayer && !fromSlot.posGroup.includes(toPlayer.posGroup)) return;
-    }
-
+    // Any player can be moved into any slot — swap freely.
     slots[fromIdx] = { ...fromSlot, playerId: toPlayerId };
     slots[toIdx] = { ...toSlot, playerId: fromPlayerId };
     setCurrentSlots(slots);
@@ -792,11 +792,7 @@ export default function DepthChartPage() {
       const benchPlayer = PLAYER_MAP[selectedBench];
       if (!benchPlayer) return;
 
-      if (!targetSlot.posGroup.includes(benchPlayer.posGroup)) {
-        setSelectedBench(null);
-        return;
-      }
-
+      // Any bench player can be placed into any slot.
       slots[targetIdx] = { ...targetSlot, playerId: selectedBench };
       setCurrentSlots(slots);
       setSelectedBench(null);
@@ -923,7 +919,7 @@ export default function DepthChartPage() {
       >
         <div
           className="relative w-full bg-green-800 rounded-2xl overflow-hidden border border-green-600/30 shadow-2xl"
-          style={{ minHeight: '520px', paddingBottom: '62%' }}
+          style={{ minHeight: '600px', paddingBottom: '72%' }}
           onClick={(e) => {
             const target = e.target as HTMLElement;
             if (target.closest('[data-slot]') === null && selectedField) {
@@ -984,10 +980,10 @@ export default function DepthChartPage() {
         {/* DragOverlay */}
         <DragOverlay>
           {activePlayer ? (
-            <div className="flex flex-col items-center bg-black/90 border border-cu-gold rounded-xl px-2 py-1.5 shadow-2xl shadow-cu-gold/30 gap-1 min-w-[72px]">
+            <div className="flex flex-col items-center bg-black/90 border border-cu-gold rounded-lg px-1 py-1 shadow-2xl shadow-cu-gold/30 gap-0.5 w-[58px]">
               <PlayerAvatar player={activePlayer} size="sm" />
-              <span className="text-cu-gold font-black text-sm">#{activePlayer.number}</span>
-              <span className="text-white text-xs font-semibold">{activePlayer.name.split(' ').slice(-1)[0]}</span>
+              <span className="text-cu-gold font-black text-xs">#{activePlayer.number}</span>
+              <span className="text-white text-[9px] font-semibold truncate w-full text-center">{getLastName(activePlayer.name)}</span>
             </div>
           ) : null}
         </DragOverlay>
