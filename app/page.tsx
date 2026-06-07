@@ -46,28 +46,28 @@ interface Commit {
 // ─── Verified data ─────────────────────────────────────────────────────────────
 
 const trendingTopics = [
-  { topic: ‘Julian Lewis 2026 QB battle’, trend: ‘+312%’ },
-  { topic: ‘2027 class June commit surge (13 commits)’, trend: ‘+420%’ },
-  { topic: ‘Deion Sanders health update’, trend: ‘+210%’ },
-  { topic: ‘Brennan Marion "Go Go Offense"’, trend: ‘+185%’ },
-  { topic: ‘Chris Marve defense’, trend: ‘+140%’ },
+  { topic: 'Julian Lewis 2026 QB battle', trend: '+312%' },
+  { topic: '2027 class June commit surge (13 commits)', trend: '+420%' },
+  { topic: 'Deion Sanders health update', trend: '+210%' },
+  { topic: 'Brennan Marion "Go Go Offense"', trend: '+185%' },
+  { topic: 'Chris Marve defense', trend: '+140%' },
 ];
 
 // 2027 commits — verified via 247Sports / On3 (most recent first). As of June 7, 2026, 4pm MT.
 const COMMITS_2027: Commit[] = [
-  { id: ‘alexis’,       name: ‘Steven Alexis’,      pos: ‘RB’,   stars: 0, heightWeight: ‘6-0 / 203’,  hometown: ‘St. Petersburg, FL’, date: ‘Jun 7, 2026’,  blurb: ‘Unranked running back who chose CU over Pitt, Illinois & Iowa. Rushed for 1,113 yds and 9 TDs in 2025.’, source: ‘247Sports / On3’ },
-  { id: ‘pulliam’,      name: ‘Jovon Pulliam’,       pos: ‘EDGE’, stars: 3, heightWeight: ‘—‘,          hometown: ‘Hoover, AL · Hoover HS’, date: ‘Jun 7, 2026’,  blurb: ‘Three-star EDGE with elite production: 11 sacks, 16 TFLs, 3 forced fumbles in 2025. Chose CU over App State & Tulane.’, source: ‘247Sports / On3’ },
-  { id: ‘linton’,       name: ‘Zaquan Linton’,       pos: ‘OT’,   stars: 3, heightWeight: ‘6-5 / 293’,  hometown: ‘Wellington, FL’, date: ‘Jun 6, 2026’,  blurb: ‘Former Miami commit with elite athleticism from track & field background. 24 total offers.’, source: ‘247Sports’ },
-  { id: ‘lindsay’,      name: ‘Jaiden Lindsay’,      pos: ‘OL’,   stars: 3, heightWeight: ‘6-3 / 300’,  hometown: ‘Olney, MD’, date: ‘Jun 6, 2026’,  blurb: ‘Three-star interior OL — No. 65 IOL nationally. Committed during his official visit to Boulder.’, source: ‘247Sports / Rivals’ },
-  { id: ‘kelly-murray’, name: ‘Jaiden Kelly-Murray’, pos: ‘WR’,   stars: 4, heightWeight: ‘5-10 / 170’, hometown: ‘Mount Pleasant, SC · Oceanside Collegiate’, date: ‘May 25, 2026’, blurb: "Four-star receiver, flipped from South Carolina. Top-40 WR nationally — the headliner of CU’s late-May surge.", source: ‘247Sports’ },
-  { id: ‘washington’,   name: ‘Prince Washington’,   pos: ‘CB’,   stars: 0, heightWeight: ‘6-1 / 185’,  hometown: ‘Houston, TX · Lamar HS’,                 date: ‘May 24, 2026’, blurb: ‘Lengthy Houston cornerback adds to a corner-heavy 2027 haul.’, source: ‘247Sports’ },
-  { id: ‘jones’,        name: "Li’Marcus Jones",     pos: ‘OT’,   stars: 4, heightWeight: ‘6-5 / 285’,  hometown: ‘Brentwood, TN · Brentwood Academy’,      date: ‘May 24, 2026’, blurb: ‘Four-star offensive tackle, a top-25 OT and major trench win.’, source: ‘247Sports’ },
-  { id: ‘rasmussen’,    name: ‘Will Rasmussen’,      pos: ‘CB’,   stars: 3, heightWeight: ‘5-10 / 180’, hometown: ‘Orem, UT · Orem HS’,                     date: ‘May 20, 2026’, blurb: ‘Three-star Utah cornerback.’, source: ‘247Sports’ },
-  { id: ‘jenkins’,      name: ‘Gabe Jenkins’,        pos: ‘S’,    stars: 4, heightWeight: ‘6-2 / 187’,  hometown: ‘Pittsburgh, PA · Imani Christian’,       date: ‘May 20, 2026’, blurb: ‘Top-20 safety nationally — a four-star anchor for the back end.’, source: ‘247Sports’ },
-  { id: ‘willis’,       name: "Ba’Roc Willis",       pos: ‘EDGE’, stars: 3, heightWeight: ‘6-3 / 230’, hometown: ‘Pell City, AL · Pell City HS’,          date: ‘May 19, 2026’, blurb: ‘Three-star edge rusher who kicked off the late-May commit run.’, source: ‘247Sports’ },
-  { id: ‘adams’,        name: ‘Andre Adams’,         pos: ‘QB’,   stars: 4, heightWeight: ‘—‘,          hometown: ‘Nashville, TN · Antioch HS’,             date: ‘Apr 14, 2026’, blurb: ‘Four-star quarterback, the cornerstone of the 2027 class.’, source: ‘247Sports’ },
-  { id: ‘fairley’,      name: ‘Kenny Fairley’,       pos: ‘DL’,   stars: 3, heightWeight: ‘6-0 / 270’,  hometown: ‘Fairburn, GA · Creekside’,               date: ‘Feb 2026’,    blurb: ‘Three-star defensive lineman, chose CU over Cincinnati & Purdue.’, source: ‘247Sports / On3’ },
-  { id: ‘dericho’,      name: ‘Davon Dericho’,       pos: ‘CB’,   stars: 3, heightWeight: ‘5-9’,        hometown: ‘Miami, FL · Killian’,                    date: ‘Feb 12, 2026’, blurb: ‘Three-star Miami cornerback.’, source: ‘247Sports’ },
+  { id: 'alexis',       name: 'Steven Alexis',      pos: 'RB',   stars: 0, heightWeight: '6-0 / 203',  hometown: 'St. Petersburg, FL', date: 'Jun 7, 2026',  blurb: 'Unranked running back who chose CU over Pitt, Illinois & Iowa. Rushed for 1,113 yds and 9 TDs in 2025.', source: '247Sports / On3' },
+  { id: 'pulliam',      name: 'Jovon Pulliam',       pos: 'EDGE', stars: 3, heightWeight: '—',          hometown: 'Hoover, AL · Hoover HS', date: 'Jun 7, 2026',  blurb: 'Three-star EDGE with elite production: 11 sacks, 16 TFLs, 3 forced fumbles in 2025. Chose CU over App State & Tulane.', source: '247Sports / On3' },
+  { id: 'linton',       name: 'Zaquan Linton',       pos: 'OT',   stars: 3, heightWeight: '6-5 / 293',  hometown: 'Wellington, FL', date: 'Jun 6, 2026',  blurb: 'Former Miami commit with elite athleticism from track & field background. 24 total offers.', source: '247Sports' },
+  { id: 'lindsay',      name: 'Jaiden Lindsay',      pos: 'OL',   stars: 3, heightWeight: '6-3 / 300',  hometown: 'Olney, MD', date: 'Jun 6, 2026',  blurb: 'Three-star interior OL — No. 65 IOL nationally. Committed during his official visit to Boulder.', source: '247Sports / Rivals' },
+  { id: 'kelly-murray', name: 'Jaiden Kelly-Murray', pos: 'WR',   stars: 4, heightWeight: '5-10 / 170', hometown: 'Mount Pleasant, SC · Oceanside Collegiate', date: 'May 25, 2026', blurb: "Four-star receiver, flipped from South Carolina. Top-40 WR nationally — the headliner of CU's late-May surge.", source: '247Sports' },
+  { id: 'washington',   name: 'Prince Washington',   pos: 'CB',   stars: 0, heightWeight: '6-1 / 185',  hometown: 'Houston, TX · Lamar HS',                 date: 'May 24, 2026', blurb: 'Lengthy Houston cornerback adds to a corner-heavy 2027 haul.', source: '247Sports' },
+  { id: 'jones',        name: "Li'Marcus Jones",     pos: 'OT',   stars: 4, heightWeight: '6-5 / 285',  hometown: 'Brentwood, TN · Brentwood Academy',      date: 'May 24, 2026', blurb: 'Four-star offensive tackle, a top-25 OT and major trench win.', source: '247Sports' },
+  { id: 'rasmussen',    name: 'Will Rasmussen',      pos: 'CB',   stars: 3, heightWeight: '5-10 / 180', hometown: 'Orem, UT · Orem HS',                     date: 'May 20, 2026', blurb: 'Three-star Utah cornerback.', source: '247Sports' },
+  { id: 'jenkins',      name: 'Gabe Jenkins',        pos: 'S',    stars: 4, heightWeight: '6-2 / 187',  hometown: 'Pittsburgh, PA · Imani Christian',       date: 'May 20, 2026', blurb: 'Top-20 safety nationally — a four-star anchor for the back end.', source: '247Sports' },
+  { id: 'willis',       name: "Ba'Roc Willis",       pos: 'EDGE', stars: 3, heightWeight: '6-3 / 230', hometown: 'Pell City, AL · Pell City HS',          date: 'May 19, 2026', blurb: 'Three-star edge rusher who kicked off the late-May commit run.', source: '247Sports' },
+  { id: 'adams',        name: 'Andre Adams',         pos: 'QB',   stars: 4, heightWeight: '—',          hometown: 'Nashville, TN · Antioch HS',             date: 'Apr 14, 2026', blurb: 'Four-star quarterback, the cornerstone of the 2027 class.', source: '247Sports' },
+  { id: 'fairley',      name: 'Kenny Fairley',       pos: 'DL',   stars: 3, heightWeight: '6-0 / 270',  hometown: 'Fairburn, GA · Creekside',               date: 'Feb 2026',    blurb: 'Three-star defensive lineman, chose CU over Cincinnati & Purdue.', source: '247Sports / On3' },
+  { id: 'dericho',      name: 'Davon Dericho',       pos: 'CB',   stars: 3, heightWeight: '5-9',        hometown: 'Miami, FL · Killian',                    date: 'Feb 12, 2026', blurb: 'Three-star Miami cornerback.', source: '247Sports' },
 ];
 
 // Expert predictions / Crystal Ball — only list 100%-confirmed picks here.
