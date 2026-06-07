@@ -80,20 +80,6 @@ const LATEST_COMMIT = COMMITS_2027[0];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function formatDate(dateStr: string) {
-  try {
-    return new Date(dateStr).toLocaleDateString('en-US', {
-      weekday: 'short', month: 'short', day: 'numeric', year: 'numeric',
-    });
-  } catch { return dateStr; }
-}
-function formatTime(dateStr: string) {
-  try {
-    return new Date(dateStr).toLocaleTimeString('en-US', {
-      hour: 'numeric', minute: '2-digit', timeZoneName: 'short',
-    });
-  } catch { return ''; }
-}
 function timeAgo(dateStr: string) {
   try {
     const diff = Date.now() - new Date(dateStr).getTime();
@@ -391,10 +377,10 @@ export default function OverviewPage() {
       {showCommit && <CommitPopup commit={LATEST_COMMIT} onClose={dismissCommit} />}
 
       {/* Folsom Field hero banner */}
-      <div className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-6 border border-cu-gold/20">
+      <div className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-6 border border-cu-gold/20 bg-gradient-to-br from-cu-gold/30 via-cu-black to-black">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Folsom_Field_Student_Section_Colorado_Buffaloes.JPG/1280px-Folsom_Field_Student_Section_Colorado_Buffaloes.JPG"
+          src="/folsom-field.jpg"
           alt="Folsom Field — Colorado Buffaloes"
           className="w-full h-full object-cover"
           onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}

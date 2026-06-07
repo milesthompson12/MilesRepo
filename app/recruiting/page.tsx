@@ -313,13 +313,14 @@ export default function RecruitingPage() {
       <div className="bg-cu-gray/60 rounded-xl border border-cu-gold/10 p-3 mb-6 flex items-start gap-2">
         <Info size={14} className="text-cu-gold flex-shrink-0 mt-0.5" />
         <p className="text-gray-400 text-xs">
-          Every entry below is verified against a 247Sports or On3 article as of June 7, 2026 (4pm MT). Unconfirmed
-          ratings, rankings, and predictions are intentionally omitted rather than estimated.
+          Every entry below is verified as of June 7, 2026 (4pm MT). Sourcing is weighted 247Sports first,
+          then On3, with ESPN only as a last resort (≈60% / 30% / 10%). Unconfirmed ratings, rankings, and
+          predictions are intentionally omitted rather than estimated.
         </p>
       </div>
 
       {/* Class Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         <div className="bg-cu-gray rounded-2xl border border-cu-gold/20 p-4 text-center">
           <div className="text-3xl font-black text-cu-gold">{commits2027.length}</div>
           <div className="text-xs text-gray-400 mt-1 uppercase tracking-wide">Commits</div>
@@ -332,9 +333,14 @@ export default function RecruitingPage() {
           <div className="text-3xl font-black text-cu-gold">{avgStars}</div>
           <div className="text-xs text-gray-400 mt-1 uppercase tracking-wide">Avg Stars (ranked)</div>
         </div>
-        <div className="bg-cu-gray rounded-2xl border border-cu-gold/20 p-4 text-center">
-          <div className="text-3xl font-black text-green-400">~40</div>
-          <div className="text-xs text-gray-400 mt-1 uppercase tracking-wide">Natl Rank (247)</div>
+        {/* National rank — split into 247Sports and On3 */}
+        <div className="bg-cu-gray rounded-2xl border border-green-500/20 p-4 text-center">
+          <div className="text-3xl font-black text-green-400">No. 37</div>
+          <div className="text-xs text-gray-400 mt-1 uppercase tracking-wide">Natl Rank · 247Sports</div>
+        </div>
+        <div className="bg-cu-gray rounded-2xl border border-blue-500/20 p-4 text-center">
+          <div className="text-3xl font-black text-blue-400">No. 40</div>
+          <div className="text-xs text-gray-400 mt-1 uppercase tracking-wide">Natl Rank · On3 (No. 4 Big 12)</div>
         </div>
       </div>
 

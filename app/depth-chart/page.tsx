@@ -39,111 +39,111 @@ type Side = 'offense' | 'defense';
 
 const rawRoster: Record<string, Omit<Player, 'posGroup'>[]> = {
   QB: [
-    { name: 'Julian Lewis',      number: '10', year: 'FR', rank: 1 },
-    { name: 'Isaac Wilson',      number: '16', year: 'So', rank: 2 },
-    { name: 'Dominiq Ponder',    number: '7',  year: 'JR', rank: 3 },
-    { name: 'Kaneal Sweetwyne',  number: '14', year: 'FR', rank: 4 },
+    { name: 'Julian Lewis',      number: '10', year: 'So', rank: 1 },
+    { name: 'Isaac Wilson',      number: '16', year: 'JR', rank: 2 },
+    { name: 'Dominiq Ponder',    number: '7',  year: 'SR', rank: 3 },
+    { name: 'Kaneal Sweetwyne',  number: '14', year: 'So', rank: 4 },
   ],
   RB: [
-    { name: 'Richard Young',       number: '9',  year: 'JR', rank: 1 },
-    { name: 'Damian Henderson II', number: '26', year: 'JR', rank: 2 },
-    { name: 'JaQuail Smith',       number: '23', year: 'So', rank: 3 },
-    { name: 'Micah Welch',         number: '29', year: 'JR', rank: 4 },
-    { name: 'Bryce Hicks',         number: '27', year: 'So', rank: 5 },
-    { name: 'DeKalon Taylor',      number: '20', year: 'SR', rank: 6 },
-    { name: 'Titus Bautista',      number: '34', year: 'So', rank: 7 },
-    { name: 'Leonardo Valle',      number: '37', year: 'FR', rank: 8 },
+    { name: 'Richard Young',       number: '9',  year: 'SR', rank: 1 },
+    { name: 'Damian Henderson II', number: '26', year: 'SR', rank: 2 },
+    { name: 'JaQuail Smith',       number: '23', year: 'JR', rank: 3 },
+    { name: 'Micah Welch',         number: '29', year: 'SR', rank: 4 },
+    { name: 'Bryce Hicks',         number: '27', year: 'JR', rank: 5 },
+    { name: 'DeKalon Taylor',      number: '20', year: 'GR', rank: 6 },
+    { name: 'Titus Bautista',      number: '34', year: 'JR', rank: 7 },
+    { name: 'Leonardo Valle',      number: '37', year: 'So', rank: 8 },
   ],
   WR: [
-    { name: 'Danny Scudero',         number: '18', year: 'SR', rank: 1 },
-    { name: 'Joseph Williams',       number: '8',  year: 'JR', rank: 2 },
-    { name: 'DeAndre Moore Jr.',     number: '3',  year: 'SR', rank: 3 },
-    { name: 'Hykeem Williams',       number: '5',  year: 'SR', rank: 4 },
-    { name: 'Kam Perry',             number: '7',  year: 'SR', rank: 5 },
-    { name: 'Quentin Gibson',        number: '6',  year: 'So', rank: 6 },
-    { name: 'Kaleb Mathis',          number: '13', year: 'JR', rank: 7 },
-    { name: 'Quanell Farrakhan Jr.', number: '14', year: 'So', rank: 8 },
-    { name: 'Christian Ward',        number: '17', year: 'FR', rank: 9 },
-    { name: 'Tagert Bardin',         number: '22', year: 'JR', rank: 10 },
-    { name: 'Carson Westbrook',      number: '36', year: 'So', rank: 11 },
-    { name: 'Alex Ward',             number: '32', year: 'FR', rank: 12 },
-    { name: 'Ernest Campbell',       number: '4',  year: 'So', rank: 13 },
+    { name: 'Danny Scudero',         number: '18', year: 'GR', rank: 1 },
+    { name: 'Joseph Williams',       number: '8',  year: 'SR', rank: 2 },
+    { name: 'DeAndre Moore Jr.',     number: '3',  year: 'GR', rank: 3 },
+    { name: 'Hykeem Williams',       number: '5',  year: 'GR', rank: 4 },
+    { name: 'Kam Perry',             number: '7',  year: 'GR', rank: 5 },
+    { name: 'Quentin Gibson',        number: '6',  year: 'JR', rank: 6 },
+    { name: 'Kaleb Mathis',          number: '13', year: 'SR', rank: 7 },
+    { name: 'Quanell Farrakhan Jr.', number: '14', year: 'JR', rank: 8 },
+    { name: 'Christian Ward',        number: '17', year: 'So', rank: 9 },
+    { name: 'Tagert Bardin',         number: '22', year: 'SR', rank: 10 },
+    { name: 'Carson Westbrook',      number: '36', year: 'JR', rank: 11 },
+    { name: 'Alex Ward',             number: '32', year: 'So', rank: 12 },
+    { name: 'Ernest Campbell',       number: '4',  year: 'JR', rank: 13 },
   ],
   TE: [
-    { name: 'Zach Atkins',      number: '85', year: 'SR', rank: 1 },
-    { name: 'Brady Kopetz',     number: '86', year: 'SR', rank: 2 },
-    { name: 'Charlie Williams', number: '87', year: 'JR', rank: 3 },
+    { name: 'Zach Atkins',      number: '85', year: 'GR', rank: 1 },
+    { name: 'Brady Kopetz',     number: '86', year: 'GR', rank: 2 },
+    { name: 'Charlie Williams', number: '87', year: 'SR', rank: 3 },
     { name: 'Fisher Clements',  number: '89', year: 'GR', rank: 4 },
-    { name: 'Ben Gula',         number: '82', year: 'FR', rank: 5 },
-    { name: 'Corbin Laisure',   number: '88', year: 'FR', rank: 6 },
-    { name: 'Zayne DeSouza',    number: '83', year: 'FR', rank: 7 },
+    { name: 'Ben Gula',         number: '82', year: 'So', rank: 5 },
+    { name: 'Corbin Laisure',   number: '88', year: 'So', rank: 6 },
+    { name: 'Zayne DeSouza',    number: '83', year: 'So', rank: 7 },
   ],
   OL: [
-    { name: 'Larry Johnson III', number: '53', year: 'SR', rank: 1 },
-    { name: 'Taj White',         number: '54', year: 'SR', rank: 2 },
+    { name: 'Larry Johnson III', number: '53', year: 'GR', rank: 1 },
+    { name: 'Taj White',         number: '54', year: 'GR', rank: 2 },
     { name: 'Leon Bell',         number: '57', year: 'GR', rank: 3 },
-    { name: 'Bo Hughley',        number: '55', year: 'JR', rank: 4 },
-    { name: 'Jayven Richardson', number: '75', year: 'SR', rank: 5 },
-    { name: 'Andre Roye Jr.',    number: '52', year: 'SR', rank: 6 },
-    { name: 'Phillip Houston',   number: '56', year: 'SR', rank: 7 },
+    { name: 'Bo Hughley',        number: '55', year: 'SR', rank: 4 },
+    { name: 'Jayven Richardson', number: '75', year: 'GR', rank: 5 },
+    { name: 'Andre Roye Jr.',    number: '52', year: 'GR', rank: 6 },
+    { name: 'Phillip Houston',   number: '56', year: 'GR', rank: 7 },
     { name: 'Demetrius Hunter',  number: '58', year: 'GR', rank: 8 },
-    { name: 'Sean Kinney',       number: '62', year: 'JR', rank: 9 },
-    { name: 'Jayvon McFadden',   number: '71', year: 'FR', rank: 10 },
-    { name: 'Jose Soto',         number: '73', year: 'JR', rank: 11 },
-    { name: 'Xavier Payne',      number: '72', year: 'FR', rank: 12 },
-    { name: 'Yahya Attia',       number: '59', year: 'So', rank: 13 },
-    { name: 'Hudson Steber',     number: '78', year: 'FR', rank: 14 },
-    { name: 'Chauncey Gooden',   number: '51', year: 'FR', rank: 15 },
+    { name: 'Sean Kinney',       number: '62', year: 'SR', rank: 9 },
+    { name: 'Jayvon McFadden',   number: '71', year: 'So', rank: 10 },
+    { name: 'Jose Soto',         number: '73', year: 'SR', rank: 11 },
+    { name: 'Xavier Payne',      number: '72', year: 'So', rank: 12 },
+    { name: 'Yahya Attia',       number: '59', year: 'JR', rank: 13 },
+    { name: 'Hudson Steber',     number: '78', year: 'So', rank: 14 },
+    { name: 'Chauncey Gooden',   number: '51', year: 'So', rank: 15 },
   ],
   DL: [
-    { name: 'Quency Wiggins',    number: '49', year: 'SR', rank: 1 },
-    { name: 'Toby Anene',        number: '53', year: 'SR', rank: 2 },
-    { name: 'Santana Hopper',    number: '97', year: 'SR', rank: 3 },
-    { name: 'Domata Peko Jr.',   number: '27', year: 'JR', rank: 4 },
-    { name: 'Kylan Salter',      number: '41', year: 'JR', rank: 5 },
-    { name: 'Immanuel Ezeogu',   number: '52', year: 'So', rank: 6 },
-    { name: 'Yamil Talib',       number: '95', year: 'So', rank: 7 },
-    { name: 'Balansama Kamara',  number: '96', year: 'SR', rank: 8 },
-    { name: 'Vili Taufatofua',   number: '45', year: 'SR', rank: 9 },
-    { name: 'Samu Taumanupepe',  number: '88', year: 'JR', rank: 10 },
-    { name: 'Lamont Lester Jr.', number: '56', year: 'So', rank: 11 },
-    { name: 'Tyler Moore',       number: '90', year: 'JR', rank: 12 },
-    { name: 'Sedrick Smith',     number: '91', year: 'JR', rank: 13 },
-    { name: 'Josiah Manu',       number: '94', year: 'FR', rank: 14 },
-    { name: 'Ezra Christensen',  number: '98', year: 'SR', rank: 15 },
-    { name: 'Dylan Manuel',      number: '99', year: 'FR', rank: 16 },
+    { name: 'Quency Wiggins',    number: '49', year: 'GR', rank: 1 },
+    { name: 'Toby Anene',        number: '53', year: 'GR', rank: 2 },
+    { name: 'Santana Hopper',    number: '97', year: 'GR', rank: 3 },
+    { name: 'Domata Peko Jr.',   number: '27', year: 'SR', rank: 4 },
+    { name: 'Kylan Salter',      number: '41', year: 'SR', rank: 5 },
+    { name: 'Immanuel Ezeogu',   number: '52', year: 'JR', rank: 6 },
+    { name: 'Yamil Talib',       number: '95', year: 'JR', rank: 7 },
+    { name: 'Balansama Kamara',  number: '96', year: 'GR', rank: 8 },
+    { name: 'Vili Taufatofua',   number: '45', year: 'GR', rank: 9 },
+    { name: 'Samu Taumanupepe',  number: '88', year: 'SR', rank: 10 },
+    { name: 'Lamont Lester Jr.', number: '56', year: 'JR', rank: 11 },
+    { name: 'Tyler Moore',       number: '90', year: 'SR', rank: 12 },
+    { name: 'Sedrick Smith',     number: '91', year: 'SR', rank: 13 },
+    { name: 'Josiah Manu',       number: '94', year: 'So', rank: 14 },
+    { name: 'Ezra Christensen',  number: '98', year: 'GR', rank: 15 },
+    { name: 'Dylan Manuel',      number: '99', year: 'So', rank: 16 },
   ],
   LB: [
-    { name: 'Liona Lefau',       number: '17', year: 'SR', rank: 1 },
-    { name: 'Tyler Martinez',    number: '35', year: 'SR', rank: 2 },
-    { name: 'Gideon Lampron',    number: '44', year: 'SR', rank: 3 },
-    { name: 'Carson Crawford',   number: '51', year: 'FR', rank: 4 },
-    { name: 'Rodney Colton Jr.', number: '50', year: 'FR', rank: 5 },
-    { name: 'Bo LaPenna',        number: '54', year: 'SR', rank: 6 },
-    { name: 'Gage Goldberg',     number: '55', year: 'So', rank: 7 },
-    { name: 'Colby Johnson',     number: '40', year: 'FR', rank: 8 },
+    { name: 'Liona Lefau',       number: '17', year: 'GR', rank: 1 },
+    { name: 'Tyler Martinez',    number: '35', year: 'GR', rank: 2 },
+    { name: 'Gideon Lampron',    number: '44', year: 'GR', rank: 3 },
+    { name: 'Carson Crawford',   number: '51', year: 'So', rank: 4 },
+    { name: 'Rodney Colton Jr.', number: '50', year: 'So', rank: 5 },
+    { name: 'Bo LaPenna',        number: '54', year: 'GR', rank: 6 },
+    { name: 'Gage Goldberg',     number: '55', year: 'JR', rank: 7 },
+    { name: 'Colby Johnson',     number: '40', year: 'So', rank: 8 },
   ],
   CB: [
-    { name: 'Justin Eaglin',     number: '30', year: 'SR', rank: 1 },
-    { name: 'Boo Carter',        number: '6',  year: 'JR', rank: 2 },
-    { name: 'Randon Fontenette', number: '7',  year: 'SR', rank: 3 },
-    { name: 'Naeten Mitchell',   number: '4',  year: 'JR', rank: 4 },
-    { name: 'RJ Johnson',        number: '5',  year: 'JR', rank: 5 },
-    { name: 'Makari Vickers',    number: '10', year: 'JR', rank: 6 },
-    { name: 'Jason Stokes Jr.',  number: '13', year: 'So', rank: 7 },
-    { name: 'Jah Jah Boyd',      number: '15', year: 'So', rank: 8 },
-    { name: 'Paul Omodia',       number: '18', year: 'JR', rank: 9 },
-    { name: 'Cree Thomas',       number: '20', year: 'FR', rank: 10 },
-    { name: 'Mojo Williams Jr.', number: '25', year: 'FR', rank: 11 },
-    { name: 'Braylon Edwards',   number: '26', year: 'FR', rank: 12 },
-    { name: 'Jaydan Hardy',      number: '9',  year: 'FR', rank: 13 },
-    { name: 'Kole Mathis',       number: '33', year: 'So', rank: 14 },
-    { name: 'Donavon Stephens',  number: '39', year: 'FR', rank: 15 },
-    { name: 'Preston Ashley',    number: '31', year: 'FR', rank: 16 },
+    { name: 'Justin Eaglin',     number: '30', year: 'GR', rank: 1 },
+    { name: 'Boo Carter',        number: '6',  year: 'SR', rank: 2 },
+    { name: 'Randon Fontenette', number: '7',  year: 'GR', rank: 3 },
+    { name: 'Naeten Mitchell',   number: '4',  year: 'SR', rank: 4 },
+    { name: 'RJ Johnson',        number: '5',  year: 'SR', rank: 5 },
+    { name: 'Makari Vickers',    number: '10', year: 'SR', rank: 6 },
+    { name: 'Jason Stokes Jr.',  number: '13', year: 'JR', rank: 7 },
+    { name: 'Jah Jah Boyd',      number: '15', year: 'JR', rank: 8 },
+    { name: 'Paul Omodia',       number: '18', year: 'SR', rank: 9 },
+    { name: 'Cree Thomas',       number: '20', year: 'So', rank: 10 },
+    { name: 'Mojo Williams Jr.', number: '25', year: 'So', rank: 11 },
+    { name: 'Braylon Edwards',   number: '26', year: 'So', rank: 12 },
+    { name: 'Jaydan Hardy',      number: '9',  year: 'So', rank: 13 },
+    { name: 'Kole Mathis',       number: '33', year: 'JR', rank: 14 },
+    { name: 'Donavon Stephens',  number: '39', year: 'So', rank: 15 },
+    { name: 'Preston Ashley',    number: '31', year: 'So', rank: 16 },
   ],
   S: [
-    { name: 'Emory Floyd',   number: '8',  year: 'SR', rank: 1 },
-    { name: 'Ben Finneseth', number: '28', year: 'SR', rank: 2 },
+    { name: 'Emory Floyd',   number: '8',  year: 'GR', rank: 1 },
+    { name: 'Ben Finneseth', number: '28', year: 'GR', rank: 2 },
   ],
 };
 
@@ -162,161 +162,177 @@ const PLAYER_MAP = buildPlayerMap();
 
 // ─── Formation definitions ────────────────────────────────────────────────────
 
-// Offense: end zone at top (y=0). OL/TE/WR line up at y=52 (the LOS).
-// WRs are positioned wide left/right so they don't overlap OL cards.
-// QB at y=68, backs at y=82. All players are at or behind the LOS (y >= 52).
+// Offense: end zone at top (y=0). LOS at y=52 (matches the dashed line in the SVG).
+// Offensive players sit AT or BEHIND the LOS (y >= 52, toward the bottom).
+// OL is subtly staggered (center on the ball, guards/tackles a touch back) like
+// a real line. All coordinates keep >=10% horizontal / >=6% vertical separation
+// so the 70px cards never overlap.
 function makeOffenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
-  const LINE = 52;   // offensive line row / line of scrimmage
-  const QB_Y = 68;   // quarterback row
-  const BACK_Y = 82; // running back row
+  const LINE = 52;       // line of scrimmage / center
+  const SHOTGUN = 68;    // QB in shotgun/pistol-deep
+  const UNDER = 60;      // QB under center
+  const RB_DEEP = 74;    // running back depth
 
-  // OL staggered as in real football: center snaps at LOS, guards slightly behind,
-  // tackles furthest back — creates a natural pocket/arc look.
+  // Offensive line — center on the ball, guards 1% back, tackles 2% back.
   const olSlots: Omit<FieldSlot, 'playerId'>[] = [
-    { id: 'LT', label: 'LT', posGroup: ['OL'], x: 24, y: LINE + 4 },
-    { id: 'LG', label: 'LG', posGroup: ['OL'], x: 35, y: LINE + 2 },
+    { id: 'LT', label: 'LT', posGroup: ['OL'], x: 32, y: LINE + 2 },
+    { id: 'LG', label: 'LG', posGroup: ['OL'], x: 40, y: LINE + 1 },
     { id: 'C',  label: 'C',  posGroup: ['OL'], x: 48, y: LINE },
-    { id: 'RG', label: 'RG', posGroup: ['OL'], x: 61, y: LINE + 2 },
-    { id: 'RT', label: 'RT', posGroup: ['OL'], x: 72, y: LINE + 4 },
+    { id: 'RG', label: 'RG', posGroup: ['OL'], x: 56, y: LINE + 1 },
+    { id: 'RT', label: 'RT', posGroup: ['OL'], x: 64, y: LINE + 2 },
   ];
 
+  // 11 personnel (1 RB, 1 TE, 3 WR), QB in shotgun with back beside him.
   if (formation === 'Spread') {
     return [
       ...olSlots,
-      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 82, y: LINE },
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: QB_Y },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 62, y: QB_Y },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 5,  y: LINE },
-      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 15, y: LINE },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 95, y: LINE },
+      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 72, y: LINE },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 6,  y: LINE },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 18, y: LINE + 3 },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 94, y: LINE },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: SHOTGUN },
+      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 38, y: SHOTGUN },
     ];
   }
+  // 11 personnel, QB in the pistol with the RB stacked directly behind.
   if (formation === 'Pistol') {
     return [
       ...olSlots,
-      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 82, y: LINE },
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: QB_Y },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 48, y: BACK_Y },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 5,  y: LINE },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 95, y: LINE },
+      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 72, y: LINE },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 6,  y: LINE },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 84, y: LINE + 3 },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 94, y: LINE },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: 64 },
+      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 48, y: RB_DEEP + 2 },
     ];
   }
+  // 21 personnel (2 RB, 1 TE, 2 WR), QB under center with split backs.
   if (formation === 'Pro Set') {
     return [
       ...olSlots,
-      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 82, y: LINE },
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: QB_Y },
-      { id: 'FB',  label: 'RB', posGroup: ['RB'], x: 38, y: BACK_Y },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 58, y: BACK_Y },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 5,  y: LINE },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 95, y: LINE },
+      { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 72, y: LINE },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 6,  y: LINE },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 94, y: LINE },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: UNDER },
+      { id: 'FB',  label: 'HB', posGroup: ['RB'], x: 40, y: RB_DEEP },
+      { id: 'RB',  label: 'HB', posGroup: ['RB'], x: 56, y: RB_DEEP },
     ];
   }
+  // Trips right: 3 WR bunched to one side, 1 WR backside, 1 RB, QB shotgun.
   if (formation === 'Trips') {
     return [
       ...olSlots,
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: QB_Y },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 62, y: QB_Y },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 5,  y: LINE },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 72, y: LINE },
-      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 84, y: LINE },
-      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 95, y: LINE },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 6,  y: LINE },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 74, y: LINE },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 84, y: LINE + 3 },
+      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 94, y: LINE },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: SHOTGUN },
+      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 38, y: SHOTGUN },
     ];
   }
+  // Empty: no back, 5 WR spread across the field, QB shotgun.
   if (formation === 'Empty') {
     return [
       ...olSlots,
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: QB_Y },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 5,  y: LINE },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 15, y: LINE },
-      { id: 'WR5', label: 'WR', posGroup: ['WR'], x: 48, y: QB_Y - 2 },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 6,  y: LINE },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 18, y: LINE + 3 },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 70, y: LINE + 3 },
       { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 82, y: LINE },
-      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 95, y: LINE },
+      { id: 'WR5', label: 'WR', posGroup: ['WR'], x: 94, y: LINE + 3 },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: SHOTGUN },
     ];
   }
   return [];
 }
 
-// Defense: end zone at bottom (y=100). D-line at y=30 (LOS). All players are at
-// or behind the LOS (y >= 30). CBs at y=38 (just behind DL), LBs at y=50,
-// safeties at y=66–80.
+// Defense: end zone at bottom (y=100). LOS at y=30 (matches the dashed SVG line).
+// The D-line is ON the ball (y=30); everyone else drops back into coverage toward
+// the bottom (corners up near the line, linebackers at the second level, safeties
+// deep). Each personnel grouping totals 11 with proper position counts.
 function makeDefenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
-  const LINE = 30;  // defensive line row (LOS)
-  const CB_Y = 38;  // cornerbacks — behind LOS, positioned wide
+  const LINE = 30;  // defensive line — on the line of scrimmage
+  const CB_Y = 40;  // cornerbacks press near the line, out wide
+  const LB_Y = 46;  // linebacker second level
+  const S_Y = 64;   // safeties deep
 
+  // 4-2-5: 4 DL, 2 LB, 5 DB (2 CB, nickel, 2 S) — Colorado's base.
   if (formation === '4-2-5') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 22, y: LINE },
+      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 20, y: LINE },
       { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
       { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 74, y: LINE },
-      { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 38, y: 48 },
-      { id: 'LB2', label: 'LB',  posGroup: ['LB'], x: 58, y: 48 },
+      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 76, y: LINE },
+      { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 38, y: LB_Y },
+      { id: 'LB2', label: 'LB',  posGroup: ['LB'], x: 58, y: LB_Y },
       { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
       { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 94, y: CB_Y },
-      { id: 'CB3', label: 'NB',  posGroup: ['CB'], x: 20, y: 48 },
-      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 36, y: 68 },
-      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 60, y: 68 },
+      { id: 'NB',  label: 'NB',  posGroup: ['CB'], x: 20, y: LB_Y + 2 },
+      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 36, y: S_Y },
+      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 60, y: S_Y },
     ];
   }
+  // 3-4: 3 DL, 4 LB, 4 DB (2 CB, 2 S).
   if (formation === '3-4') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 30, y: LINE },
-      { id: 'DL2', label: 'NT',  posGroup: ['DL'], x: 50, y: LINE },
-      { id: 'DL3', label: 'DE',  posGroup: ['DL'], x: 70, y: LINE },
-      { id: 'LB1', label: 'OLB', posGroup: ['LB'], x: 12, y: 48 },
-      { id: 'LB2', label: 'ILB', posGroup: ['LB'], x: 38, y: 48 },
-      { id: 'LB3', label: 'ILB', posGroup: ['LB'], x: 62, y: 48 },
-      { id: 'LB4', label: 'OLB', posGroup: ['LB'], x: 88, y: 48 },
+      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 28, y: LINE },
+      { id: 'DL2', label: 'NT',  posGroup: ['DL'], x: 48, y: LINE },
+      { id: 'DL3', label: 'DE',  posGroup: ['DL'], x: 68, y: LINE },
+      { id: 'LB1', label: 'OLB', posGroup: ['LB'], x: 10, y: LB_Y - 2 },
+      { id: 'LB2', label: 'ILB', posGroup: ['LB'], x: 36, y: LB_Y },
+      { id: 'LB3', label: 'ILB', posGroup: ['LB'], x: 60, y: LB_Y },
+      { id: 'LB4', label: 'OLB', posGroup: ['LB'], x: 86, y: LB_Y - 2 },
       { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
       { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 94, y: CB_Y },
-      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 38, y: 68 },
-      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 62, y: 68 },
+      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 36, y: S_Y },
+      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 62, y: S_Y },
     ];
   }
+  // 4-3: 4 DL, 3 LB, 4 DB (2 CB, 2 S).
   if (formation === '4-3') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 22, y: LINE },
+      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 20, y: LINE },
       { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
       { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 74, y: LINE },
-      { id: 'LB1', label: 'WLB', posGroup: ['LB'], x: 26, y: 48 },
-      { id: 'LB2', label: 'MLB', posGroup: ['LB'], x: 50, y: 48 },
-      { id: 'LB3', label: 'SLB', posGroup: ['LB'], x: 74, y: 48 },
+      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 76, y: LINE },
+      { id: 'LB1', label: 'WLB', posGroup: ['LB'], x: 28, y: LB_Y },
+      { id: 'LB2', label: 'MLB', posGroup: ['LB'], x: 48, y: LB_Y },
+      { id: 'LB3', label: 'SLB', posGroup: ['LB'], x: 68, y: LB_Y },
       { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
       { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 94, y: CB_Y },
-      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 38, y: 68 },
-      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 62, y: 68 },
+      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 36, y: S_Y },
+      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 62, y: S_Y },
     ];
   }
+  // Nickel: 4 DL, 2 LB, 5 DB (2 CB, nickel, 2 S).
   if (formation === 'Nickel') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 22, y: LINE },
+      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 20, y: LINE },
       { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
       { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 74, y: LINE },
-      { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 46, y: 48 },
+      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 76, y: LINE },
+      { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 38, y: LB_Y },
+      { id: 'LB2', label: 'LB',  posGroup: ['LB'], x: 58, y: LB_Y },
       { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
       { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 94, y: CB_Y },
-      { id: 'CB3', label: 'NB',  posGroup: ['CB'], x: 20, y: 48 },
-      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 34, y: 66 },
-      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 58, y: 66 },
-      { id: 'S3',  label: 'DB',  posGroup: ['S', 'CB'], x: 46, y: 82 },
+      { id: 'NB',  label: 'NB',  posGroup: ['CB'], x: 20, y: LB_Y + 2 },
+      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 36, y: S_Y },
+      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 60, y: S_Y },
     ];
   }
+  // Dime: 4 DL, 1 LB, 6 DB (2 CB, nickel, extra DB, 2 S).
   if (formation === 'Dime') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 22, y: LINE },
+      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 20, y: LINE },
       { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
       { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 74, y: LINE },
+      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 76, y: LINE },
+      { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 48, y: LB_Y },
       { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
       { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 94, y: CB_Y },
-      { id: 'CB3', label: 'NB',  posGroup: ['CB'], x: 20, y: 46 },
-      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 30, y: 64 },
-      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 50, y: 64 },
-      { id: 'S3',  label: 'DB',  posGroup: ['S', 'CB'], x: 70, y: 64 },
-      { id: 'S4',  label: 'DB',  posGroup: ['S', 'CB'], x: 50, y: 82 },
+      { id: 'NB',  label: 'NB',  posGroup: ['CB'], x: 20, y: LB_Y + 2 },
+      { id: 'DB',  label: 'DB',  posGroup: ['CB', 'S'], x: 76, y: LB_Y + 2 },
+      { id: 'S1',  label: 'SS',  posGroup: ['S'],  x: 36, y: S_Y },
+      { id: 'S2',  label: 'FS',  posGroup: ['S'],  x: 60, y: S_Y },
     ];
   }
   return [];
