@@ -197,7 +197,7 @@ export default function RosterPage() {
   const [headshotMap, setHeadshotMap] = useState<Record<string, string>>({});
   const [loadingHeadshots, setLoadingHeadshots] = useState(true);
 
-  // Fetch headshots from ESPN API and map by jersey number
+  // Fetch headshots from ESPN API and map by normalized player name
   useEffect(() => {
     fetch('https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/38/roster')
       .then(r => r.json())
@@ -206,8 +206,10 @@ export default function RosterPage() {
         const groups = (data.athletes || []) as { items?: EspnAthlete[] }[];
         for (const group of groups) {
           for (const p of group.items || []) {
-            if (p.jersey && p.headshot?.href) {
-              map[p.jersey] = p.headshot.href;
+            if (p.displayName && p.headshot?.href) {
+              // normalize: lowercase, strip punctuation/spaces for fuzzy match
+              const key = p.displayName.toLowerCase().replace(/[^a-z0-9]/g, '');
+              map[key] = p.headshot.href;
             }
           }
         }
@@ -346,7 +348,7 @@ export default function RosterPage() {
                           <div className="flex items-center gap-3">
                             <PlayerAvatar
                               name={player.name}
-                              headshot={headshotMap[player.jersey]}
+                              headshot={headshotMap[player.name.toLowerCase().replace(/[^a-z0-9]/g, '')]}
                             />
                             <span className="text-white font-semibold text-sm whitespace-nowrap">
                               {player.name}
