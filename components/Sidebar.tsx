@@ -6,7 +6,7 @@ import { Home, Users, BarChart2, List, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 const navItems = [
-  { href: '/', label: 'News & Trending', icon: Home },
+  { href: '/', label: 'Overview', icon: Home },
   { href: '/recruiting', label: 'Recruiting', icon: Users },
   { href: '/roster', label: 'Roster & Stats', icon: BarChart2 },
   { href: '/depth-chart', label: 'Depth Chart', icon: List },

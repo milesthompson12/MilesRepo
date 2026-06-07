@@ -46,24 +46,28 @@ interface Commit {
 // ─── Verified data ─────────────────────────────────────────────────────────────
 
 const trendingTopics = [
-  { topic: 'Julian Lewis 2026 QB battle', trend: '+312%' },
-  { topic: '2027 class May commit surge', trend: '+260%' },
-  { topic: 'Deion Sanders health update', trend: '+210%' },
-  { topic: 'Brennan Marion "Go Go Offense"', trend: '+185%' },
-  { topic: 'Chris Marve defense', trend: '+140%' },
+  { topic: ‘Julian Lewis 2026 QB battle’, trend: ‘+312%’ },
+  { topic: ‘2027 class June commit surge (13 commits)’, trend: ‘+420%’ },
+  { topic: ‘Deion Sanders health update’, trend: ‘+210%’ },
+  { topic: ‘Brennan Marion "Go Go Offense"’, trend: ‘+185%’ },
+  { topic: ‘Chris Marve defense’, trend: ‘+140%’ },
 ];
 
-// 2027 commits — verified via 247Sports (most recent first). As of June 6, 2026.
+// 2027 commits — verified via 247Sports / On3 (most recent first). As of June 7, 2026, 4pm MT.
 const COMMITS_2027: Commit[] = [
-  { id: 'kelly-murray', name: 'Jaiden Kelly-Murray', pos: 'WR', stars: 4, heightWeight: '5-10 / 170', hometown: 'Mount Pleasant, SC · Oceanside Collegiate', date: 'May 25, 2026', blurb: 'Four-star receiver, flipped from South Carolina. Top-40 WR nationally — the headliner of CU’s late-May surge.', source: '247Sports' },
-  { id: 'washington',   name: 'Prince Washington',   pos: 'CB', stars: 0, heightWeight: '6-1 / 185',  hometown: 'Houston, TX · Lamar HS',                 date: 'May 24, 2026', blurb: 'Length-y Houston cornerback adds to a corner-heavy 2027 haul.', source: '247Sports' },
-  { id: 'jones',        name: "Li'Marcus Jones",     pos: 'OT', stars: 4, heightWeight: '6-5 / 285',  hometown: 'Brentwood, TN · Brentwood Academy',      date: 'May 24, 2026', blurb: 'Four-star offensive tackle, a top-25 OT and major trench win.', source: '247Sports' },
-  { id: 'rasmussen',    name: 'Will Rasmussen',      pos: 'CB', stars: 3, heightWeight: '5-10 / 180', hometown: 'Orem, UT · Orem HS',                     date: 'May 20, 2026', blurb: 'Three-star Utah cornerback.', source: '247Sports' },
-  { id: 'jenkins',      name: 'Gabe Jenkins',        pos: 'S',  stars: 4, heightWeight: '6-2 / 187',  hometown: 'Pittsburgh, PA · Imani Christian',       date: 'May 20, 2026', blurb: 'Top-20 safety nationally — a four-star anchor for the back end.', source: '247Sports' },
-  { id: 'willis',       name: "Ba'Roc Willis",       pos: 'EDGE', stars: 3, heightWeight: '6-3 / 230', hometown: 'Pell City, AL · Pell City HS',          date: 'May 19, 2026', blurb: 'Three-star edge rusher who kicked off the late-May commit run.', source: '247Sports' },
-  { id: 'adams',        name: 'Andre Adams',         pos: 'QB', stars: 4, heightWeight: '—',     hometown: 'Nashville, TN · Antioch HS',             date: 'Apr 14, 2026', blurb: 'Four-star quarterback, the cornerstone of the 2027 class.', source: '247Sports' },
-  { id: 'fairley',      name: 'Kenny Fairley',       pos: 'DL', stars: 3, heightWeight: '6-0 / 270',  hometown: 'Fairburn, GA · Creekside',               date: 'Feb 2026',    blurb: 'Three-star defensive lineman, chose CU over Cincinnati & Purdue.', source: '247Sports / On3' },
-  { id: 'dericho',      name: 'Davon Dericho',       pos: 'CB', stars: 3, heightWeight: '5-9',        hometown: 'Miami, FL · Killian',                    date: 'Feb 12, 2026', blurb: 'Three-star Miami cornerback.', source: '247Sports' },
+  { id: ‘alexis’,       name: ‘Steven Alexis’,      pos: ‘RB’,   stars: 0, heightWeight: ‘6-0 / 203’,  hometown: ‘St. Petersburg, FL’, date: ‘Jun 7, 2026’,  blurb: ‘Unranked running back who chose CU over Pitt, Illinois & Iowa. Rushed for 1,113 yds and 9 TDs in 2025.’, source: ‘247Sports / On3’ },
+  { id: ‘pulliam’,      name: ‘Jovon Pulliam’,       pos: ‘EDGE’, stars: 3, heightWeight: ‘—‘,          hometown: ‘Hoover, AL · Hoover HS’, date: ‘Jun 7, 2026’,  blurb: ‘Three-star EDGE with elite production: 11 sacks, 16 TFLs, 3 forced fumbles in 2025. Chose CU over App State & Tulane.’, source: ‘247Sports / On3’ },
+  { id: ‘linton’,       name: ‘Zaquan Linton’,       pos: ‘OT’,   stars: 3, heightWeight: ‘6-5 / 293’,  hometown: ‘Wellington, FL’, date: ‘Jun 6, 2026’,  blurb: ‘Former Miami commit with elite athleticism from track & field background. 24 total offers.’, source: ‘247Sports’ },
+  { id: ‘lindsay’,      name: ‘Jaiden Lindsay’,      pos: ‘OL’,   stars: 3, heightWeight: ‘6-3 / 300’,  hometown: ‘Olney, MD’, date: ‘Jun 6, 2026’,  blurb: ‘Three-star interior OL — No. 65 IOL nationally. Committed during his official visit to Boulder.’, source: ‘247Sports / Rivals’ },
+  { id: ‘kelly-murray’, name: ‘Jaiden Kelly-Murray’, pos: ‘WR’,   stars: 4, heightWeight: ‘5-10 / 170’, hometown: ‘Mount Pleasant, SC · Oceanside Collegiate’, date: ‘May 25, 2026’, blurb: ‘Four-star receiver, flipped from South Carolina. Top-40 WR nationally — the headliner of CU’s late-May surge.’, source: ‘247Sports’ },
+  { id: ‘washington’,   name: ‘Prince Washington’,   pos: ‘CB’,   stars: 0, heightWeight: ‘6-1 / 185’,  hometown: ‘Houston, TX · Lamar HS’,                 date: ‘May 24, 2026’, blurb: ‘Lengthy Houston cornerback adds to a corner-heavy 2027 haul.’, source: ‘247Sports’ },
+  { id: ‘jones’,        name: "Li’Marcus Jones",     pos: ‘OT’,   stars: 4, heightWeight: ‘6-5 / 285’,  hometown: ‘Brentwood, TN · Brentwood Academy’,      date: ‘May 24, 2026’, blurb: ‘Four-star offensive tackle, a top-25 OT and major trench win.’, source: ‘247Sports’ },
+  { id: ‘rasmussen’,    name: ‘Will Rasmussen’,      pos: ‘CB’,   stars: 3, heightWeight: ‘5-10 / 180’, hometown: ‘Orem, UT · Orem HS’,                     date: ‘May 20, 2026’, blurb: ‘Three-star Utah cornerback.’, source: ‘247Sports’ },
+  { id: ‘jenkins’,      name: ‘Gabe Jenkins’,        pos: ‘S’,    stars: 4, heightWeight: ‘6-2 / 187’,  hometown: ‘Pittsburgh, PA · Imani Christian’,       date: ‘May 20, 2026’, blurb: ‘Top-20 safety nationally — a four-star anchor for the back end.’, source: ‘247Sports’ },
+  { id: ‘willis’,       name: "Ba’Roc Willis",       pos: ‘EDGE’, stars: 3, heightWeight: ‘6-3 / 230’, hometown: ‘Pell City, AL · Pell City HS’,          date: ‘May 19, 2026’, blurb: ‘Three-star edge rusher who kicked off the late-May commit run.’, source: ‘247Sports’ },
+  { id: ‘adams’,        name: ‘Andre Adams’,         pos: ‘QB’,   stars: 4, heightWeight: ‘—‘,          hometown: ‘Nashville, TN · Antioch HS’,             date: ‘Apr 14, 2026’, blurb: ‘Four-star quarterback, the cornerstone of the 2027 class.’, source: ‘247Sports’ },
+  { id: ‘fairley’,      name: ‘Kenny Fairley’,       pos: ‘DL’,   stars: 3, heightWeight: ‘6-0 / 270’,  hometown: ‘Fairburn, GA · Creekside’,               date: ‘Feb 2026’,    blurb: ‘Three-star defensive lineman, chose CU over Cincinnati & Purdue.’, source: ‘247Sports / On3’ },
+  { id: ‘dericho’,      name: ‘Davon Dericho’,       pos: ‘CB’,   stars: 3, heightWeight: ‘5-9’,        hometown: ‘Miami, FL · Killian’,                    date: ‘Feb 12, 2026’, blurb: ‘Three-star Miami cornerback.’, source: ‘247Sports’ },
 ];
 
 // Expert predictions / Crystal Ball — only list 100%-confirmed picks here.
@@ -176,18 +180,32 @@ function TileHeader({ title, icon }: { title: string; icon?: React.ReactNode }) 
   );
 }
 
+// Hardcoded 2026 opener info (ESPN API not reliable for future games)
+const NEXT_GAME = {
+  opponent: 'Georgia Tech Yellow Jackets',
+  opponentAbbr: 'GT',
+  date: 'Thu, Sep 3, 2026',
+  time: 'TBD',
+  broadcast: 'ESPN',
+  location: 'Bobby Dodd Stadium · Atlanta, GA',
+  homeAway: 'away' as const,
+  record: 'Coming off 9-4 in 2025',
+  playersToWatch: [
+    { name: 'Justice Haynes', pos: 'RB', note: 'Michigan transfer · 857 rush yds, 10 TDs in \'25 · potential All-American' },
+    { name: 'Alberto Mendoza', pos: 'QB', note: 'Indiana transfer · younger brother of Heisman winner Fernando Mendoza' },
+    { name: 'Gavin Harris',    pos: 'TE', note: '37 rec, 531 yds in \'25 · All-ACC candidate' },
+  ],
+};
+
 function NextGameTile({ events }: { events: ScheduleEvent[] }) {
+  // Try ESPN first; fall back to hardcoded NEXT_GAME
   const now = new Date();
   const upcoming = events.find(e => {
     const comp = e.competitions?.[0];
     return comp && !comp.status.type.completed && new Date(e.date) >= now;
   });
   const comp = upcoming?.competitions?.[0];
-  const opponent = comp?.competitors.find(c => c.homeAway !== 'home');
-  const home = comp?.competitors.find(c => c.homeAway === 'home');
-  const isHome = home?.team.abbreviation === 'COLO';
-  const broadcast = comp?.broadcasts?.[0]?.names?.[0];
-  const venue = comp?.venue;
+  const espnOpponent = comp?.competitors.find(c => c.homeAway !== 'home');
 
   return (
     <div className="rounded-2xl bg-cu-gray border border-cu-gold/20 overflow-hidden">
@@ -197,40 +215,52 @@ function NextGameTile({ events }: { events: ScheduleEvent[] }) {
           Next Game
         </h3>
       </div>
-      <div className="p-4">
-        {upcoming && opponent ? (
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              {opponent.team.logo && (
-                <Image src={opponent.team.logo} alt={opponent.team.displayName} width={40} height={40} unoptimized className="rounded" />
-              )}
-              <div>
-                <div className="text-white font-bold text-sm">{isHome ? 'vs.' : 'at'} {opponent.team.displayName}</div>
-                <div className="text-cu-gold text-xs font-medium mt-0.5">{formatDate(upcoming.date)}</div>
-              </div>
+      <div className="p-4 space-y-2">
+        {/* Opponent + date */}
+        <div className="flex items-center gap-3">
+          {espnOpponent?.team.logo ? (
+            <Image src={espnOpponent.team.logo} alt={espnOpponent.team.displayName} width={36} height={36} unoptimized className="rounded" />
+          ) : (
+            <div className="w-9 h-9 rounded bg-yellow-800/40 flex items-center justify-center flex-shrink-0">
+              <span className="text-yellow-400 font-black text-xs">{NEXT_GAME.opponentAbbr}</span>
             </div>
-            <div className="text-gray-400 text-xs flex items-center gap-1"><Clock size={10} />{formatTime(upcoming.date)}</div>
-            {venue?.fullName && (
-              <div className="text-gray-400 text-xs flex items-center gap-1">
-                <MapPin size={10} />{venue.fullName}{venue.address ? `, ${venue.address.city}, ${venue.address.state}` : ''}
-              </div>
-            )}
-            {broadcast && (
-              <div className="text-gray-400 text-xs flex items-center gap-1"><Tv size={10} />{broadcast}</div>
-            )}
-            <div className="mt-3 pt-3 border-t border-gray-700">
-              <div className="text-gray-600 text-xs flex items-center gap-1"><AlertCircle size={10} />Betting lines posted closer to kickoff</div>
+          )}
+          <div>
+            <div className="text-white font-bold text-sm">
+              {NEXT_GAME.homeAway === 'away' ? 'at' : 'vs.'} {espnOpponent?.team.displayName ?? NEXT_GAME.opponent}
             </div>
+            <div className="text-cu-gold text-xs font-medium">{NEXT_GAME.date}</div>
           </div>
-        ) : (
-          <div className="space-y-2">
-            <div className="text-gray-300 text-sm font-medium">2026 Season</div>
-            <div className="text-gray-500 text-xs">Schedule loading from ESPN&hellip;</div>
-            <div className="mt-3 pt-3 border-t border-gray-700">
-              <div className="text-gray-600 text-xs flex items-center gap-1"><AlertCircle size={10} />Betting lines available once the schedule is set</div>
-            </div>
+        </div>
+
+        {/* Game details */}
+        <div className="text-gray-400 text-xs flex items-center gap-1">
+          <Clock size={10} />{NEXT_GAME.time} · <Tv size={10} className="ml-0.5" />{NEXT_GAME.broadcast}
+        </div>
+        <div className="text-gray-400 text-xs flex items-center gap-1">
+          <MapPin size={10} />{comp?.venue?.fullName ? `${comp.venue.fullName}${comp.venue.address ? `, ${comp.venue.address.city}, ${comp.venue.address.state}` : ''}` : NEXT_GAME.location}
+        </div>
+        <div className="text-gray-600 text-xs">{NEXT_GAME.record}</div>
+
+        {/* Players to watch */}
+        <div className="pt-2 border-t border-gray-700/60">
+          <div className="text-gray-500 text-[10px] font-bold uppercase tracking-wide mb-1.5">Players to Watch</div>
+          <div className="space-y-1.5">
+            {NEXT_GAME.playersToWatch.map(p => (
+              <div key={p.name} className="flex items-start gap-1.5">
+                <span className="text-cu-gold text-[10px] font-bold px-1 py-0.5 bg-cu-gold/10 rounded flex-shrink-0">{p.pos}</span>
+                <div>
+                  <span className="text-white text-xs font-semibold">{p.name}</span>
+                  <p className="text-gray-500 text-[10px] leading-tight">{p.note}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
+
+        <div className="text-gray-700 text-[10px] flex items-center gap-1 pt-1">
+          <AlertCircle size={9} />Betting lines posted closer to kickoff
+        </div>
       </div>
     </div>
   );
@@ -314,7 +344,7 @@ function RecruitingTile({ onShowCommit }: { onShowCommit: () => void }) {
         <div className="pt-2 border-t border-gray-800">
           <div className="text-gray-500 text-xs">
             <span className="text-cu-gold font-bold">{COMMITS_2027.length}</span> total commits ·{' '}
-            <span className="text-gray-400">Visit:</span> Zykee Scott LB (Jun 19&ndash;21)
+            <span className="text-gray-400">Next visit:</span> Zykee Scott LB (Jun 19–21)
           </div>
           <Link href="/recruiting" className="text-cu-gold text-xs font-bold hover:underline flex items-center gap-1 mt-2">
             Full 2027 tracker <ExternalLink size={10} />
@@ -360,16 +390,26 @@ export default function OverviewPage() {
     <div className="max-w-7xl mx-auto">
       {showCommit && <CommitPopup commit={LATEST_COMMIT} onClose={dismissCommit} />}
 
-      {/* Page Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-black text-white">
-          <span className="text-cu-gold">CU Buffaloes</span> Overview
-        </h1>
-        <p className="text-gray-400 mt-1">Latest news, scores, and updates from Boulder</p>
+      {/* Folsom Field hero banner */}
+      <div className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-6 border border-cu-gold/20">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Folsom_Field_Student_Section_Colorado_Buffaloes.JPG/1280px-Folsom_Field_Student_Section_Colorado_Buffaloes.JPG"
+          alt="Folsom Field — Colorado Buffaloes"
+          className="w-full h-full object-cover"
+          onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-5">
+          <h1 className="text-3xl font-black text-white drop-shadow-lg">
+            <span className="text-cu-gold">CU Buffaloes</span> Overview
+          </h1>
+          <p className="text-gray-300 text-sm mt-0.5 drop-shadow">Folsom Field · Boulder, Colorado</p>
+        </div>
       </div>
 
       {/* 4 info tiles */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
         <NextGameTile events={events} />
         <TeamInfoTile />
         <TrendingTile />

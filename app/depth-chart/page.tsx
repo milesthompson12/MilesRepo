@@ -170,13 +170,14 @@ function makeOffenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
   const QB_Y = 68;   // quarterback row
   const BACK_Y = 82; // running back row
 
-  // OL shifted slightly to center to leave room for wide WRs
+  // OL staggered as in real football: center snaps at LOS, guards slightly behind,
+  // tackles furthest back — creates a natural pocket/arc look.
   const olSlots: Omit<FieldSlot, 'playerId'>[] = [
-    { id: 'LT', label: 'LT', posGroup: ['OL'], x: 26, y: LINE },
-    { id: 'LG', label: 'LG', posGroup: ['OL'], x: 36, y: LINE },
+    { id: 'LT', label: 'LT', posGroup: ['OL'], x: 24, y: LINE + 4 },
+    { id: 'LG', label: 'LG', posGroup: ['OL'], x: 35, y: LINE + 2 },
     { id: 'C',  label: 'C',  posGroup: ['OL'], x: 48, y: LINE },
-    { id: 'RG', label: 'RG', posGroup: ['OL'], x: 60, y: LINE },
-    { id: 'RT', label: 'RT', posGroup: ['OL'], x: 70, y: LINE },
+    { id: 'RG', label: 'RG', posGroup: ['OL'], x: 61, y: LINE + 2 },
+    { id: 'RT', label: 'RT', posGroup: ['OL'], x: 72, y: LINE + 4 },
   ];
 
   if (formation === 'Spread') {
@@ -353,6 +354,8 @@ type DefenseFormation = typeof DEFENSE_FORMATIONS[number];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
+const GRADE_ORDER: Record<string, number> = { SR: 0, GR: 1, JR: 2, SO: 3, So: 3, FR: 4 };
+
 const YEAR_COLORS: Record<string, string> = {
   FR: 'bg-emerald-900/60 text-emerald-300',
   SO: 'bg-sky-900/60 text-sky-300',
@@ -389,7 +392,7 @@ function PlayerAvatar({
   size?: 'sm' | 'md';
 }) {
   const initials = getInitials(player.name);
-  const sz = size === 'sm' ? 'w-8 h-8 text-[10px]' : 'w-10 h-10 text-sm';
+  const sz = size === 'sm' ? 'w-9 h-9 text-[11px]' : 'w-11 h-11 text-sm';
   return (
     <div
       className={`${sz} rounded-full bg-cu-gold/20 border border-cu-gold/50 flex items-center justify-center font-black text-cu-gold flex-shrink-0`}
@@ -429,17 +432,17 @@ function DraggablePlayerCard({
     >
       <div
         className={`
-          flex flex-col items-center bg-black/85 border rounded-lg px-1 py-1 gap-0.5 shadow-lg w-[58px]
+          flex flex-col items-center bg-black/85 border rounded-lg px-1 py-1.5 gap-0.5 shadow-lg w-[70px]
           ${isOver ? 'border-cu-gold shadow-cu-gold/40' : 'border-cu-gold/50'}
         `}
       >
         <PlayerAvatar player={player} size="sm" />
         <span className="text-cu-gold font-black text-xs leading-none">#{player.number}</span>
-        <span className="text-white font-semibold text-[9px] leading-none text-center w-full truncate">
+        <span className="text-white font-semibold text-[10px] leading-none text-center w-full truncate">
           {getLastName(player.name)}
         </span>
         <span
-          className={`text-[7px] font-bold px-1 rounded leading-none ${YEAR_COLORS[player.year] ?? 'bg-gray-700 text-gray-400'}`}
+          className={`text-[8px] font-bold px-1 rounded leading-none ${YEAR_COLORS[player.year] ?? 'bg-gray-700 text-gray-400'}`}
         >
           {player.year}
         </span>
@@ -464,7 +467,7 @@ function EmptySlotCard({
       ref={setNodeRef}
       className={`
         absolute flex flex-col items-center justify-center
-        w-[58px] h-[58px] rounded-lg border-2 border-dashed
+        w-[70px] h-[70px] rounded-lg border-2 border-dashed
         ${isOver ? 'border-cu-gold bg-cu-gold/10' : 'border-white/20 bg-white/5'}
         transition-all
       `}
@@ -610,6 +613,13 @@ function BenchSection({
   for (const p of benchPlayers) {
     if (!byPos[p.posGroup]) byPos[p.posGroup] = [];
     byPos[p.posGroup].push(p);
+  }
+  // Sort each position group by grade level (SR first) then by depth-chart rank
+  for (const pos of Object.keys(byPos)) {
+    byPos[pos].sort((a, b) => {
+      const g = (GRADE_ORDER[a.year] ?? 5) - (GRADE_ORDER[b.year] ?? 5);
+      return g !== 0 ? g : a.rank - b.rank;
+    });
   }
 
   return (
@@ -980,7 +990,7 @@ export default function DepthChartPage() {
         {/* DragOverlay */}
         <DragOverlay>
           {activePlayer ? (
-            <div className="flex flex-col items-center bg-black/90 border border-cu-gold rounded-lg px-1 py-1 shadow-2xl shadow-cu-gold/30 gap-0.5 w-[58px]">
+            <div className="flex flex-col items-center bg-black/90 border border-cu-gold rounded-lg px-1 py-1.5 shadow-2xl shadow-cu-gold/30 gap-0.5 w-[70px]">
               <PlayerAvatar player={activePlayer} size="sm" />
               <span className="text-cu-gold font-black text-xs">#{activePlayer.number}</span>
               <span className="text-white text-[9px] font-semibold truncate w-full text-center">{getLastName(activePlayer.name)}</span>

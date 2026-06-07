@@ -44,9 +44,36 @@ interface Visit {
 }
 
 // ─── 2027 COMMITS — verified via 247Sports / On3 (most recent first) ──────────────
-// As of June 6, 2026, 9:30pm MT. Ratings shown only where confirmed; weights/ranks
-// omitted where not verifiable to a 247Sports or On3 article.
+// As of June 7, 2026, 4:00pm MT. 13 commits.
 const commits2027: Commit[] = [
+  {
+    name: 'Steven Alexis', position: 'RB', stars: 0,
+    hometown: 'St. Petersburg', state: 'FL', highSchool: 'Northeast HS',
+    height: '6\'0"', weight: '203', date: 'Jun 7, 2026',
+    note: 'Rushed for 1,113 yds and 9 TDs in 2025. Chose CU over Pitt, Illinois & Iowa.',
+    source: '247Sports / On3',
+  },
+  {
+    name: 'Jovon Pulliam', position: 'EDGE', stars: 3,
+    hometown: 'Hoover', state: 'AL', highSchool: 'Hoover HS',
+    date: 'Jun 7, 2026',
+    note: '11 sacks, 16 TFLs, 3 forced fumbles in 2025. Chose CU over App State & Tulane.',
+    source: '247Sports / On3',
+  },
+  {
+    name: 'Zaquan Linton', position: 'OT', stars: 3,
+    hometown: 'Wellington', state: 'FL', highSchool: 'Wellington HS',
+    height: '6\'5"', weight: '293', date: 'Jun 6, 2026',
+    note: 'Former Miami commit with track & field athleticism. 24 total offers.',
+    source: '247Sports',
+  },
+  {
+    name: 'Jaiden Lindsay', position: 'OL', stars: 3,
+    hometown: 'Olney', state: 'MD', highSchool: 'Bullis School',
+    height: '6\'3"', weight: '300', date: 'Jun 6, 2026', posRank: 'No. 65 IOL',
+    note: 'Committed during his official visit to Boulder.',
+    source: '247Sports / Rivals',
+  },
   {
     name: 'Jaiden Kelly-Murray', position: 'WR', stars: 4,
     hometown: 'Mount Pleasant', state: 'SC', highSchool: 'Oceanside Collegiate Academy',
@@ -128,14 +155,6 @@ const targets2027: Target[] = [
     source: '247Sports',
   },
   {
-    name: 'Jovon Pulliam', position: 'EDGE', stars: 3,
-    hometown: 'Hoover', state: 'AL', highSchool: 'Hoover HS',
-    status: 'Target',
-    visitDate: 'Jun 5–7', visitType: 'Official',
-    note: 'No. 106 EDGE in 2027 class — took official visit this weekend.',
-    source: 'On3 / 247Sports',
-  },
-  {
     name: 'Jaden Baldwin', position: 'WR', stars: 3,
     hometown: 'Chandler', state: 'AZ', highSchool: 'Chandler HS',
     status: 'Target', topSchools: ['Colorado', 'Iowa State', 'Penn State', 'Pitt'],
@@ -148,24 +167,16 @@ const targets2027: Target[] = [
     hometown: 'Lakeland', state: 'FL', highSchool: 'Lakeland HS',
     status: 'Target',
     visitDate: 'Jun 12', visitType: 'Official',
-    note: 'Official visit set for June 12; also visits Mississippi State.',
+    note: 'Official visit set for June 12; also visiting Mississippi State.',
     source: '247Sports',
   },
   {
     name: 'Samari Howard', position: 'S', stars: 3,
     hometown: 'Fort Lauderdale', state: 'FL', highSchool: 'St. Thomas Aquinas',
     status: 'Target',
-    visitDate: 'Jun 5–7', visitType: 'Official',
+    visitDate: 'Jun 5–7 (visited)', visitType: 'Official',
     note: 'No. 71 safety in 2027 class — took official visit this weekend.',
     source: 'On3 / 247Sports',
-  },
-  {
-    name: 'Jaiden Lindsay', position: 'OL', stars: 3,
-    hometown: 'Olney', state: 'MD', highSchool: 'Bullis School',
-    status: 'Target',
-    visitDate: 'Jun 5–7', visitType: 'Official',
-    note: 'No. 65 interior OL in 2027 class — took official visit this weekend.',
-    source: '247Sports',
   },
   {
     name: 'Kingston Thornton', position: 'CB', stars: 0,
@@ -182,29 +193,15 @@ const upcomingVisits: Visit[] = [
     name: 'Ryan Ferdinand', position: 'WR', stars: 0,
     hometown: 'West Palm Beach', state: 'FL',
     visitType: 'Official', visitDate: 'Jun 5–7, 2026',
-    note: 'Priority WR target — official visit this weekend.',
+    note: 'Priority WR target — took official visit this weekend.',
     source: '247Sports',
-  },
-  {
-    name: 'Jovon Pulliam', position: 'EDGE', stars: 3,
-    hometown: 'Hoover', state: 'AL',
-    visitType: 'Official', visitDate: 'Jun 5–7, 2026',
-    note: 'No. 106 EDGE in 2027 class.',
-    source: 'On3 / 247Sports',
   },
   {
     name: 'Samari Howard', position: 'S', stars: 3,
     hometown: 'Fort Lauderdale', state: 'FL',
     visitType: 'Official', visitDate: 'Jun 5–7, 2026',
-    note: 'No. 71 safety in 2027 class.',
+    note: 'No. 71 safety in 2027 class — took official visit this weekend.',
     source: 'On3 / 247Sports',
-  },
-  {
-    name: 'Jaiden Lindsay', position: 'OL', stars: 3,
-    hometown: 'Olney', state: 'MD',
-    visitType: 'Official', visitDate: 'Jun 5–7, 2026',
-    note: 'No. 65 interior OL in 2027 class.',
-    source: '247Sports',
   },
   {
     name: 'Jaden Baldwin', position: 'WR', stars: 3,
@@ -309,14 +306,14 @@ export default function RecruitingPage() {
         <h1 className="text-3xl font-black text-white">
           <span className="text-cu-gold">2027</span> Recruiting
         </h1>
-        <p className="text-gray-400 mt-1">Commits · Targets · Visits · Crystal Ball — as of June 7, 2026</p>
+        <p className="text-gray-400 mt-1">Commits · Targets · Visits · Crystal Ball — as of June 7, 2026, 4:00pm MT</p>
       </div>
 
       {/* Accuracy note */}
       <div className="bg-cu-gray/60 rounded-xl border border-cu-gold/10 p-3 mb-6 flex items-start gap-2">
         <Info size={14} className="text-cu-gold flex-shrink-0 mt-0.5" />
         <p className="text-gray-400 text-xs">
-          Every entry below is verified against a 247Sports or On3 article as of June 7, 2026. Unconfirmed
+          Every entry below is verified against a 247Sports or On3 article as of June 7, 2026 (4pm MT). Unconfirmed
           ratings, rankings, and predictions are intentionally omitted rather than estimated.
         </p>
       </div>
@@ -589,11 +586,11 @@ export default function RecruitingPage() {
               </h3>
             </div>
             <div className="p-4 space-y-2 text-xs text-gray-400">
-              <p>🔥 Six commits landed May 19–25 — a rapid late-May surge (247Sports)</p>
+              <p>🔥 4 commits June 6–7 weekend (Alexis, Pulliam, Linton, Lindsay — 247Sports/On3)</p>
               <p>⭐ WR Jaiden Kelly-Murray flipped from South Carolina (247/On3)</p>
-              <p>📍 Every commit hails from a different state — a true national class</p>
-              <p>🏈 9 prospects on official visits to Boulder June 5–7 weekend (247Sports)</p>
-              <p>🏈 WR Jaden Baldwin on official visit June 12, decides June 16 (247Sports)</p>
+              <p>🏈 13 commits — ranked No. 34 nationally, No. 2 in the Big 12 (On3)</p>
+              <p>📍 Class spans 10+ different states — a true national haul</p>
+              <p>🏈 WR Jaden Baldwin official visit June 12, decides June 16 (247Sports)</p>
               <p>🏈 LB Zykee Scott official visit June 19–21, decides June 25 (247Sports)</p>
             </div>
           </div>
