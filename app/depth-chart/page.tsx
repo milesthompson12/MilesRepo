@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -39,111 +39,111 @@ type Side = 'offense' | 'defense';
 
 const rawRoster: Record<string, Omit<Player, 'posGroup'>[]> = {
   QB: [
-    { name: 'Julian Lewis',      number: '10', year: 'So', rank: 1 },
-    { name: 'Isaac Wilson',      number: '16', year: 'JR', rank: 2 },
-    { name: 'Dominiq Ponder',    number: '7',  year: 'SR', rank: 3 },
-    { name: 'Kaneal Sweetwyne',  number: '14', year: 'So', rank: 4 },
+    { name: 'Julian Lewis',      number: '10', year: 'FR', rank: 1 },
+    { name: 'Isaac Wilson',      number: '16', year: 'So', rank: 2 },
+    { name: 'Dominiq Ponder',    number: '7',  year: 'JR', rank: 3 },
+    { name: 'Kaneal Sweetwyne',  number: '14', year: 'FR', rank: 4 },
   ],
   RB: [
-    { name: 'Richard Young',       number: '9',  year: 'SR', rank: 1 },
-    { name: 'Damian Henderson II', number: '26', year: 'SR', rank: 2 },
-    { name: 'JaQuail Smith',       number: '23', year: 'JR', rank: 3 },
-    { name: 'Micah Welch',         number: '29', year: 'SR', rank: 4 },
-    { name: 'Bryce Hicks',         number: '27', year: 'JR', rank: 5 },
-    { name: 'DeKalon Taylor',      number: '20', year: 'GR', rank: 6 },
-    { name: 'Titus Bautista',      number: '34', year: 'JR', rank: 7 },
-    { name: 'Leonardo Valle',      number: '37', year: 'So', rank: 8 },
+    { name: 'Richard Young',       number: '9',  year: 'JR', rank: 1 },
+    { name: 'Damian Henderson II', number: '26', year: 'JR', rank: 2 },
+    { name: 'JaQuail Smith',       number: '23', year: 'So', rank: 3 },
+    { name: 'Micah Welch',         number: '29', year: 'JR', rank: 4 },
+    { name: 'Bryce Hicks',         number: '27', year: 'So', rank: 5 },
+    { name: 'DeKalon Taylor',      number: '20', year: 'SR', rank: 6 },
+    { name: 'Titus Bautista',      number: '34', year: 'So', rank: 7 },
+    { name: 'Leonardo Valle',      number: '37', year: 'FR', rank: 8 },
   ],
   WR: [
-    { name: 'Danny Scudero',         number: '18', year: 'GR', rank: 1 },
-    { name: 'Joseph Williams',       number: '8',  year: 'SR', rank: 2 },
-    { name: 'DeAndre Moore Jr.',     number: '3',  year: 'GR', rank: 3 },
-    { name: 'Hykeem Williams',       number: '5',  year: 'GR', rank: 4 },
-    { name: 'Kam Perry',             number: '7',  year: 'GR', rank: 5 },
-    { name: 'Quentin Gibson',        number: '6',  year: 'JR', rank: 6 },
-    { name: 'Kaleb Mathis',          number: '13', year: 'SR', rank: 7 },
-    { name: 'Quanell Farrakhan Jr.', number: '14', year: 'JR', rank: 8 },
-    { name: 'Christian Ward',        number: '17', year: 'So', rank: 9 },
-    { name: 'Tagert Bardin',         number: '22', year: 'SR', rank: 10 },
-    { name: 'Carson Westbrook',      number: '36', year: 'JR', rank: 11 },
-    { name: 'Alex Ward',             number: '32', year: 'So', rank: 12 },
-    { name: 'Ernest Campbell',       number: '4',  year: 'JR', rank: 13 },
+    { name: 'Danny Scudero',         number: '18', year: 'SR', rank: 1 },
+    { name: 'Joseph Williams',       number: '8',  year: 'JR', rank: 2 },
+    { name: 'DeAndre Moore Jr.',     number: '3',  year: 'SR', rank: 3 },
+    { name: 'Hykeem Williams',       number: '5',  year: 'SR', rank: 4 },
+    { name: 'Kam Perry',             number: '7',  year: 'SR', rank: 5 },
+    { name: 'Quentin Gibson',        number: '6',  year: 'So', rank: 6 },
+    { name: 'Kaleb Mathis',          number: '13', year: 'JR', rank: 7 },
+    { name: 'Quanell Farrakhan Jr.', number: '14', year: 'So', rank: 8 },
+    { name: 'Christian Ward',        number: '17', year: 'FR', rank: 9 },
+    { name: 'Tagert Bardin',         number: '22', year: 'JR', rank: 10 },
+    { name: 'Carson Westbrook',      number: '36', year: 'So', rank: 11 },
+    { name: 'Alex Ward',             number: '32', year: 'FR', rank: 12 },
+    { name: 'Ernest Campbell',       number: '4',  year: 'So', rank: 13 },
   ],
   TE: [
-    { name: 'Zach Atkins',      number: '85', year: 'GR', rank: 1 },
-    { name: 'Brady Kopetz',     number: '86', year: 'GR', rank: 2 },
-    { name: 'Charlie Williams', number: '87', year: 'SR', rank: 3 },
+    { name: 'Zach Atkins',      number: '85', year: 'SR', rank: 1 },
+    { name: 'Brady Kopetz',     number: '86', year: 'SR', rank: 2 },
+    { name: 'Charlie Williams', number: '87', year: 'JR', rank: 3 },
     { name: 'Fisher Clements',  number: '89', year: 'GR', rank: 4 },
-    { name: 'Ben Gula',         number: '82', year: 'So', rank: 5 },
-    { name: 'Corbin Laisure',   number: '88', year: 'So', rank: 6 },
-    { name: 'Zayne DeSouza',    number: '83', year: 'So', rank: 7 },
+    { name: 'Ben Gula',         number: '82', year: 'FR', rank: 5 },
+    { name: 'Corbin Laisure',   number: '88', year: 'FR', rank: 6 },
+    { name: 'Zayne DeSouza',    number: '83', year: 'FR', rank: 7 },
   ],
   OL: [
-    { name: 'Larry Johnson III', number: '53', year: 'GR', rank: 1 },
-    { name: 'Taj White',         number: '54', year: 'GR', rank: 2 },
+    { name: 'Larry Johnson III', number: '53', year: 'SR', rank: 1 },
+    { name: 'Taj White',         number: '54', year: 'SR', rank: 2 },
     { name: 'Leon Bell',         number: '57', year: 'GR', rank: 3 },
-    { name: 'Bo Hughley',        number: '55', year: 'SR', rank: 4 },
-    { name: 'Jayven Richardson', number: '75', year: 'GR', rank: 5 },
-    { name: 'Andre Roye Jr.',    number: '52', year: 'GR', rank: 6 },
-    { name: 'Phillip Houston',   number: '56', year: 'GR', rank: 7 },
+    { name: 'Bo Hughley',        number: '55', year: 'JR', rank: 4 },
+    { name: 'Jayven Richardson', number: '75', year: 'SR', rank: 5 },
+    { name: 'Andre Roye Jr.',    number: '52', year: 'SR', rank: 6 },
+    { name: 'Phillip Houston',   number: '56', year: 'SR', rank: 7 },
     { name: 'Demetrius Hunter',  number: '58', year: 'GR', rank: 8 },
-    { name: 'Sean Kinney',       number: '62', year: 'SR', rank: 9 },
-    { name: 'Jayvon McFadden',   number: '71', year: 'So', rank: 10 },
-    { name: 'Jose Soto',         number: '73', year: 'SR', rank: 11 },
-    { name: 'Xavier Payne',      number: '72', year: 'So', rank: 12 },
-    { name: 'Yahya Attia',       number: '59', year: 'JR', rank: 13 },
-    { name: 'Hudson Steber',     number: '78', year: 'So', rank: 14 },
-    { name: 'Chauncey Gooden',   number: '51', year: 'So', rank: 15 },
+    { name: 'Sean Kinney',       number: '62', year: 'JR', rank: 9 },
+    { name: 'Jayvon McFadden',   number: '71', year: 'FR', rank: 10 },
+    { name: 'Jose Soto',         number: '73', year: 'JR', rank: 11 },
+    { name: 'Xavier Payne',      number: '72', year: 'FR', rank: 12 },
+    { name: 'Yahya Attia',       number: '59', year: 'So', rank: 13 },
+    { name: 'Hudson Steber',     number: '78', year: 'FR', rank: 14 },
+    { name: 'Chauncey Gooden',   number: '51', year: 'FR', rank: 15 },
   ],
   DL: [
-    { name: 'Quency Wiggins',    number: '49', year: 'GR', rank: 1 },
-    { name: 'Toby Anene',        number: '53', year: 'GR', rank: 2 },
-    { name: 'Santana Hopper',    number: '97', year: 'GR', rank: 3 },
-    { name: 'Domata Peko Jr.',   number: '27', year: 'SR', rank: 4 },
-    { name: 'Kylan Salter',      number: '41', year: 'SR', rank: 5 },
-    { name: 'Immanuel Ezeogu',   number: '52', year: 'JR', rank: 6 },
-    { name: 'Yamil Talib',       number: '95', year: 'JR', rank: 7 },
-    { name: 'Balansama Kamara',  number: '96', year: 'GR', rank: 8 },
-    { name: 'Vili Taufatofua',   number: '45', year: 'GR', rank: 9 },
-    { name: 'Samu Taumanupepe',  number: '88', year: 'SR', rank: 10 },
-    { name: 'Lamont Lester Jr.', number: '56', year: 'JR', rank: 11 },
-    { name: 'Tyler Moore',       number: '90', year: 'SR', rank: 12 },
-    { name: 'Sedrick Smith',     number: '91', year: 'SR', rank: 13 },
-    { name: 'Josiah Manu',       number: '94', year: 'So', rank: 14 },
-    { name: 'Ezra Christensen',  number: '98', year: 'GR', rank: 15 },
-    { name: 'Dylan Manuel',      number: '99', year: 'So', rank: 16 },
+    { name: 'Quency Wiggins',    number: '49', year: 'SR', rank: 1 },
+    { name: 'Toby Anene',        number: '53', year: 'SR', rank: 2 },
+    { name: 'Santana Hopper',    number: '97', year: 'SR', rank: 3 },
+    { name: 'Domata Peko Jr.',   number: '27', year: 'JR', rank: 4 },
+    { name: 'Kylan Salter',      number: '41', year: 'JR', rank: 5 },
+    { name: 'Immanuel Ezeogu',   number: '52', year: 'So', rank: 6 },
+    { name: 'Yamil Talib',       number: '95', year: 'So', rank: 7 },
+    { name: 'Balansama Kamara',  number: '96', year: 'SR', rank: 8 },
+    { name: 'Vili Taufatofua',   number: '45', year: 'SR', rank: 9 },
+    { name: 'Samu Taumanupepe',  number: '88', year: 'JR', rank: 10 },
+    { name: 'Lamont Lester Jr.', number: '56', year: 'So', rank: 11 },
+    { name: 'Tyler Moore',       number: '90', year: 'JR', rank: 12 },
+    { name: 'Sedrick Smith',     number: '91', year: 'JR', rank: 13 },
+    { name: 'Josiah Manu',       number: '94', year: 'FR', rank: 14 },
+    { name: 'Ezra Christensen',  number: '98', year: 'SR', rank: 15 },
+    { name: 'Dylan Manuel',      number: '99', year: 'FR', rank: 16 },
   ],
   LB: [
-    { name: 'Liona Lefau',       number: '17', year: 'GR', rank: 1 },
-    { name: 'Tyler Martinez',    number: '35', year: 'GR', rank: 2 },
-    { name: 'Gideon Lampron',    number: '44', year: 'GR', rank: 3 },
-    { name: 'Carson Crawford',   number: '51', year: 'So', rank: 4 },
-    { name: 'Rodney Colton Jr.', number: '50', year: 'So', rank: 5 },
-    { name: 'Bo LaPenna',        number: '54', year: 'GR', rank: 6 },
-    { name: 'Gage Goldberg',     number: '55', year: 'JR', rank: 7 },
-    { name: 'Colby Johnson',     number: '40', year: 'So', rank: 8 },
+    { name: 'Liona Lefau',       number: '17', year: 'SR', rank: 1 },
+    { name: 'Tyler Martinez',    number: '35', year: 'SR', rank: 2 },
+    { name: 'Gideon Lampron',    number: '44', year: 'SR', rank: 3 },
+    { name: 'Carson Crawford',   number: '51', year: 'FR', rank: 4 },
+    { name: 'Rodney Colton Jr.', number: '50', year: 'FR', rank: 5 },
+    { name: 'Bo LaPenna',        number: '54', year: 'SR', rank: 6 },
+    { name: 'Gage Goldberg',     number: '55', year: 'So', rank: 7 },
+    { name: 'Colby Johnson',     number: '40', year: 'FR', rank: 8 },
   ],
   CB: [
-    { name: 'Justin Eaglin',     number: '30', year: 'GR', rank: 1 },
-    { name: 'Boo Carter',        number: '6',  year: 'SR', rank: 2 },
-    { name: 'Randon Fontenette', number: '7',  year: 'GR', rank: 3 },
-    { name: 'Naeten Mitchell',   number: '4',  year: 'SR', rank: 4 },
-    { name: 'RJ Johnson',        number: '5',  year: 'SR', rank: 5 },
-    { name: 'Makari Vickers',    number: '10', year: 'SR', rank: 6 },
-    { name: 'Jason Stokes Jr.',  number: '13', year: 'JR', rank: 7 },
-    { name: 'Jah Jah Boyd',      number: '15', year: 'JR', rank: 8 },
-    { name: 'Paul Omodia',       number: '18', year: 'SR', rank: 9 },
-    { name: 'Cree Thomas',       number: '20', year: 'So', rank: 10 },
-    { name: 'Mojo Williams Jr.', number: '25', year: 'So', rank: 11 },
-    { name: 'Braylon Edwards',   number: '26', year: 'So', rank: 12 },
-    { name: 'Jaydan Hardy',      number: '9',  year: 'So', rank: 13 },
-    { name: 'Kole Mathis',       number: '33', year: 'JR', rank: 14 },
-    { name: 'Donavon Stephens',  number: '39', year: 'So', rank: 15 },
-    { name: 'Preston Ashley',    number: '31', year: 'So', rank: 16 },
+    { name: 'Justin Eaglin',     number: '30', year: 'SR', rank: 1 },
+    { name: 'Boo Carter',        number: '6',  year: 'JR', rank: 2 },
+    { name: 'Randon Fontenette', number: '7',  year: 'SR', rank: 3 },
+    { name: 'Naeten Mitchell',   number: '4',  year: 'JR', rank: 4 },
+    { name: 'RJ Johnson',        number: '5',  year: 'JR', rank: 5 },
+    { name: 'Makari Vickers',    number: '10', year: 'JR', rank: 6 },
+    { name: 'Jason Stokes Jr.',  number: '13', year: 'So', rank: 7 },
+    { name: 'Jah Jah Boyd',      number: '15', year: 'So', rank: 8 },
+    { name: 'Paul Omodia',       number: '18', year: 'JR', rank: 9 },
+    { name: 'Cree Thomas',       number: '20', year: 'FR', rank: 10 },
+    { name: 'Mojo Williams Jr.', number: '25', year: 'FR', rank: 11 },
+    { name: 'Braylon Edwards',   number: '26', year: 'FR', rank: 12 },
+    { name: 'Jaydan Hardy',      number: '9',  year: 'FR', rank: 13 },
+    { name: 'Kole Mathis',       number: '33', year: 'So', rank: 14 },
+    { name: 'Donavon Stephens',  number: '39', year: 'FR', rank: 15 },
+    { name: 'Preston Ashley',    number: '31', year: 'FR', rank: 16 },
   ],
   S: [
-    { name: 'Emory Floyd',   number: '8',  year: 'GR', rank: 1 },
-    { name: 'Ben Finneseth', number: '28', year: 'GR', rank: 2 },
+    { name: 'Emory Floyd',   number: '8',  year: 'SR', rank: 1 },
+    { name: 'Ben Finneseth', number: '28', year: 'SR', rank: 2 },
   ],
 };
 
@@ -367,6 +367,38 @@ const OFFENSE_FORMATIONS = ['Spread', 'Pistol', 'Pro Set', 'Trips', 'Empty'] as 
 const DEFENSE_FORMATIONS = ['4-2-5', '3-4', '4-3', 'Nickel', 'Dime'] as const;
 type OffenseFormation = typeof OFFENSE_FORMATIONS[number];
 type DefenseFormation = typeof DEFENSE_FORMATIONS[number];
+
+// ─── Route drawing ───────────────────────────────────────────────────────────
+
+const ROUTES = ['Go', 'Post', 'Corner', 'Curl', 'Dig', 'Out', 'Slant', 'Screen', 'Wheel', 'Flat'] as const;
+type RouteType = typeof ROUTES[number];
+
+interface RouteEntry { route: RouteType; flip: boolean; color: string }
+
+const ROUTE_COLORS = [
+  '#FFD700', '#FF6B6B', '#6BFFB8', '#6BB8FF', '#FF6BFF',
+  '#FFA500', '#00FFFF', '#FF4444', '#44FF44', '#FFFF44',
+];
+
+// Generates SVG path data for a route starting at (x, y) in viewBox coords (0–100).
+// dir: -1 = route goes upward (offense), +1 = downward (defense).
+// flip: mirrors horizontal direction.
+function routePath(route: RouteType, x: number, y: number, flip: boolean, dir: number): string {
+  const h = flip ? -1 : 1;
+  switch (route) {
+    case 'Go':     return `M ${x} ${y} L ${x} ${y + dir * 30}`;
+    case 'Slant':  return `M ${x} ${y} L ${x + h * 14} ${y + dir * 22}`;
+    case 'Out':    return `M ${x} ${y} L ${x} ${y + dir * 14} L ${x + h * 14} ${y + dir * 14}`;
+    case 'Dig':    return `M ${x} ${y} L ${x} ${y + dir * 14} L ${x - h * 14} ${y + dir * 14}`;
+    case 'Post':   return `M ${x} ${y} L ${x} ${y + dir * 14} L ${x - h * 14} ${y + dir * 28}`;
+    case 'Corner': return `M ${x} ${y} L ${x} ${y + dir * 14} L ${x + h * 14} ${y + dir * 28}`;
+    case 'Curl':   return `M ${x} ${y} L ${x} ${y + dir * 20} Q ${x + h * 6} ${y + dir * 26} ${x} ${y + dir * 24}`;
+    case 'Flat':   return `M ${x} ${y} L ${x + h * 12} ${y + dir * 4}`;
+    case 'Screen': return `M ${x} ${y} L ${x - h * 8} ${y - dir * 5}`;
+    case 'Wheel':  return `M ${x} ${y} L ${x + h * 10} ${y + dir * 6} L ${x + h * 12} ${y + dir * 28}`;
+    default:       return '';
+  }
+}
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -598,18 +630,6 @@ function FieldBackground({ side }: { side: Side }) {
         <line x1="0" y1="30" x2="100" y2="30" stroke="#CFB227" strokeWidth="0.6" opacity="0.5" strokeDasharray="3,2" />
       )}
 
-      {/* LINE OF SCRIMMAGE label */}
-      {side === 'offense' ? (
-        <text x="50" y="55" textAnchor="middle" fontSize="2.2" fill="#CFB227" opacity="0.7"
-          fontFamily="sans-serif" letterSpacing="1" fontWeight="bold">
-          LINE OF SCRIMMAGE
-        </text>
-      ) : (
-        <text x="50" y="28.5" textAnchor="middle" fontSize="2.2" fill="#CFB227" opacity="0.7"
-          fontFamily="sans-serif" letterSpacing="1" fontWeight="bold">
-          LINE OF SCRIMMAGE
-        </text>
-      )}
     </svg>
   );
 }
@@ -707,6 +727,125 @@ function PlayerInfoPanel({ player, onClose }: { player: Player; onClose: () => v
   );
 }
 
+// SVG overlay that draws all assigned routes on the field
+function RouteOverlay({
+  routes,
+  slots,
+  posOverrides,
+  side,
+}: {
+  routes: Record<string, RouteEntry>;
+  slots: FieldSlot[];
+  posOverrides: Record<string, { x: number; y: number }>;
+  side: Side;
+}) {
+  const dir = side === 'offense' ? -1 : 1;
+  const entries = Object.entries(routes);
+  if (entries.length === 0) return null;
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+    >
+      <defs>
+        {ROUTE_COLORS.map((c) => (
+          <marker
+            key={c}
+            id={`arrow-${c.replace('#', '')}`}
+            markerWidth="4" markerHeight="4"
+            refX="2" refY="2"
+            orient="auto"
+          >
+            <path d="M0,0 L4,2 L0,4 Z" fill={c} />
+          </marker>
+        ))}
+      </defs>
+      {entries.map(([slotId, entry]) => {
+        const slot = slots.find((s) => s.id === slotId);
+        if (!slot) return null;
+        const pos = posOverrides[slotId] || { x: slot.x, y: slot.y };
+        const d = routePath(entry.route, pos.x, pos.y, entry.flip, dir);
+        const markerId = `arrow-${entry.color.replace('#', '')}`;
+        return (
+          <path
+            key={slotId}
+            d={d}
+            stroke={entry.color}
+            strokeWidth="1.2"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.9"
+            markerEnd={`url(#${markerId})`}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
+// Route picker popover shown when a player is clicked in route-draw mode
+function RoutePicker({
+  slotId,
+  onSelect,
+  onFlip,
+  onClear,
+  onClose,
+  currentRoute,
+  currentFlip,
+}: {
+  slotId: string;
+  onSelect: (slotId: string, route: RouteType) => void;
+  onFlip: (slotId: string) => void;
+  onClear: (slotId: string) => void;
+  onClose: () => void;
+  currentRoute?: RouteType;
+  currentFlip?: boolean;
+}) {
+  void slotId;
+  return (
+    <div className="absolute z-50 bg-black/95 border border-cu-gold/60 rounded-xl p-3 shadow-2xl w-52 top-2 left-1/2 -translate-x-1/2">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-cu-gold text-xs font-black uppercase tracking-wide">Route Tree</span>
+        <button onClick={onClose} className="text-gray-500 hover:text-white text-xs">&#x2715;</button>
+      </div>
+      <div className="grid grid-cols-2 gap-1 mb-2">
+        {ROUTES.map((r, i) => (
+          <button
+            key={r}
+            onClick={() => onSelect(slotId, r)}
+            className={`
+              px-2 py-1 rounded text-[10px] font-bold border transition-all text-left
+              ${currentRoute === r
+                ? 'bg-cu-gold text-black border-cu-gold'
+                : 'bg-black/60 border-white/20 text-white hover:border-cu-gold/50'
+              }
+            `}
+            style={{ borderLeftColor: currentRoute === r ? undefined : ROUTE_COLORS[i % ROUTE_COLORS.length], borderLeftWidth: 2 }}
+          >
+            {r}
+          </button>
+        ))}
+      </div>
+      <div className="flex gap-1">
+        <button
+          onClick={() => onFlip(slotId)}
+          className={`flex-1 px-2 py-1 rounded text-[10px] font-bold border transition-all ${currentFlip ? 'bg-white/20 border-white/50 text-white' : 'border-white/20 text-gray-400 hover:text-white'}`}
+        >
+          Flip {currentFlip ? '(on)' : '(off)'}
+        </button>
+        <button
+          onClick={() => onClear(slotId)}
+          className="flex-1 px-2 py-1 rounded text-[10px] font-bold border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-all"
+        >
+          Clear
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function DepthChartPage() {
@@ -751,6 +890,36 @@ export default function DepthChartPage() {
     }
   }
 
+  // Free-position overrides: slotId -> {x, y} in % coords
+  const fieldRef = useRef<HTMLDivElement>(null);
+  const [posOverrides, setPosOverrides] = useState<Record<string, { x: number; y: number }>>({});
+
+  // Route drawing state
+  const [routeMode, setRouteMode] = useState(false);
+  const [routes, setRoutes] = useState<Record<string, RouteEntry>>({});
+  const [routeTarget, setRouteTarget] = useState<string | null>(null);
+  const routeColorIndex = useRef(0);
+
+  function handleSelectRoute(slotId: string, route: RouteType) {
+    const existing = routes[slotId];
+    const color = existing?.color ?? ROUTE_COLORS[routeColorIndex.current++ % ROUTE_COLORS.length];
+    setRoutes((prev) => ({ ...prev, [slotId]: { route, flip: existing?.flip ?? false, color } }));
+    setRouteTarget(null);
+  }
+
+  function handleFlipRoute(slotId: string) {
+    setRoutes((prev) => {
+      const e = prev[slotId];
+      if (!e) return prev;
+      return { ...prev, [slotId]: { ...e, flip: !e.flip } };
+    });
+  }
+
+  function handleClearRoute(slotId: string) {
+    setRoutes((prev) => { const n = { ...prev }; delete n[slotId]; return n; });
+    setRouteTarget(null);
+  }
+
   // DnD
   const [activeSlotId, setActiveSlotId] = useState<string | null>(null);
   const [overSlotId, setOverSlotId] = useState<string | null>(null);
@@ -779,12 +948,34 @@ export default function DepthChartPage() {
     setOverSlotId(null);
 
     const { active, over } = event;
-    if (!over) return;
-
     const fromSlotId = (active.data.current as { slotId: string })?.slotId;
-    const toSlotId = String(over.id).replace('drop-', '');
+    if (!fromSlotId) return;
 
-    if (!fromSlotId || fromSlotId === toSlotId) return;
+    if (!over) {
+      // Free-form move: shift position by drag delta
+      const fieldEl = fieldRef.current;
+      if (fieldEl) {
+        const rect = fieldEl.getBoundingClientRect();
+        const dx = (event.delta.x / rect.width) * 100;
+        const dy = (event.delta.y / rect.height) * 100;
+        const slot = currentSlots.find((s) => s.id === fromSlotId);
+        if (slot) {
+          const cur = posOverrides[fromSlotId] ?? { x: slot.x, y: slot.y };
+          setPosOverrides((prev) => ({
+            ...prev,
+            [fromSlotId]: {
+              x: Math.max(2, Math.min(98, cur.x + dx)),
+              y: Math.max(2, Math.min(98, cur.y + dy)),
+            },
+          }));
+          // Also update route position if it exists (routes follow the player)
+        }
+      }
+      return;
+    }
+
+    const toSlotId = String(over.id).replace('drop-', '');
+    if (fromSlotId === toSlotId) return;
 
     const slots = [...currentSlots];
     const fromIdx = slots.findIndex((s) => s.id === fromSlotId);
@@ -793,13 +984,9 @@ export default function DepthChartPage() {
 
     const fromSlot = slots[fromIdx];
     const toSlot = slots[toIdx];
-
-    const fromPlayerId = fromSlot.playerId;
-    const toPlayerId = toSlot.playerId;
-
-    // Any player can be moved into any slot — swap freely.
-    slots[fromIdx] = { ...fromSlot, playerId: toPlayerId };
-    slots[toIdx] = { ...toSlot, playerId: fromPlayerId };
+    // Swap players between slots
+    slots[fromIdx] = { ...fromSlot, playerId: toSlot.playerId };
+    slots[toIdx] = { ...toSlot, playerId: fromSlot.playerId };
     setCurrentSlots(slots);
   }
 
@@ -863,6 +1050,9 @@ export default function DepthChartPage() {
     setSelectedBench(null);
     setSelectedField(null);
     setInfoPlayer(null);
+    setPosOverrides({});
+    setRoutes({});
+    setRouteTarget(null);
   }
 
   const activePlayer = activeSlotId
@@ -914,6 +1104,9 @@ export default function DepthChartPage() {
                 setSelectedBench(null);
                 setSelectedField(null);
                 setInfoPlayer(null);
+                setPosOverrides({});
+                setRoutes({});
+                setRouteTarget(null);
               }}
               className={`
                 px-3 py-1 rounded-lg text-xs font-bold border transition-all
@@ -927,6 +1120,31 @@ export default function DepthChartPage() {
             </button>
           );
         })}
+      </div>
+
+      {/* Route mode toggle + clear */}
+      <div className="flex gap-2 mb-3 items-center">
+        <button
+          onClick={() => { setRouteMode((v) => !v); setRouteTarget(null); }}
+          className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+            routeMode
+              ? 'bg-cu-gold text-black border-cu-gold shadow-lg shadow-cu-gold/30'
+              : 'bg-cu-gray border-white/10 text-gray-400 hover:text-white'
+          }`}
+        >
+          {routeMode ? '✏️ Drawing Routes' : 'Draw Routes'}
+        </button>
+        {Object.keys(routes).length > 0 && (
+          <button
+            onClick={() => { setRoutes({}); setRouteTarget(null); }}
+            className="px-3 py-1.5 rounded-lg text-xs font-bold border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-all"
+          >
+            Clear All Routes
+          </button>
+        )}
+        {routeMode && (
+          <span className="text-xs text-gray-400 italic">Click a player to assign a route</span>
+        )}
       </div>
 
       {/* Hint */}
@@ -944,41 +1162,66 @@ export default function DepthChartPage() {
         onDragEnd={handleDragEnd}
       >
         <div
+          ref={fieldRef}
           className="relative w-full bg-green-800 rounded-2xl overflow-hidden border border-green-600/30 shadow-2xl"
           style={{ minHeight: '640px', paddingBottom: '78%' }}
           onClick={(e) => {
             const target = e.target as HTMLElement;
-            if (target.closest('[data-slot]') === null && selectedField) {
-              setSelectedField(null);
-              setInfoPlayer(null);
+            if (target.closest('[data-slot]') === null) {
+              if (selectedField) { setSelectedField(null); setInfoPlayer(null); }
+              if (routeTarget) { setRouteTarget(null); }
             }
           }}
         >
           <FieldBackground side={side} />
 
+          {/* Route overlay */}
+          <RouteOverlay routes={routes} slots={currentSlots} posOverrides={posOverrides} side={side} />
+
           {/* Slot nodes */}
           <div className="absolute inset-0">
             {currentSlots.map((slot) => {
               const player = slot.playerId ? (PLAYER_MAP[slot.playerId] ?? null) : null;
+              const pos = posOverrides[slot.id] ?? { x: slot.x, y: slot.y };
+              const isRouteTarget = routeTarget === slot.id;
               return (
                 <div
                   key={slot.id}
                   data-slot={slot.id}
-                  onClick={() => handleFieldSlotClick(slot.id)}
+                  onClick={() => {
+                    if (routeMode && player) {
+                      setRouteTarget(isRouteTarget ? null : slot.id);
+                      return;
+                    }
+                    handleFieldSlotClick(slot.id);
+                  }}
                   style={{
                     position: 'absolute',
-                    left: `${slot.x}%`,
-                    top: `${slot.y}%`,
+                    left: `${pos.x}%`,
+                    top: `${pos.y}%`,
                     transform: 'translate(-50%, -50%)',
-                    zIndex: 10,
+                    zIndex: isRouteTarget ? 60 : 10,
                   }}
                 >
-                  <FieldSlotNode
-                    slot={slot}
-                    player={player}
-                    activeSlotId={activeSlotId}
-                    overSlotId={overSlotId}
-                  />
+                  {isRouteTarget && (
+                    <RoutePicker
+                      slotId={slot.id}
+                      onSelect={handleSelectRoute}
+                      onFlip={handleFlipRoute}
+                      onClear={handleClearRoute}
+                      onClose={() => setRouteTarget(null)}
+                      currentRoute={routes[slot.id]?.route}
+                      currentFlip={routes[slot.id]?.flip}
+                    />
+                  )}
+                  <div style={{ outline: routes[slot.id] ? `2px solid ${routes[slot.id].color}` : undefined, borderRadius: 10 }}>
+                    <FieldSlotNode
+                      slot={{ ...slot, x: pos.x, y: pos.y }}
+                      player={player}
+                      activeSlotId={activeSlotId}
+                      overSlotId={overSlotId}
+                    />
+                  </div>
                 </div>
               );
             })}
