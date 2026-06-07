@@ -149,75 +149,10 @@ const POSITION_FILTER_MAP: Record<string, string[]> = {
   'K/P': ['K', 'P', 'PK', 'SN', 'LS'],
 };
 
-// Position groups where career stats are relevant to show
-const STATS_POSITIONS = new Set(['QB', 'RB', 'WR', 'TE', 'LB', 'DE', 'DL', 'DB', 'CB', 'S']);
-
 interface EspnAthlete {
   id: string;
   displayName: string;
   headshot?: { href: string };
-}
-
-// Parse ESPN stats API response into a compact display string per position
-function parseEspnStats(data: Record<string, unknown>, position: string): string | null {
-  // ESPN stats response has a `splits` or `categories` structure
-  const splits = data.splits as { categories?: Array<{ name: string; stats: Array<{ name: string; value: number }> }> } | undefined;
-  const categories = splits?.categories ?? (data.categories as Array<{ name: string; stats: Array<{ name: string; value: number }> }> | undefined);
-  if (!categories) return null;
-
-  function getStat(catName: string, statName: string): number | null {
-    const cat = categories!.find(c => c.name.toLowerCase() === catName.toLowerCase());
-    if (!cat) return null;
-    const s = cat.stats?.find(s => s.name.toLowerCase() === statName.toLowerCase());
-    return s?.value ?? null;
-  }
-
-  const pos = position.toUpperCase();
-
-  if (pos === 'QB') {
-    const yds = getStat('passing', 'passingYards') ?? getStat('passing', 'yards');
-    const tds = getStat('passing', 'passingTouchdowns') ?? getStat('passing', 'touchdowns');
-    const ints = getStat('passing', 'interceptions');
-    const cmp = getStat('passing', 'completions');
-    const att = getStat('passing', 'passingAttempts') ?? getStat('passing', 'attempts');
-    if (yds === null && tds === null) return null;
-    const pct = (cmp !== null && att !== null && att > 0) ? `${((cmp / att) * 100).toFixed(1)}%` : null;
-    return [pct && `${pct} CMP`, yds !== null && `${yds.toLocaleString()} YDS`, tds !== null && `${tds} TD`, ints !== null && `${ints} INT`].filter(Boolean).join(' · ');
-  }
-
-  if (pos === 'RB') {
-    const yds = getStat('rushing', 'rushingYards') ?? getStat('rushing', 'yards');
-    const tds = getStat('rushing', 'rushingTouchdowns') ?? getStat('rushing', 'touchdowns');
-    const att = getStat('rushing', 'rushingAttempts') ?? getStat('rushing', 'attempts');
-    if (yds === null) return null;
-    return [att !== null && `${att} CAR`, yds !== null && `${yds.toLocaleString()} YDS`, tds !== null && `${tds} TD`].filter(Boolean).join(' · ');
-  }
-
-  if (pos === 'WR' || pos === 'TE') {
-    const rec = getStat('receiving', 'receptions');
-    const yds = getStat('receiving', 'receivingYards') ?? getStat('receiving', 'yards');
-    const tds = getStat('receiving', 'receivingTouchdowns') ?? getStat('receiving', 'touchdowns');
-    if (yds === null && rec === null) return null;
-    return [rec !== null && `${rec} REC`, yds !== null && `${yds.toLocaleString()} YDS`, tds !== null && `${tds} TD`].filter(Boolean).join(' · ');
-  }
-
-  if (pos === 'LB' || pos === 'DE' || pos === 'DL') {
-    const tckl = getStat('defensive', 'totalTackles') ?? getStat('defensive', 'tackles') ?? getStat('general', 'totalTackles');
-    const sacks = getStat('defensive', 'sacks') ?? getStat('general', 'sacks');
-    const tfl = getStat('defensive', 'tacklesForLoss') ?? getStat('defensive', 'tfl');
-    if (tckl === null && sacks === null) return null;
-    return [tckl !== null && `${tckl} TCKL`, sacks !== null && `${sacks} SACKS`, tfl !== null && `${tfl} TFL`].filter(Boolean).join(' · ');
-  }
-
-  if (pos === 'DB' || pos === 'CB' || pos === 'S') {
-    const tckl = getStat('defensive', 'totalTackles') ?? getStat('defensive', 'tackles') ?? getStat('general', 'totalTackles');
-    const ints = getStat('defensive', 'interceptions') ?? getStat('interceptions', 'interceptions');
-    const pbu = getStat('defensive', 'passesDefended') ?? getStat('defensive', 'pbu');
-    if (tckl === null && ints === null) return null;
-    return [tckl !== null && `${tckl} TCKL`, ints !== null && `${ints} INT`, pbu !== null && `${pbu} PBU`].filter(Boolean).join(' · ');
-  }
-
-  return null;
 }
 
 function YearBadge({ year }: { year: string }) {
@@ -255,7 +190,6 @@ function PlayerAvatar({ name, headshot }: { name: string; headshot?: string }) {
 export default function RosterPage() {
   const [selectedPosition, setSelectedPosition] = useState('All');
   const [headshotMap, setHeadshotMap] = useState<Record<string, string>>({});
-  const [statsMap, setStatsMap] = useState<Record<string, string>>({});
   const [loadingHeadshots, setLoadingHeadshots] = useState(true);
 
   useEffect(() => {
@@ -268,7 +202,6 @@ export default function RosterPage() {
         const data = await res.json();
 
         const headshots: Record<string, string> = {};
-        const ids: Record<string, string> = {};
 
         const groups = (data.athletes || []) as { items?: EspnAthlete[] }[];
         for (const group of groups) {
@@ -276,35 +209,9 @@ export default function RosterPage() {
             if (!p.displayName) continue;
             const key = p.displayName.toLowerCase().replace(/[^a-z0-9]/g, '');
             if (p.headshot?.href) headshots[key] = p.headshot.href;
-            if (p.id) ids[key] = p.id;
           }
         }
         setHeadshotMap(headshots);
-
-        // Step 2: fetch career stats for skill position players
-        const skillPlayers = OFFICIAL_ROSTER.filter(p => STATS_POSITIONS.has(p.position));
-        const results: Record<string, string> = {};
-
-        await Promise.all(
-          skillPlayers.map(async (player) => {
-            const nameKey = player.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-            const id = ids[nameKey];
-            if (!id) return;
-            try {
-              const sr = await fetch(
-                `https://site.api.espn.com/apis/site/v2/sports/football/college-football/athletes/${id}/statistics/career`
-              );
-              if (!sr.ok) return;
-              const sd = await sr.json();
-              const str = parseEspnStats(sd as Record<string, unknown>, player.position);
-              if (str) results[nameKey] = str;
-            } catch {
-              // silently skip — no stats available
-            }
-          })
-        );
-
-        setStatsMap(results);
       } catch {
         // ESPN API unavailable — render without headshots/stats
       } finally {
@@ -383,7 +290,7 @@ export default function RosterPage() {
           <span className="ml-auto text-gray-500 text-xs flex items-center gap-1">
             <Users size={12} />
             {filtered.length} players
-            {loadingHeadshots && <span className="text-gray-600 ml-1">(loading photos &amp; stats&hellip;)</span>}
+            {loadingHeadshots && <span className="text-gray-600 ml-1">(loading photos&hellip;)</span>}
           </span>
         </div>
       </div>
@@ -401,7 +308,7 @@ export default function RosterPage() {
               <table className="w-full">
                 <thead className="bg-cu-black/30">
                   <tr>
-                    {['#', 'Player', 'Pos', 'Year', 'Height', 'Weight', 'Hometown / High School', 'Prev. School', 'Career Stats'].map(h => (
+                    {['#', 'Player', 'Pos', 'Year', 'Height', 'Weight', 'Hometown / High School', 'Prev. School'].map(h => (
                       <th key={h} className="px-3 py-2 text-left text-xs text-gray-500 font-bold uppercase tracking-wide whitespace-nowrap">
                         {h}
                       </th>
@@ -411,8 +318,6 @@ export default function RosterPage() {
                 <tbody>
                   {sortPlayers(grouped[group]).map((player, i) => {
                     const nameKey = player.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-                    const stats = statsMap[nameKey];
-                    const showStats = STATS_POSITIONS.has(player.position);
                     return (
                       <tr
                         key={`${player.jersey}-${player.name}`}
@@ -452,17 +357,6 @@ export default function RosterPage() {
                             <span className="text-gray-700 text-xs">—</span>
                           )}
                         </td>
-                        <td className="px-3 py-3 text-xs text-gray-400 whitespace-nowrap">
-                          {!showStats ? (
-                            <span className="text-gray-700">—</span>
-                          ) : loadingHeadshots ? (
-                            <span className="text-gray-700 animate-pulse">loading…</span>
-                          ) : stats ? (
-                            <span className="font-mono text-gray-300">{stats}</span>
-                          ) : (
-                            <span className="text-gray-600">No data</span>
-                          )}
-                        </td>
                       </tr>
                     );
                   })}
@@ -484,7 +378,6 @@ export default function RosterPage() {
         >
           cubuffs.com
         </a>
-        {' '}· Career stats via ESPN
       </div>
     </div>
   );

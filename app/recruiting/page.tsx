@@ -24,6 +24,8 @@ interface Target {
   highSchool: string;
   status: 'Offered' | 'Target';
   topSchools?: string[];
+  visitDate?: string;
+  visitType?: 'Official' | 'Unofficial';
   note?: string;
   source: string;
 }
@@ -106,19 +108,63 @@ const commits2027: Commit[] = [
 ];
 
 // ─── TARGETS / OFFERS — verified via 247Sports / On3 only ────────────────────────
+// Warm interest = "Target" · Cool/offer only = "Offered"
+// visitDate shown next to player name in this section if a visit is scheduled.
 const targets2027: Target[] = [
   {
     name: 'Zykee Scott', position: 'LB', stars: 3,
     hometown: 'Philadelphia', state: 'PA', highSchool: 'La Salle College HS',
-    status: 'Offered', topSchools: ['UNC', 'Georgia Tech', 'Colorado'],
-    note: 'Offered by new recruiting director Rashad Rich · plans to decide June 25.',
+    status: 'Target', topSchools: ['UNC', 'Georgia Tech', 'Pitt', 'Michigan St.', 'Colorado'],
+    visitDate: 'Jun 19–21', visitType: 'Official',
+    note: 'Top-50 LB · plans to announce commitment June 25.',
     source: '247Sports',
   },
   {
     name: 'Ryan Ferdinand', position: 'WR', stars: 0,
     hometown: 'West Palm Beach', state: 'FL', highSchool: 'Palm Beach Lakes HS',
     status: 'Target',
-    note: 'Progressed to a priority target for the CU staff.',
+    visitDate: 'Jun 5–7', visitType: 'Official',
+    note: 'Priority WR target — on campus for official visit this weekend.',
+    source: '247Sports',
+  },
+  {
+    name: 'Jovon Pulliam', position: 'EDGE', stars: 3,
+    hometown: 'Hoover', state: 'AL', highSchool: 'Hoover HS',
+    status: 'Target',
+    visitDate: 'Jun 5–7', visitType: 'Official',
+    note: 'No. 106 EDGE in 2027 class — took official visit this weekend.',
+    source: 'On3 / 247Sports',
+  },
+  {
+    name: 'Jaden Baldwin', position: 'WR', stars: 3,
+    hometown: 'Chandler', state: 'AZ', highSchool: 'Chandler HS',
+    status: 'Target', topSchools: ['Colorado', 'Iowa State', 'Penn State', 'Pitt'],
+    visitDate: 'Jun 12', visitType: 'Official',
+    note: 'Final four includes CU — plans to announce commitment June 16.',
+    source: '247Sports',
+  },
+  {
+    name: 'Drew Sapp', position: 'EDGE', stars: 3,
+    hometown: 'Lakeland', state: 'FL', highSchool: 'Lakeland HS',
+    status: 'Target',
+    visitDate: 'Jun 12', visitType: 'Official',
+    note: 'Official visit set for June 12; also visits Mississippi State.',
+    source: '247Sports',
+  },
+  {
+    name: 'Samari Howard', position: 'S', stars: 3,
+    hometown: 'Fort Lauderdale', state: 'FL', highSchool: 'St. Thomas Aquinas',
+    status: 'Target',
+    visitDate: 'Jun 5–7', visitType: 'Official',
+    note: 'No. 71 safety in 2027 class — took official visit this weekend.',
+    source: 'On3 / 247Sports',
+  },
+  {
+    name: 'Jaiden Lindsay', position: 'OL', stars: 3,
+    hometown: 'Olney', state: 'MD', highSchool: 'Bullis School',
+    status: 'Target',
+    visitDate: 'Jun 5–7', visitType: 'Official',
+    note: 'No. 65 interior OL in 2027 class — took official visit this weekend.',
     source: '247Sports',
   },
   {
@@ -133,18 +179,54 @@ const targets2027: Target[] = [
 // ─── UPCOMING VISITS — verified via 247Sports only ───────────────────────────────
 const upcomingVisits: Visit[] = [
   {
-    name: 'Zykee Scott', position: 'LB', stars: 3,
-    hometown: 'Philadelphia', state: 'PA',
-    visitType: 'Official', visitDate: 'Jun 19–21, 2026',
-    topSchools: ['UNC', 'Georgia Tech', 'Colorado'],
-    note: 'Plans to announce his commitment June 25.',
-    source: '247Sports',
-  },
-  {
     name: 'Ryan Ferdinand', position: 'WR', stars: 0,
     hometown: 'West Palm Beach', state: 'FL',
     visitType: 'Official', visitDate: 'Jun 5–7, 2026',
-    note: 'Priority WR target on campus.',
+    note: 'Priority WR target — official visit this weekend.',
+    source: '247Sports',
+  },
+  {
+    name: 'Jovon Pulliam', position: 'EDGE', stars: 3,
+    hometown: 'Hoover', state: 'AL',
+    visitType: 'Official', visitDate: 'Jun 5–7, 2026',
+    note: 'No. 106 EDGE in 2027 class.',
+    source: 'On3 / 247Sports',
+  },
+  {
+    name: 'Samari Howard', position: 'S', stars: 3,
+    hometown: 'Fort Lauderdale', state: 'FL',
+    visitType: 'Official', visitDate: 'Jun 5–7, 2026',
+    note: 'No. 71 safety in 2027 class.',
+    source: 'On3 / 247Sports',
+  },
+  {
+    name: 'Jaiden Lindsay', position: 'OL', stars: 3,
+    hometown: 'Olney', state: 'MD',
+    visitType: 'Official', visitDate: 'Jun 5–7, 2026',
+    note: 'No. 65 interior OL in 2027 class.',
+    source: '247Sports',
+  },
+  {
+    name: 'Jaden Baldwin', position: 'WR', stars: 3,
+    hometown: 'Chandler', state: 'AZ',
+    visitType: 'Official', visitDate: 'Jun 12, 2026',
+    topSchools: ['Colorado', 'Iowa State', 'Penn State', 'Pitt'],
+    note: 'Final four — plans to announce commitment June 16.',
+    source: '247Sports',
+  },
+  {
+    name: 'Drew Sapp', position: 'EDGE', stars: 3,
+    hometown: 'Lakeland', state: 'FL',
+    visitType: 'Official', visitDate: 'Jun 12, 2026',
+    note: 'Also visiting Mississippi State.',
+    source: '247Sports',
+  },
+  {
+    name: 'Zykee Scott', position: 'LB', stars: 3,
+    hometown: 'Philadelphia', state: 'PA',
+    visitType: 'Official', visitDate: 'Jun 19–21, 2026',
+    topSchools: ['UNC', 'Georgia Tech', 'Pitt', 'Michigan St.', 'Colorado'],
+    note: 'Plans to announce commitment June 25.',
     source: '247Sports',
   },
 ];
@@ -227,15 +309,15 @@ export default function RecruitingPage() {
         <h1 className="text-3xl font-black text-white">
           <span className="text-cu-gold">2027</span> Recruiting
         </h1>
-        <p className="text-gray-400 mt-1">Commits · Targets · Visits · Crystal Ball — as of June 6, 2026, 9:30pm MT</p>
+        <p className="text-gray-400 mt-1">Commits · Targets · Visits · Crystal Ball — as of June 7, 2026</p>
       </div>
 
       {/* Accuracy note */}
       <div className="bg-cu-gray/60 rounded-xl border border-cu-gold/10 p-3 mb-6 flex items-start gap-2">
         <Info size={14} className="text-cu-gold flex-shrink-0 mt-0.5" />
         <p className="text-gray-400 text-xs">
-          Every entry below is verified against a 247Sports or On3 article. Unconfirmed ratings, rankings,
-          and predictions are intentionally omitted rather than estimated.
+          Every entry below is verified against a 247Sports or On3 article as of June 7, 2026. Unconfirmed
+          ratings, rankings, and predictions are intentionally omitted rather than estimated.
         </p>
       </div>
 
@@ -332,6 +414,12 @@ export default function RecruitingPage() {
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-white font-bold">{t.name}</span>
                         <StatusBadge status={t.status} />
+                        {t.visitDate && (
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-900/40 text-purple-300 border border-purple-700/40 flex items-center gap-1">
+                            <Calendar size={9} />
+                            {t.visitType} Visit: {t.visitDate}
+                          </span>
+                        )}
                       </div>
                       <div className="mt-1"><StarRating stars={t.stars} /></div>
                       <div className="flex items-center gap-1 mt-1 text-gray-400 text-xs">
@@ -415,7 +503,7 @@ export default function RecruitingPage() {
                 <Sparkles size={14} className="text-emerald-400 flex-shrink-0 mt-0.5" />
                 <div className="text-gray-400 text-sm">
                   No individual Crystal Ball (247Sports) or RPM Expert Prediction (On3) for a 2027 Colorado
-                  recruit could be 100% confirmed as of June 6, 2026 — those prediction pages are
+                  recruit could be 100% confirmed as of June 7, 2026 — those prediction pages are
                   subscriber-locked. To preserve accuracy, none are listed. Check the live pages below for the latest.
                   <div className="flex flex-wrap gap-3 mt-2">
                     <a href="https://247sports.com/college/colorado/season/2027-football/institutionpredictions/" target="_blank" rel="noopener noreferrer" className="text-cu-gold text-xs underline">247 Crystal Ball</a>
@@ -504,7 +592,9 @@ export default function RecruitingPage() {
               <p>🔥 Six commits landed May 19–25 — a rapid late-May surge (247Sports)</p>
               <p>⭐ WR Jaiden Kelly-Murray flipped from South Carolina (247/On3)</p>
               <p>📍 Every commit hails from a different state — a true national class</p>
-              <p>🏈 LB Zykee Scott takes an official visit June 19–21, decides June 25 (247Sports)</p>
+              <p>🏈 9 prospects on official visits to Boulder June 5–7 weekend (247Sports)</p>
+              <p>🏈 WR Jaden Baldwin on official visit June 12, decides June 16 (247Sports)</p>
+              <p>🏈 LB Zykee Scott official visit June 19–21, decides June 25 (247Sports)</p>
             </div>
           </div>
 

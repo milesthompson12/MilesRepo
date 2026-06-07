@@ -162,20 +162,20 @@ const PLAYER_MAP = buildPlayerMap();
 
 // ─── Formation definitions ────────────────────────────────────────────────────
 
-// Offense: end zone at top (y=0). OL line at y=52. Receivers up at y=30 (their own
-// row), QB at y=68, backs at y=82. Rows are >=15% apart and same-row items >=12%
-// apart so the ~60px cards never overlap.
+// Offense: end zone at top (y=0). OL/TE/WR line up at y=52 (the LOS).
+// WRs are positioned wide left/right so they don't overlap OL cards.
+// QB at y=68, backs at y=82. All players are at or behind the LOS (y >= 52).
 function makeOffenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
-  const LINE = 52;   // offensive line row
-  const WR_Y = 30;   // receiver row (well above the line)
+  const LINE = 52;   // offensive line row / line of scrimmage
   const QB_Y = 68;   // quarterback row
   const BACK_Y = 82; // running back row
 
+  // OL shifted slightly to center to leave room for wide WRs
   const olSlots: Omit<FieldSlot, 'playerId'>[] = [
-    { id: 'LT', label: 'LT', posGroup: ['OL'], x: 22, y: LINE },
-    { id: 'LG', label: 'LG', posGroup: ['OL'], x: 34, y: LINE },
-    { id: 'C',  label: 'C',  posGroup: ['OL'], x: 46, y: LINE },
-    { id: 'RG', label: 'RG', posGroup: ['OL'], x: 58, y: LINE },
+    { id: 'LT', label: 'LT', posGroup: ['OL'], x: 26, y: LINE },
+    { id: 'LG', label: 'LG', posGroup: ['OL'], x: 36, y: LINE },
+    { id: 'C',  label: 'C',  posGroup: ['OL'], x: 48, y: LINE },
+    { id: 'RG', label: 'RG', posGroup: ['OL'], x: 60, y: LINE },
     { id: 'RT', label: 'RT', posGroup: ['OL'], x: 70, y: LINE },
   ];
 
@@ -183,65 +183,65 @@ function makeOffenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
     return [
       ...olSlots,
       { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 82, y: LINE },
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: QB_Y },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 60, y: QB_Y },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: WR_Y },
-      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 24, y: WR_Y },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 92, y: WR_Y },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: QB_Y },
+      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 62, y: QB_Y },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 5,  y: LINE },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 15, y: LINE },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 95, y: LINE },
     ];
   }
   if (formation === 'Pistol') {
     return [
       ...olSlots,
       { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 82, y: LINE },
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: QB_Y },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 46, y: BACK_Y },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: WR_Y },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 92, y: WR_Y },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: QB_Y },
+      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 48, y: BACK_Y },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 5,  y: LINE },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 95, y: LINE },
     ];
   }
   if (formation === 'Pro Set') {
     return [
       ...olSlots,
       { id: 'TE',  label: 'TE', posGroup: ['TE'], x: 82, y: LINE },
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: QB_Y },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: QB_Y },
       { id: 'FB',  label: 'RB', posGroup: ['RB'], x: 38, y: BACK_Y },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 56, y: BACK_Y },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: WR_Y },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 92, y: WR_Y },
+      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 58, y: BACK_Y },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 5,  y: LINE },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 95, y: LINE },
     ];
   }
   if (formation === 'Trips') {
     return [
       ...olSlots,
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: QB_Y },
-      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 60, y: QB_Y },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 8,  y: WR_Y },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 70, y: WR_Y },
-      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 82, y: WR_Y },
-      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 94, y: WR_Y },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: QB_Y },
+      { id: 'RB',  label: 'RB', posGroup: ['RB'], x: 62, y: QB_Y },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 5,  y: LINE },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 72, y: LINE },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 84, y: LINE },
+      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 95, y: LINE },
     ];
   }
   if (formation === 'Empty') {
     return [
       ...olSlots,
-      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 46, y: QB_Y },
-      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 6,  y: WR_Y },
-      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 20, y: WR_Y },
-      { id: 'WR5', label: 'WR', posGroup: ['WR'], x: 46, y: WR_Y },
-      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 80, y: WR_Y },
-      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 94, y: WR_Y },
+      { id: 'QB',  label: 'QB', posGroup: ['QB'], x: 48, y: QB_Y },
+      { id: 'WR1', label: 'WR', posGroup: ['WR'], x: 5,  y: LINE },
+      { id: 'WR2', label: 'WR', posGroup: ['WR'], x: 15, y: LINE },
+      { id: 'WR5', label: 'WR', posGroup: ['WR'], x: 48, y: QB_Y - 2 },
+      { id: 'WR4', label: 'WR', posGroup: ['WR'], x: 82, y: LINE },
+      { id: 'WR3', label: 'WR', posGroup: ['WR'], x: 95, y: LINE },
     ];
   }
   return [];
 }
 
-// Defense: end zone at bottom (y=100). D-line at y=30, LBs at y=48, nickel at y=60,
-// safeties deep at y=66–80, corners wide at y=24. Rows are >=14% apart and same-row
-// items >=12% apart so the ~60px cards never overlap.
+// Defense: end zone at bottom (y=100). D-line at y=30 (LOS). All players are at
+// or behind the LOS (y >= 30). CBs at y=38 (just behind DL), LBs at y=50,
+// safeties at y=66–80.
 function makeDefenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
-  const LINE = 30;  // defensive line row
-  const CB_Y = 24;  // cornerbacks wide, slightly off the line
+  const LINE = 30;  // defensive line row (LOS)
+  const CB_Y = 38;  // cornerbacks — behind LOS, positioned wide
 
   if (formation === '4-2-5') {
     return [
@@ -581,7 +581,7 @@ function FieldBackground({ side }: { side: Side }) {
 
       {/* LINE OF SCRIMMAGE label */}
       {side === 'offense' ? (
-        <text x="50" y="50.5" textAnchor="middle" fontSize="2.2" fill="#CFB227" opacity="0.7"
+        <text x="50" y="55" textAnchor="middle" fontSize="2.2" fill="#CFB227" opacity="0.7"
           fontFamily="sans-serif" letterSpacing="1" fontWeight="bold">
           LINE OF SCRIMMAGE
         </text>
@@ -844,7 +844,7 @@ export default function DepthChartPage() {
     : null;
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-black text-white">
@@ -919,7 +919,7 @@ export default function DepthChartPage() {
       >
         <div
           className="relative w-full bg-green-800 rounded-2xl overflow-hidden border border-green-600/30 shadow-2xl"
-          style={{ minHeight: '600px', paddingBottom: '72%' }}
+          style={{ minHeight: '640px', paddingBottom: '78%' }}
           onClick={(e) => {
             const target = e.target as HTMLElement;
             if (target.closest('[data-slot]') === null && selectedField) {
