@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Filter, Users, ExternalLink, RefreshCw } from 'lucide-react';
+import { Filter, Users, ExternalLink } from 'lucide-react';
 
 interface Player {
-  id?: string;
   jersey: string;
   name: string;
   position: string;
@@ -15,7 +14,6 @@ interface Player {
   weight: string;
   hometown: string;
   previousSchool?: string;
-  headshot?: string;
 }
 
 // Official 2026 CU Buffaloes Spring Football Roster — sourced from official PDF
@@ -120,32 +118,106 @@ const OFFICIAL_ROSTER: Player[] = [
   // SPECIALISTS
   { jersey: '35', name: 'Damon Greaves',          position: 'P',  positionGroup: 'Specialists',     year: 'SR', height: "6'1\"",  weight: '190', hometown: 'Busselton, Australia / Prokick Australia', previousSchool: 'Kansas' },
   { jersey: '38', name: 'Daniel Gerlach',         position: 'P',  positionGroup: 'Specialists',     year: 'JR', height: "6'0\"",  weight: '160', hometown: 'Boulder, CO / Boulder',              previousSchool: 'Colby College' },
-  { jersey: '46', name: 'Elliot Arnold',          position: 'PK', positionGroup: 'Specialists',     year: 'FR', height: "5'10\"", weight: '165', hometown: 'Chattanooga, TN / McCallie' },
   { jersey: '45', name: 'Luke Whiting',           position: 'SN', positionGroup: 'Specialists',     year: 'JR', height: "6'4\"",  weight: '225', hometown: 'Holiday, UT / Olympus',             previousSchool: 'Idaho State/FAU/Georgia Tech' },
+  { jersey: '46', name: 'Elliot Arnold',          position: 'PK', positionGroup: 'Specialists',     year: 'FR', height: "5'10\"", weight: '165', hometown: 'Chattanooga, TN / McCallie' },
   { jersey: '50', name: 'Trey Young',             position: 'SN', positionGroup: 'Specialists',     year: 'So', height: "5'10\"", weight: '195', hometown: 'San Juan Capistrano, CA / San Juan Hills', previousSchool: 'Saddleback' },
   { jersey: '60', name: 'Josh McCormick',         position: 'PK', positionGroup: 'Specialists',     year: 'GR', height: "6'0\"",  weight: '220', hometown: 'Austin, TX / Akins',                previousSchool: 'Oregon State/William & Mary/Grambling State' },
   { jersey: '61', name: 'Aiden DeCorte',          position: 'SN', positionGroup: 'Specialists',     year: 'JR', height: "6'1\"",  weight: '300', hometown: 'Jackson, MI / Jackson',              previousSchool: 'Central Michigan' },
 ];
 
+const GRADE_ORDER: Record<string, number> = { SR: 0, GR: 1, JR: 2, SO: 3, So: 3, FR: 4 };
+
+function sortPlayers(players: Player[]): Player[] {
+  return [...players].sort((a, b) => {
+    const gradeDiff = (GRADE_ORDER[a.year] ?? 5) - (GRADE_ORDER[b.year] ?? 5);
+    if (gradeDiff !== 0) return gradeDiff;
+    return parseInt(a.jersey) - parseInt(b.jersey);
+  });
+}
+
 const POSITION_FILTERS = ['All', 'QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'DB', 'K/P'];
 
 const POSITION_FILTER_MAP: Record<string, string[]> = {
-  'QB': ['QB'],
-  'RB': ['RB', 'FB'],
-  'WR': ['WR'],
-  'TE': ['TE'],
-  'OL': ['OL', 'OT', 'OG', 'C'],
-  'DL': ['DE', 'DL', 'DT', 'NT'],
-  'LB': ['LB', 'ILB', 'OLB'],
-  'DB': ['CB', 'DB', 'S', 'FS', 'SS'],
+  QB: ['QB'],
+  RB: ['RB', 'FB'],
+  WR: ['WR'],
+  TE: ['TE'],
+  OL: ['OL', 'OT', 'OG', 'C'],
+  DL: ['DE', 'DL', 'DT', 'NT'],
+  LB: ['LB', 'ILB', 'OLB'],
+  DB: ['CB', 'DB', 'S', 'FS', 'SS'],
   'K/P': ['K', 'P', 'PK', 'SN', 'LS'],
 };
+
+// Position groups where career stats are relevant to show
+const STATS_POSITIONS = new Set(['QB', 'RB', 'WR', 'TE', 'LB', 'DE', 'DL', 'DB', 'CB', 'S']);
 
 interface EspnAthlete {
   id: string;
   displayName: string;
-  jersey?: string;
   headshot?: { href: string };
+}
+
+// Parse ESPN stats API response into a compact display string per position
+function parseEspnStats(data: Record<string, unknown>, position: string): string | null {
+  // ESPN stats response has a `splits` or `categories` structure
+  const splits = data.splits as { categories?: Array<{ name: string; stats: Array<{ name: string; value: number }> }> } | undefined;
+  const categories = splits?.categories ?? (data.categories as Array<{ name: string; stats: Array<{ name: string; value: number }> }> | undefined);
+  if (!categories) return null;
+
+  function getStat(catName: string, statName: string): number | null {
+    const cat = categories!.find(c => c.name.toLowerCase() === catName.toLowerCase());
+    if (!cat) return null;
+    const s = cat.stats?.find(s => s.name.toLowerCase() === statName.toLowerCase());
+    return s?.value ?? null;
+  }
+
+  const pos = position.toUpperCase();
+
+  if (pos === 'QB') {
+    const yds = getStat('passing', 'passingYards') ?? getStat('passing', 'yards');
+    const tds = getStat('passing', 'passingTouchdowns') ?? getStat('passing', 'touchdowns');
+    const ints = getStat('passing', 'interceptions');
+    const cmp = getStat('passing', 'completions');
+    const att = getStat('passing', 'passingAttempts') ?? getStat('passing', 'attempts');
+    if (yds === null && tds === null) return null;
+    const pct = (cmp !== null && att !== null && att > 0) ? `${((cmp / att) * 100).toFixed(1)}%` : null;
+    return [pct && `${pct} CMP`, yds !== null && `${yds.toLocaleString()} YDS`, tds !== null && `${tds} TD`, ints !== null && `${ints} INT`].filter(Boolean).join(' · ');
+  }
+
+  if (pos === 'RB') {
+    const yds = getStat('rushing', 'rushingYards') ?? getStat('rushing', 'yards');
+    const tds = getStat('rushing', 'rushingTouchdowns') ?? getStat('rushing', 'touchdowns');
+    const att = getStat('rushing', 'rushingAttempts') ?? getStat('rushing', 'attempts');
+    if (yds === null) return null;
+    return [att !== null && `${att} CAR`, yds !== null && `${yds.toLocaleString()} YDS`, tds !== null && `${tds} TD`].filter(Boolean).join(' · ');
+  }
+
+  if (pos === 'WR' || pos === 'TE') {
+    const rec = getStat('receiving', 'receptions');
+    const yds = getStat('receiving', 'receivingYards') ?? getStat('receiving', 'yards');
+    const tds = getStat('receiving', 'receivingTouchdowns') ?? getStat('receiving', 'touchdowns');
+    if (yds === null && rec === null) return null;
+    return [rec !== null && `${rec} REC`, yds !== null && `${yds.toLocaleString()} YDS`, tds !== null && `${tds} TD`].filter(Boolean).join(' · ');
+  }
+
+  if (pos === 'LB' || pos === 'DE' || pos === 'DL') {
+    const tckl = getStat('defensive', 'totalTackles') ?? getStat('defensive', 'tackles') ?? getStat('general', 'totalTackles');
+    const sacks = getStat('defensive', 'sacks') ?? getStat('general', 'sacks');
+    const tfl = getStat('defensive', 'tacklesForLoss') ?? getStat('defensive', 'tfl');
+    if (tckl === null && sacks === null) return null;
+    return [tckl !== null && `${tckl} TCKL`, sacks !== null && `${sacks} SACKS`, tfl !== null && `${tfl} TFL`].filter(Boolean).join(' · ');
+  }
+
+  if (pos === 'DB' || pos === 'CB' || pos === 'S') {
+    const tckl = getStat('defensive', 'totalTackles') ?? getStat('defensive', 'tackles') ?? getStat('general', 'totalTackles');
+    const ints = getStat('defensive', 'interceptions') ?? getStat('interceptions', 'interceptions');
+    const pbu = getStat('defensive', 'passesDefended') ?? getStat('defensive', 'pbu');
+    if (tckl === null && ints === null) return null;
+    return [tckl !== null && `${tckl} TCKL`, ints !== null && `${ints} INT`, pbu !== null && `${pbu} PBU`].filter(Boolean).join(' · ');
+  }
+
+  return null;
 }
 
 function YearBadge({ year }: { year: string }) {
@@ -180,43 +252,67 @@ function PlayerAvatar({ name, headshot }: { name: string; headshot?: string }) {
   );
 }
 
-function SkeletonRow() {
-  return (
-    <tr className="border-b border-gray-800">
-      {Array.from({ length: 8 }).map((_, i) => (
-        <td key={i} className="px-3 py-3">
-          <div className="h-4 bg-gray-700 rounded animate-pulse" />
-        </td>
-      ))}
-    </tr>
-  );
-}
-
 export default function RosterPage() {
   const [selectedPosition, setSelectedPosition] = useState('All');
   const [headshotMap, setHeadshotMap] = useState<Record<string, string>>({});
+  const [statsMap, setStatsMap] = useState<Record<string, string>>({});
   const [loadingHeadshots, setLoadingHeadshots] = useState(true);
 
-  // Fetch headshots from ESPN API and map by normalized player name
   useEffect(() => {
-    fetch('https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/38/roster')
-      .then(r => r.json())
-      .then(data => {
-        const map: Record<string, string> = {};
+    const fetchAll = async () => {
+      try {
+        // Step 1: roster fetch for headshots + ESPN IDs
+        const res = await fetch(
+          'https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/38/roster'
+        );
+        const data = await res.json();
+
+        const headshots: Record<string, string> = {};
+        const ids: Record<string, string> = {};
+
         const groups = (data.athletes || []) as { items?: EspnAthlete[] }[];
         for (const group of groups) {
           for (const p of group.items || []) {
-            if (p.displayName && p.headshot?.href) {
-              // normalize: lowercase, strip punctuation/spaces for fuzzy match
-              const key = p.displayName.toLowerCase().replace(/[^a-z0-9]/g, '');
-              map[key] = p.headshot.href;
-            }
+            if (!p.displayName) continue;
+            const key = p.displayName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (p.headshot?.href) headshots[key] = p.headshot.href;
+            if (p.id) ids[key] = p.id;
           }
         }
-        setHeadshotMap(map);
-      })
-      .catch(() => {})
-      .finally(() => setLoadingHeadshots(false));
+        setHeadshotMap(headshots);
+
+        // Step 2: fetch career stats for skill position players
+        const skillPlayers = OFFICIAL_ROSTER.filter(p => STATS_POSITIONS.has(p.position));
+        const results: Record<string, string> = {};
+
+        await Promise.all(
+          skillPlayers.map(async (player) => {
+            const nameKey = player.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const id = ids[nameKey];
+            if (!id) return;
+            try {
+              const sr = await fetch(
+                `https://site.api.espn.com/apis/site/v2/sports/football/college-football/athletes/${id}/statistics/career`
+              );
+              if (!sr.ok) return;
+              const sd = await sr.json();
+              const str = parseEspnStats(sd as Record<string, unknown>, player.position);
+              if (str) results[nameKey] = str;
+            } catch {
+              // silently skip — no stats available
+            }
+          })
+        );
+
+        setStatsMap(results);
+      } catch {
+        // ESPN API unavailable — render without headshots/stats
+      } finally {
+        setLoadingHeadshots(false);
+      }
+    };
+
+    fetchAll();
   }, []);
 
   const matchesFilter = (p: Player) => {
@@ -233,13 +329,11 @@ export default function RosterPage() {
     return acc;
   }, {});
 
-  const GROUP_ORDER = ['Quarterbacks', 'Running Backs', 'Wide Receivers', 'Tight Ends', 'Offensive Line', 'Defensive Line', 'Linebackers', 'Defensive Backs', 'Specialists'];
+  const GROUP_ORDER = [
+    'Quarterbacks', 'Running Backs', 'Wide Receivers', 'Tight Ends',
+    'Offensive Line', 'Defensive Line', 'Linebackers', 'Defensive Backs', 'Specialists',
+  ];
   const sortedGroups = GROUP_ORDER.filter(g => grouped[g]);
-
-  const transfers = OFFICIAL_ROSTER.filter(p => p.previousSchool);
-
-  // suppress unused warning
-  void SkeletonRow;
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -261,25 +355,6 @@ export default function RosterPage() {
             <ExternalLink size={14} />
             Official Roster · cubuffs.com
           </a>
-        </div>
-      </div>
-
-      {/* Transfer portal summary */}
-      <div className="bg-cu-gray rounded-2xl border border-cu-gold/20 p-4 mb-6">
-        <div className="flex items-center gap-2 mb-3">
-          <RefreshCw size={14} className="text-cu-gold" />
-          <span className="text-cu-gold font-bold text-sm uppercase tracking-wide">Transfer Portal Additions</span>
-          <span className="ml-auto text-gray-500 text-xs">{transfers.length} transfers on roster</span>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {transfers.map((p, i) => (
-            <div key={`${p.jersey}-${p.name}-${i}`} className="flex items-center gap-2 bg-cu-black/50 rounded-lg px-3 py-1.5 border border-cu-gold/10">
-              <span className="text-cu-gold font-bold text-xs">#{p.jersey}</span>
-              <span className="text-white text-xs font-medium">{p.name}</span>
-              <span className="text-gray-500 text-xs">{p.position}</span>
-              <span className="text-gray-600 text-xs">&#8592; {p.previousSchool}</span>
-            </div>
-          ))}
         </div>
       </div>
 
@@ -308,7 +383,7 @@ export default function RosterPage() {
           <span className="ml-auto text-gray-500 text-xs flex items-center gap-1">
             <Users size={12} />
             {filtered.length} players
-            {loadingHeadshots && <span className="text-gray-600 ml-1">(loading photos&hellip;)</span>}
+            {loadingHeadshots && <span className="text-gray-600 ml-1">(loading photos &amp; stats&hellip;)</span>}
           </span>
         </div>
       </div>
@@ -326,7 +401,7 @@ export default function RosterPage() {
               <table className="w-full">
                 <thead className="bg-cu-black/30">
                   <tr>
-                    {['#', 'Player', 'Pos', 'Year', 'Height', 'Weight', 'Hometown', 'Prev. School'].map(h => (
+                    {['#', 'Player', 'Pos', 'Year', 'Height', 'Weight', 'Hometown / High School', 'Prev. School', 'Career Stats'].map(h => (
                       <th key={h} className="px-3 py-2 text-left text-xs text-gray-500 font-bold uppercase tracking-wide whitespace-nowrap">
                         {h}
                       </th>
@@ -334,9 +409,11 @@ export default function RosterPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {grouped[group]
-                    .sort((a, b) => parseInt(a.jersey) - parseInt(b.jersey))
-                    .map((player, i) => (
+                  {sortPlayers(grouped[group]).map((player, i) => {
+                    const nameKey = player.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                    const stats = statsMap[nameKey];
+                    const showStats = STATS_POSITIONS.has(player.position);
+                    return (
                       <tr
                         key={`${player.jersey}-${player.name}`}
                         className={`border-b border-gray-800/50 hover:bg-cu-gold/5 transition-colors ${i % 2 === 0 ? '' : 'bg-black/20'}`}
@@ -348,7 +425,7 @@ export default function RosterPage() {
                           <div className="flex items-center gap-3">
                             <PlayerAvatar
                               name={player.name}
-                              headshot={headshotMap[player.name.toLowerCase().replace(/[^a-z0-9]/g, '')]}
+                              headshot={headshotMap[nameKey]}
                             />
                             <span className="text-white font-semibold text-sm whitespace-nowrap">
                               {player.name}
@@ -375,8 +452,20 @@ export default function RosterPage() {
                             <span className="text-gray-700 text-xs">—</span>
                           )}
                         </td>
+                        <td className="px-3 py-3 text-xs text-gray-400 whitespace-nowrap">
+                          {!showStats ? (
+                            <span className="text-gray-700">—</span>
+                          ) : loadingHeadshots ? (
+                            <span className="text-gray-700 animate-pulse">loading…</span>
+                          ) : stats ? (
+                            <span className="font-mono text-gray-300">{stats}</span>
+                          ) : (
+                            <span className="text-gray-600">No data</span>
+                          )}
+                        </td>
                       </tr>
-                    ))}
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -386,11 +475,16 @@ export default function RosterPage() {
 
       {/* Footer note */}
       <div className="mt-6 text-center text-gray-600 text-xs">
-        Roster sourced from official 2026 Spring Football Roster PDF{' '}
-        <a href="https://cubuffs.com/sports/football/roster" target="_blank" rel="noopener noreferrer" className="text-cu-gold/60 hover:text-cu-gold underline">
+        Roster sourced from official 2026 Spring Football Roster PDF ·{' '}
+        <a
+          href="https://cubuffs.com/sports/football/roster"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-cu-gold/50 hover:text-cu-gold underline"
+        >
           cubuffs.com
         </a>
-        {' '}· Player headshots loaded live from ESPN · Last updated June 6, 2026
+        {' '}· Career stats via ESPN
       </div>
     </div>
   );
