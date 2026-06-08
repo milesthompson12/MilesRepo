@@ -19,7 +19,6 @@ interface Player {
 // Official 2026 CU Buffaloes Spring Football Roster — sourced from official PDF
 const OFFICIAL_ROSTER: Player[] = [
   // QUARTERBACKS
-  { jersey: '7',  name: 'Dominiq Ponder',        position: 'QB', positionGroup: 'Quarterbacks',   year: 'JR', height: "6'5\"",  weight: '200', hometown: 'Opa Locka, FL / Carol City',        previousSchool: 'Bethune Cookman/Georgia Tech' },
   { jersey: '10', name: 'Julian Lewis',           position: 'QB', positionGroup: 'Quarterbacks',   year: 'FR', height: "6'1\"",  weight: '190', hometown: 'Carrollton, GA / Carrollton' },
   { jersey: '14', name: 'Kaneal Sweetwyne',       position: 'QB', positionGroup: 'Quarterbacks',   year: 'FR', height: "6'3\"",  weight: '195', hometown: 'Lehi, UT / Skyridge' },
   { jersey: '16', name: 'Isaac Wilson',           position: 'QB', positionGroup: 'Quarterbacks',   year: 'So', height: "6'0\"",  weight: '210', hometown: 'Draper, UT / Corner Canyon',        previousSchool: 'Utah' },
@@ -125,10 +124,35 @@ const OFFICIAL_ROSTER: Player[] = [
   { jersey: '61', name: 'Aiden DeCorte',          position: 'SN', positionGroup: 'Specialists',     year: 'JR', height: "6'1\"",  weight: '300', hometown: 'Jackson, MI / Jackson',              previousSchool: 'Central Michigan' },
 ];
 
+// ─── 2027 Commits for roster display ────────────────────────────────────────
+interface Commit27 {
+  name: string; position: string; positionGroup: string; hometown: string; state: string; highSchool: string;
+  height?: string; weight?: string; stars: number;
+}
+const COMMITS_2027: Commit27[] = [
+  { name: 'Andre Adams',        position: 'QB',   positionGroup: 'Quarterbacks',   hometown: 'Nashville',      state: 'TN', highSchool: 'Antioch HS',                 stars: 4 },
+  { name: 'Steven Alexis',      position: 'RB',   positionGroup: 'Running Backs',  hometown: 'St. Petersburg', state: 'FL', highSchool: 'Northeast HS',               height: "6'0\"", weight: '203', stars: 0 },
+  { name: 'Jaiden Kelly-Murray',position: 'WR',   positionGroup: 'Wide Receivers', hometown: 'Mount Pleasant', state: 'SC', highSchool: 'Oceanside Collegiate',       height: "5'10\"", weight: '170', stars: 4 },
+  { name: 'Zaquan Linton',      position: 'OT',   positionGroup: 'Offensive Line', hometown: 'Wellington',     state: 'FL', highSchool: 'Wellington HS',              height: "6'5\"", weight: '293', stars: 3 },
+  { name: 'Jaiden Lindsay',     position: 'OL',   positionGroup: 'Offensive Line', hometown: 'Olney',          state: 'MD', highSchool: 'Bullis School',              height: "6'3\"", weight: '300', stars: 3 },
+  { name: "Li'Marcus Jones",    position: 'OT',   positionGroup: 'Offensive Line', hometown: 'Brentwood',      state: 'TN', highSchool: 'Brentwood Academy',          height: "6'5\"", weight: '285', stars: 4 },
+  { name: 'Kenny Fairley',      position: 'DL',   positionGroup: 'Defensive Line', hometown: 'Fairburn',       state: 'GA', highSchool: 'Creekside HS',               height: "6'0\"", weight: '270', stars: 3 },
+  { name: 'Jovon Pulliam',      position: 'EDGE', positionGroup: 'Defensive Line', hometown: 'Hoover',         state: 'AL', highSchool: 'Hoover HS',                  stars: 3 },
+  { name: "Ba'Roc Willis",      position: 'EDGE', positionGroup: 'Defensive Line', hometown: 'Pell City',      state: 'AL', highSchool: 'Pell City HS',               height: "6'3\"", weight: '230', stars: 3 },
+  { name: 'Gabe Jenkins',       position: 'S',    positionGroup: 'Defensive Backs',hometown: 'Pittsburgh',     state: 'PA', highSchool: 'Imani Christian Academy',    height: "6'2\"", weight: '187', stars: 4 },
+  { name: 'Prince Washington',  position: 'CB',   positionGroup: 'Defensive Backs',hometown: 'Houston',        state: 'TX', highSchool: 'Lamar HS',                   height: "6'1\"", weight: '185', stars: 0 },
+  { name: 'Will Rasmussen',     position: 'CB',   positionGroup: 'Defensive Backs',hometown: 'Orem',           state: 'UT', highSchool: 'Orem HS',                    height: "5'10\"", weight: '180', stars: 3 },
+  { name: 'Davon Dericho',      position: 'CB',   positionGroup: 'Defensive Backs',hometown: 'Miami',          state: 'FL', highSchool: 'Killian HS',                 height: "5'9\"", stars: 3 },
+];
+
 const GRADE_ORDER: Record<string, number> = { SR: 0, GR: 1, JR: 2, SO: 3, So: 3, FR: 4 };
 
 function sortPlayers(players: Player[]): Player[] {
   return [...players].sort((a, b) => {
+    // (HS) commits always appear last
+    const aHS = a.year === '(HS)' ? 1 : 0;
+    const bHS = b.year === '(HS)' ? 1 : 0;
+    if (aHS !== bHS) return aHS - bHS;
     const gradeDiff = (GRADE_ORDER[a.year] ?? 5) - (GRADE_ORDER[b.year] ?? 5);
     if (gradeDiff !== 0) return gradeDiff;
     return parseInt(a.jersey) - parseInt(b.jersey);
@@ -156,6 +180,9 @@ interface EspnAthlete {
 }
 
 function YearBadge({ year }: { year: string }) {
+  if (year === '(HS)') {
+    return <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-cu-gold/20 text-cu-gold border border-cu-gold/30">(HS)</span>;
+  }
   const upper = year.toUpperCase();
   const colors: Record<string, string> = {
     FR: 'bg-green-900/60 text-green-400',
@@ -191,6 +218,7 @@ export default function RosterPage() {
   const [selectedPosition, setSelectedPosition] = useState('All');
   const [headshotMap, setHeadshotMap] = useState<Record<string, string>>({});
   const [loadingHeadshots, setLoadingHeadshots] = useState(true);
+  const [showCommits, setShowCommits] = useState(false);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -228,7 +256,21 @@ export default function RosterPage() {
     return allowed.includes(p.position);
   };
 
-  const filtered = OFFICIAL_ROSTER.filter(matchesFilter);
+  // Merge commits into roster as (HS) players when toggled
+  const commitPlayers: Player[] = showCommits
+    ? COMMITS_2027.filter((c) => matchesFilter(c as unknown as Player)).map((c) => ({
+        jersey: '—',
+        name: c.name,
+        position: c.position,
+        positionGroup: c.positionGroup,
+        year: `(HS)`,
+        height: c.height ?? '',
+        weight: c.weight ?? '',
+        hometown: `${c.hometown}, ${c.state} / ${c.highSchool}`,
+      }))
+    : [];
+
+  const filtered = [...OFFICIAL_ROSTER.filter(matchesFilter), ...commitPlayers];
 
   const grouped = filtered.reduce<Record<string, Player[]>>((acc, p) => {
     if (!acc[p.positionGroup]) acc[p.positionGroup] = [];
@@ -287,11 +329,23 @@ export default function RosterPage() {
               </button>
             ))}
           </div>
-          <span className="ml-auto text-gray-500 text-xs flex items-center gap-1">
-            <Users size={12} />
-            {filtered.length} players
-            {loadingHeadshots && <span className="text-gray-600 ml-1">(loading photos&hellip;)</span>}
-          </span>
+          <div className="ml-auto flex items-center gap-3">
+            <button
+              onClick={() => setShowCommits((v) => !v)}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all ${
+                showCommits
+                  ? 'bg-cu-gold text-black border-cu-gold'
+                  : 'bg-gray-700/60 text-gray-300 border-gray-600 hover:border-cu-gold/40 hover:text-white'
+              }`}
+            >
+              <span className="text-[10px]">2027</span> Commits
+            </button>
+            <span className="text-gray-500 text-xs flex items-center gap-1">
+              <Users size={12} />
+              {filtered.length} players
+              {loadingHeadshots && <span className="text-gray-600 ml-1">(loading photos&hellip;)</span>}
+            </span>
+          </div>
         </div>
       </div>
 

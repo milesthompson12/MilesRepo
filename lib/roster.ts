@@ -12,8 +12,7 @@ export const rawRoster: Record<string, RosterPlayer[]> = {
   QB: [
     { name: 'Julian Lewis',      number: '10', year: 'FR', rank: 1 },
     { name: 'Isaac Wilson',      number: '16', year: 'So', rank: 2 },
-    { name: 'Dominiq Ponder',    number: '7',  year: 'JR', rank: 3 },
-    { name: 'Kaneal Sweetwyne',  number: '14', year: 'FR', rank: 4 },
+    { name: 'Kaneal Sweetwyne',  number: '14', year: 'FR', rank: 3 },
   ],
   RB: [
     { name: 'Richard Young',       number: '9',  year: 'JR', rank: 1 },
@@ -136,6 +135,25 @@ export function getLastName(name: string): string {
   }
   return parts[parts.length - 1] ?? name;
 }
+
+// Sub-position roles for DL players — used to split DE/DT/NT depth chart rows
+export const DL_ROLES: Record<string, 'DE' | 'DT' | 'NT'> = {
+  'Quency Wiggins':    'DE',
+  'Toby Anene':        'DE',
+  'Santana Hopper':    'DT',
+  'Kylan Salter':      'DE',
+  'Immanuel Ezeogu':   'DE',
+  'Yamil Talib':       'DE',
+  'Balansama Kamara':  'DE',
+  'Vili Taufatofua':   'DT',
+  'Samu Taumanupepe':  'NT',
+  'Lamont Lester Jr.': 'DE',
+  'Tyler Moore':       'DT',
+  'Sedrick Smith':     'DT',
+  'Josiah Manu':       'DT',
+  'Ezra Christensen':  'DT',
+  'Dylan Manuel':      'DT',
+};
 
 export function getInitials(name: string): string {
   return name

@@ -41,8 +41,7 @@ const rawRoster: Record<string, Omit<Player, 'posGroup'>[]> = {
   QB: [
     { name: 'Julian Lewis',      number: '10', year: 'FR', rank: 1 },
     { name: 'Isaac Wilson',      number: '16', year: 'So', rank: 2 },
-    { name: 'Dominiq Ponder',    number: '7',  year: 'JR', rank: 3 },
-    { name: 'Kaneal Sweetwyne',  number: '14', year: 'FR', rank: 4 },
+    { name: 'Kaneal Sweetwyne',  number: '14', year: 'FR', rank: 3 },
   ],
   RB: [
     { name: 'Richard Young',       number: '9',  year: 'JR', rank: 1 },

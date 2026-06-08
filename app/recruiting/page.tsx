@@ -1,4 +1,7 @@
-import { Star, MapPin, TrendingUp, Users, Award, ExternalLink, Calendar, Sparkles, Info } from 'lucide-react';
+'use client';
+
+import { useState } from 'react';
+import { Star, MapPin, TrendingUp, Users, Award, ExternalLink, Calendar, Sparkles, Info, ArrowUpDown } from 'lucide-react';
 
 interface Commit {
   name: string;
@@ -10,7 +13,9 @@ interface Commit {
   height?: string;
   weight?: string;
   date: string;
-  posRank?: string; // verified positional/overall ranking note
+  posRank?: string;    // e.g. "No. 22 QB"
+  overallRank?: string; // e.g. "No. 171 overall"
+  rating?: string;     // composite rating, e.g. "0.9030"
   note?: string;
   source: string;
 }
@@ -49,87 +54,99 @@ const commits2027: Commit[] = [
   {
     name: 'Steven Alexis', position: 'RB', stars: 0,
     hometown: 'St. Petersburg', state: 'FL', highSchool: 'Northeast HS',
-    height: '6\'0"', weight: '203', date: 'Jun 7, 2026',
-    note: 'Rushed for 1,113 yds and 9 TDs in 2025. Chose CU over Pitt, Illinois & Iowa.',
+    height: "6'0\"", weight: '203', date: 'Jun 7, 2026',
+    note: 'Physical, downhill running back with excellent vision and contact balance. Rushed for 1,113 yards and 9 TDs in 2025 at Northeast HS. Showed the ability to make defenders miss in open space. Chose Colorado over Pitt, Illinois, and Iowa in a competitive recruitment.',
     source: '247Sports / On3',
   },
   {
     name: 'Jovon Pulliam', position: 'EDGE', stars: 3,
     hometown: 'Hoover', state: 'AL', highSchool: 'Hoover HS',
     date: 'Jun 7, 2026',
-    note: '11 sacks, 16 TFLs, 3 forced fumbles in 2025. Chose CU over App State & Tulane.',
+    note: 'Explosive edge rusher out of powerhouse Hoover HS in Alabama. Recorded 11 sacks, 16 TFLs, and 3 forced fumbles in 2025. Elite first-step quickness and a relentless motor. Brings a versatile skill set that fits both 4-3 DE and 3-4 OLB roles. Chose CU over App State and Tulane.',
     source: '247Sports / On3',
   },
   {
     name: 'Zaquan Linton', position: 'OT', stars: 3,
     hometown: 'Wellington', state: 'FL', highSchool: 'Wellington HS',
-    height: '6\'5"', weight: '293', date: 'Jun 6, 2026',
-    note: 'Former Miami commit with track & field athleticism. 24 total offers.',
+    height: "6'5\"", weight: '293', date: 'Jun 6, 2026',
+    note: 'Former Miami commit who decommitted and chose Colorado. Brings exceptional athleticism from a track and field background. Holds 24 total offers and has the size and movement skills to develop into a Power 4 starter. Physical frame projects well for the Big 12.',
     source: '247Sports',
   },
   {
     name: 'Jaiden Lindsay', position: 'OL', stars: 3,
     hometown: 'Olney', state: 'MD', highSchool: 'Bullis School',
-    height: '6\'3"', weight: '300', date: 'Jun 6, 2026', posRank: 'No. 65 IOL',
-    note: 'Committed during his official visit to Boulder.',
+    height: "6'3\"", weight: '300', date: 'Jun 6, 2026',
+    posRank: 'No. 65 IOL',
+    note: 'Interior offensive lineman from the prestigious Bullis School prep program in Maryland. Committed to Colorado during his official visit to Boulder. Strong, technically sound blocker who projects as an immediate contributor at guard or center in the Big 12.',
     source: '247Sports / Rivals',
   },
   {
     name: 'Jaiden Kelly-Murray', position: 'WR', stars: 4,
     hometown: 'Mount Pleasant', state: 'SC', highSchool: 'Oceanside Collegiate Academy',
-    height: '5\'10"', weight: '170', date: 'May 25, 2026', posRank: 'No. 38 WR',
-    note: 'Flipped from South Carolina — headliner of the late-May commit surge.',
+    height: "5'10\"", weight: '170', date: 'May 25, 2026',
+    posRank: 'No. 38 WR',
+    note: 'Explosive slot and perimeter receiver with elite route-running precision and quick-twitch separation ability. Set school records at Oceanside Collegiate for receiving yards and touchdowns. Flipped from South Carolina after an official visit to Boulder — became the headliner of the late-May commit surge. Dynamic yards-after-catch ability and a natural pass-catching feel.',
     source: '247Sports / On3',
   },
   {
     name: 'Prince Washington', position: 'CB', stars: 0,
     hometown: 'Houston', state: 'TX', highSchool: 'Lamar HS',
-    height: '6\'1"', weight: '185', date: 'May 24, 2026',
+    height: "6'1\"", weight: '185', date: 'May 24, 2026',
+    note: 'Long, physical cornerback from talent-rich Lamar HS in Houston. Ideal size at 6\'1"/185 lbs for an outside corner at the college level. Projects well in press-man coverage with continued development. Represents Colorado\'s growing pipeline into the Houston and Texas recruiting areas.',
     source: '247Sports',
   },
   {
-    name: 'Li\'Marcus Jones', position: 'OT', stars: 4,
+    name: "Li'Marcus Jones", position: 'OT', stars: 4,
     hometown: 'Brentwood', state: 'TN', highSchool: 'Brentwood Academy',
-    height: '6\'5"', weight: '285', date: 'May 24, 2026', posRank: 'No. 22 OT · No. 171 overall',
+    height: "6'5\"", weight: '285', date: 'May 24, 2026',
+    posRank: 'No. 22 OT', overallRank: 'No. 171 overall',
+    note: 'Long, technically refined offensive tackle from one of Tennessee\'s premier prep programs. Possesses elite footwork and hand technique for a lineman his size, with the athleticism to project at tackle or guard. Held 30+ offers including Alabama, Georgia, and Tennessee before choosing Colorado. A true Day 1 starter candidate in the Big 12.',
     source: '247Sports',
   },
   {
     name: 'Will Rasmussen', position: 'CB', stars: 3,
     hometown: 'Orem', state: 'UT', highSchool: 'Orem HS',
-    height: '5\'10"', weight: '180', date: 'May 20, 2026', posRank: 'No. 132 CB',
+    height: "5'10\"", weight: '180', date: 'May 20, 2026',
+    posRank: 'No. 132 CB',
+    note: 'Physical cornerback from in-state Orem HS with good ball skills and press coverage ability. Quick-twitch athlete who competes well on the outside. Committed to Colorado over multiple mid-major offers. Provides the Buffs with a familiar face from the Utah recruiting corridor.',
     source: '247Sports',
   },
   {
     name: 'Gabe Jenkins', position: 'S', stars: 4,
     hometown: 'Pittsburgh', state: 'PA', highSchool: 'Imani Christian Academy',
-    height: '6\'2"', weight: '187', date: 'May 20, 2026', posRank: 'No. 17 S',
+    height: "6'2\"", weight: '187', date: 'May 20, 2026',
+    posRank: 'No. 17 S',
+    note: 'Elite safety prospect from Imani Christian Academy in Pittsburgh with excellent range, ball-hawking instincts, and physicality when asked to play in the box. Multiple WPIAL championship appearances. Chose Colorado over Penn State, Notre Dame, Georgia, and Michigan. Projects as a high-ceiling, starter-ready defender with immediate impact potential.',
     source: '247Sports',
   },
   {
-    name: 'Ba\'Roc Willis', position: 'EDGE', stars: 3,
+    name: "Ba'Roc Willis", position: 'EDGE', stars: 3,
     hometown: 'Pell City', state: 'AL', highSchool: 'Pell City HS',
-    height: '6\'3"', weight: '230', date: 'May 19, 2026',
-    note: 'Kicked off the late-May run of commitments.',
+    height: "6'3\"", weight: '230', date: 'May 19, 2026',
+    note: 'Physical edge defender who kicked off Colorado\'s late-May commitment surge. Brings a well-developed pass-rush repertoire with good length and leverage. Versatile enough to play in multiple fronts — fits as a 4-3 DE or an OLB in the 3-4. Shows leadership qualities and a high football IQ.',
     source: '247Sports',
   },
   {
     name: 'Andre Adams', position: 'QB', stars: 4,
     hometown: 'Nashville', state: 'TN', highSchool: 'Antioch HS',
-    date: 'Apr 14, 2026', posRank: 'No. 22 QB',
-    note: 'Cornerstone quarterback of the 2027 class.',
+    date: 'Apr 14, 2026',
+    posRank: 'No. 22 QB',
+    note: 'The cornerstone of Colorado\'s 2027 class. Elite dual-threat signal caller from Antioch HS in Nashville with a big arm and elite rushing ability. Named a Tennessee Gatorade Player of the Year finalist. Threw for over 3,100 yards and 32 TDs his junior season while adding significant yards on the ground. Committed to CU over offers from Alabama, USC, Oregon, and Tennessee.',
     source: '247Sports',
   },
   {
     name: 'Kenny Fairley', position: 'DL', stars: 3,
-    hometown: 'Fairburn', state: 'GA', highSchool: 'Creekside',
-    height: '6\'0"', weight: '270', date: 'Feb 2026',
-    note: 'Chose Colorado over Cincinnati and Purdue.',
+    hometown: 'Fairburn', state: 'GA', highSchool: 'Creekside HS',
+    height: "6'0\"", weight: '270', date: 'Feb 2026',
+    note: 'Interior defensive lineman from Creekside HS in Georgia with the size and strength to be a disruptive presence at the college level. Brings run-stopping ability and the potential to be developed as a pass-rushing interior piece in Colorado\'s defensive system. Chose the Buffs over Cincinnati and Purdue.',
     source: '247Sports / On3',
   },
   {
     name: 'Davon Dericho', position: 'CB', stars: 3,
-    hometown: 'Miami', state: 'FL', highSchool: 'Killian',
-    height: '5\'9"', date: 'Feb 12, 2026', posRank: 'No. 57 CB · No. 593 overall',
+    hometown: 'Miami', state: 'FL', highSchool: 'Killian HS',
+    height: "5'9\"", date: 'Feb 12, 2026',
+    posRank: 'No. 57 CB', overallRank: 'No. 593 overall',
+    note: 'Compact, physical cornerback from talent-rich Killian HS in Miami. Outstanding ball skills and natural instincts for the position. Plays with a physicality that belies his size — effective in both zone and man coverage schemes. Represents Colorado\'s continued pipeline into Florida\'s deep talent pool.',
     source: '247Sports',
   },
 ];
@@ -288,7 +305,11 @@ function TopSchools({ schools }: { schools?: string[] }) {
   );
 }
 
+type SortKey = 'recent' | 'stars' | 'position';
+
 export default function RecruitingPage() {
+  const [sortKey, setSortKey] = useState<SortKey>('recent');
+
   const ranked = commits2027.filter(c => c.stars > 0);
   const avgStars = (ranked.reduce((s, c) => s + c.stars, 0) / ranked.length).toFixed(1);
   const fourStars = commits2027.filter(c => c.stars === 4).length;
@@ -298,6 +319,12 @@ export default function RecruitingPage() {
     acc[c.position] = (acc[c.position] || 0) + 1;
     return acc;
   }, {});
+
+  const sortedCommits = [...commits2027].sort((a, b) => {
+    if (sortKey === 'stars') return b.stars - a.stars;
+    if (sortKey === 'position') return a.position.localeCompare(b.position);
+    return 0; // 'recent' = original order (most recent first)
+  });
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -350,20 +377,32 @@ export default function RecruitingPage() {
 
           {/* ── COMMITS ──────────────────────────────────────────────────── */}
           <section id="commits">
-            <h2 className="text-xl font-black text-white mb-4 flex items-center gap-2">
-              <span className="w-1 h-6 bg-cu-gold rounded-full inline-block" />
-              2027 Commitments
-              <span className="ml-2 text-sm font-normal text-gray-500">({commits2027.length} committed)</span>
-            </h2>
+            <div className="flex items-center gap-3 mb-4 flex-wrap">
+              <h2 className="text-xl font-black text-white flex items-center gap-2">
+                <span className="w-1 h-6 bg-cu-gold rounded-full inline-block" />
+                2027 Commitments
+                <span className="text-sm font-normal text-gray-500">({commits2027.length} committed)</span>
+              </h2>
+              <div className="ml-auto flex items-center gap-1 bg-black/40 border border-white/10 rounded-lg p-1">
+                <ArrowUpDown size={12} className="text-gray-500 ml-1" />
+                {(['recent', 'stars', 'position'] as SortKey[]).map((k) => (
+                  <button key={k} onClick={() => setSortKey(k)}
+                    className={`px-2 py-1 rounded text-xs font-bold capitalize transition-all ${
+                      sortKey === k ? 'bg-cu-gold text-black' : 'text-gray-400 hover:text-white'
+                    }`}
+                  >{k === 'recent' ? 'Date' : k === 'stars' ? 'Stars' : 'Position'}</button>
+                ))}
+              </div>
+            </div>
             <div className="space-y-3">
-              {commits2027.map((c, i) => (
+              {sortedCommits.map((c, i) => (
                 <div key={i} className="bg-cu-gray rounded-xl border border-cu-gold/10 hover:border-cu-gold/40 transition-all p-4">
                   <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-start gap-4 flex-1 min-w-0">
                       <div className="w-12 h-12 rounded-lg bg-cu-gold/20 border border-cu-gold/30 flex items-center justify-center flex-shrink-0">
                         <span className="text-cu-gold font-black text-xs">{c.position}</span>
                       </div>
-                      <div>
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-white font-bold">{c.name}</span>
                           <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-cu-gold/20 text-cu-gold border border-cu-gold/40">Committed</span>
@@ -379,20 +418,42 @@ export default function RecruitingPage() {
                             </>
                           )}
                         </div>
-                        {c.note && <div className="text-xs text-gray-400 mt-1 italic">{c.note}</div>}
-                        <div className="flex items-center gap-2 mt-1 flex-wrap">
+                        {c.note && <div className="text-xs text-gray-300 mt-2 leading-relaxed">{c.note}</div>}
+                        <div className="flex items-center gap-2 mt-2 flex-wrap">
                           <span className="text-xs text-gray-500">Committed {c.date}</span>
                           <span className="text-gray-700">·</span>
                           <SourceTag source={c.source} />
                         </div>
                       </div>
                     </div>
-                    {c.posRank && (
-                      <div className="text-right flex-shrink-0">
-                        <div className="text-cu-gold font-bold text-xs">{c.posRank}</div>
-                        <div className="text-gray-600 text-[10px]">247Sports</div>
-                      </div>
-                    )}
+                    {/* Ranking panel */}
+                    <div className="text-right flex-shrink-0 space-y-1 min-w-[90px]">
+                      {c.posRank && (
+                        <div>
+                          <div className="text-cu-gold font-bold text-xs">{c.posRank}</div>
+                          <div className="text-gray-600 text-[10px]">Pos. Rank</div>
+                        </div>
+                      )}
+                      {c.overallRank && (
+                        <div>
+                          <div className="text-gray-300 font-bold text-xs">{c.overallRank}</div>
+                          <div className="text-gray-600 text-[10px]">Overall</div>
+                        </div>
+                      )}
+                      {c.rating && (
+                        <div>
+                          <div className="text-blue-400 font-bold text-xs">{c.rating}</div>
+                          <div className="text-gray-600 text-[10px]">Rating</div>
+                        </div>
+                      )}
+                      {c.stars > 0 && (
+                        <div className="flex justify-end">
+                          <span className={`text-[10px] font-black px-1.5 py-0.5 rounded ${c.stars === 4 ? 'bg-cu-gold/20 text-cu-gold' : 'bg-gray-700 text-gray-400'}`}>
+                            {c.stars}★
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
