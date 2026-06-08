@@ -136,23 +136,25 @@ export function getLastName(name: string): string {
   return parts[parts.length - 1] ?? name;
 }
 
-// Sub-position roles for DL players — used to split DE/DT/NT depth chart rows
+// Sub-position roles for DL players — used to split DE / DT / NT.
+// DE = defensive ends (edge), DT = defensive tackles (interior), NT = nose tackle.
 export const DL_ROLES: Record<string, 'DE' | 'DT' | 'NT'> = {
   'Quency Wiggins':    'DE',
   'Toby Anene':        'DE',
-  'Santana Hopper':    'DT',
+  'Domata Peko Jr.':   'DE',
   'Kylan Salter':      'DE',
   'Immanuel Ezeogu':   'DE',
   'Yamil Talib':       'DE',
   'Balansama Kamara':  'DE',
+  'Santana Hopper':    'DT',
   'Vili Taufatofua':   'DT',
-  'Samu Taumanupepe':  'NT',
-  'Lamont Lester Jr.': 'DE',
+  'Lamont Lester Jr.': 'DT',
   'Tyler Moore':       'DT',
   'Sedrick Smith':     'DT',
   'Josiah Manu':       'DT',
   'Ezra Christensen':  'DT',
   'Dylan Manuel':      'DT',
+  'Samu Taumanupepe':  'NT',
 };
 
 export function getInitials(name: string): string {

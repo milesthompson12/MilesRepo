@@ -13,6 +13,7 @@ import {
   useDroppable,
 } from '@dnd-kit/core';
 import { useDraggable } from '@dnd-kit/core';
+import { DL_ROLES } from '@/lib/roster';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -257,10 +258,10 @@ function makeDefenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
   // 4-2-5: 4 DL, 2 LB, 5 DB (2 CB, nickel, 2 S) — Colorado's base.
   if (formation === '4-2-5') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 20, y: LINE },
-      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
-      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 76, y: LINE },
+      { id: 'DL1', label: 'LDE', posGroup: ['DE'], x: 20, y: LINE },
+      { id: 'DL2', label: 'LDT', posGroup: ['DT'], x: 38, y: LINE },
+      { id: 'DL3', label: 'RDT', posGroup: ['DT'], x: 58, y: LINE },
+      { id: 'DL4', label: 'RDE', posGroup: ['DE'], x: 76, y: LINE },
       { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 38, y: LB_Y },
       { id: 'LB2', label: 'LB',  posGroup: ['LB'], x: 58, y: LB_Y },
       { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
@@ -273,9 +274,9 @@ function makeDefenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
   // 3-4: 3 DL, 4 LB, 4 DB (2 CB, 2 S).
   if (formation === '3-4') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 28, y: LINE },
-      { id: 'DL2', label: 'NT',  posGroup: ['DL'], x: 48, y: LINE },
-      { id: 'DL3', label: 'DE',  posGroup: ['DL'], x: 68, y: LINE },
+      { id: 'DL1', label: 'LDE', posGroup: ['DE'], x: 28, y: LINE },
+      { id: 'DL2', label: 'NT',  posGroup: ['NT'], x: 48, y: LINE },
+      { id: 'DL3', label: 'RDE', posGroup: ['DE'], x: 68, y: LINE },
       { id: 'LB1', label: 'OLB', posGroup: ['LB'], x: 10, y: LB_Y - 2 },
       { id: 'LB2', label: 'ILB', posGroup: ['LB'], x: 36, y: LB_Y },
       { id: 'LB3', label: 'ILB', posGroup: ['LB'], x: 60, y: LB_Y },
@@ -289,10 +290,10 @@ function makeDefenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
   // 4-3: 4 DL, 3 LB, 4 DB (2 CB, 2 S).
   if (formation === '4-3') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 20, y: LINE },
-      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
-      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 76, y: LINE },
+      { id: 'DL1', label: 'LDE', posGroup: ['DE'], x: 20, y: LINE },
+      { id: 'DL2', label: 'LDT', posGroup: ['DT'], x: 38, y: LINE },
+      { id: 'DL3', label: 'RDT', posGroup: ['DT'], x: 58, y: LINE },
+      { id: 'DL4', label: 'RDE', posGroup: ['DE'], x: 76, y: LINE },
       { id: 'LB1', label: 'WLB', posGroup: ['LB'], x: 28, y: LB_Y },
       { id: 'LB2', label: 'MLB', posGroup: ['LB'], x: 48, y: LB_Y },
       { id: 'LB3', label: 'SLB', posGroup: ['LB'], x: 68, y: LB_Y },
@@ -305,10 +306,10 @@ function makeDefenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
   // Nickel: 4 DL, 2 LB, 5 DB (2 CB, nickel, 2 S).
   if (formation === 'Nickel') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 20, y: LINE },
-      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
-      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 76, y: LINE },
+      { id: 'DL1', label: 'LDE', posGroup: ['DE'], x: 20, y: LINE },
+      { id: 'DL2', label: 'LDT', posGroup: ['DT'], x: 38, y: LINE },
+      { id: 'DL3', label: 'RDT', posGroup: ['DT'], x: 58, y: LINE },
+      { id: 'DL4', label: 'RDE', posGroup: ['DE'], x: 76, y: LINE },
       { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 38, y: LB_Y },
       { id: 'LB2', label: 'LB',  posGroup: ['LB'], x: 58, y: LB_Y },
       { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
@@ -321,10 +322,10 @@ function makeDefenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
   // Dime: 4 DL, 1 LB, 6 DB (2 CB, nickel, extra DB, 2 S).
   if (formation === 'Dime') {
     return [
-      { id: 'DL1', label: 'DE',  posGroup: ['DL'], x: 20, y: LINE },
-      { id: 'DL2', label: 'DT',  posGroup: ['DL'], x: 38, y: LINE },
-      { id: 'DL3', label: 'DT',  posGroup: ['DL'], x: 58, y: LINE },
-      { id: 'DL4', label: 'DE',  posGroup: ['DL'], x: 76, y: LINE },
+      { id: 'DL1', label: 'LDE', posGroup: ['DE'], x: 20, y: LINE },
+      { id: 'DL2', label: 'LDT', posGroup: ['DT'], x: 38, y: LINE },
+      { id: 'DL3', label: 'RDT', posGroup: ['DT'], x: 58, y: LINE },
+      { id: 'DL4', label: 'RDE', posGroup: ['DE'], x: 76, y: LINE },
       { id: 'LB1', label: 'LB',  posGroup: ['LB'], x: 48, y: LB_Y },
       { id: 'CB1', label: 'CB',  posGroup: ['CB'], x: 6,  y: CB_Y },
       { id: 'CB2', label: 'CB',  posGroup: ['CB'], x: 94, y: CB_Y },
@@ -339,17 +340,32 @@ function makeDefenseSlots(formation: string): Omit<FieldSlot, 'playerId'>[] {
 
 // ─── Auto-assign logic ────────────────────────────────────────────────────────
 
+// Resolve a position group (including the virtual DE / DT / NT defensive splits)
+// to a rank-sorted list of player ids. DE = edge ends, DT/NT = interior linemen.
+function playersForGroup(pg: string): { pid: string; rank: number }[] {
+  if (pg === 'DE') {
+    return (rawRoster['DL'] ?? [])
+      .filter((p) => DL_ROLES[p.name] === 'DE')
+      .map((p) => ({ pid: `DL-${p.rank}`, rank: p.rank }));
+  }
+  if (pg === 'DT' || pg === 'NT') {
+    return (rawRoster['DL'] ?? [])
+      .filter((p) => DL_ROLES[p.name] === 'DT' || DL_ROLES[p.name] === 'NT')
+      .map((p) => ({ pid: `DL-${p.rank}`, rank: p.rank }));
+  }
+  return (rawRoster[pg] ?? []).map((p) => ({ pid: `${pg}-${p.rank}`, rank: p.rank }));
+}
+
 function autoAssignSlots(slotDefs: Omit<FieldSlot, 'playerId'>[]): FieldSlot[] {
   const used = new Set<string>();
 
   return slotDefs.map((slot) => {
     let chosen: string | null = null;
     for (const pg of slot.posGroup) {
-      const players = (rawRoster[pg] ?? []).slice().sort((a, b) => a.rank - b.rank);
+      const players = playersForGroup(pg).slice().sort((a, b) => a.rank - b.rank);
       for (const p of players) {
-        const pid = `${pg}-${p.rank}`;
-        if (!used.has(pid)) {
-          chosen = pid;
+        if (!used.has(p.pid)) {
+          chosen = p.pid;
           break;
         }
       }
@@ -366,6 +382,43 @@ const OFFENSE_FORMATIONS = ['Spread', 'Pistol', 'Pro Set', 'Trips', 'Empty'] as 
 const DEFENSE_FORMATIONS = ['4-2-5', '3-4', '4-3', 'Nickel', 'Dime'] as const;
 type OffenseFormation = typeof OFFENSE_FORMATIONS[number];
 type DefenseFormation = typeof DEFENSE_FORMATIONS[number];
+
+// ─── Opponent (scout team) positions ──────────────────────────────────────────
+// Generic, name/number-less markers for the other team, positioned above the LOS.
+// When viewing OUR offense (LOS y=52), the opponent shows a 4-3 defense.
+// When viewing OUR defense (LOS y=30), the opponent shows a Pistol offense.
+
+interface OppMarker { id: string; label: string; x: number; y: number }
+
+// Opponent 4-3 defense vs our offense — sits just above the LOS (y < 52).
+const OPP_DEFENSE_43: OppMarker[] = [
+  { id: 'o-de1', label: 'DE', x: 22, y: 48 },
+  { id: 'o-dt1', label: 'DT', x: 40, y: 48 },
+  { id: 'o-dt2', label: 'DT', x: 56, y: 48 },
+  { id: 'o-de2', label: 'DE', x: 74, y: 48 },
+  { id: 'o-lb1', label: 'LB', x: 30, y: 40 },
+  { id: 'o-lb2', label: 'LB', x: 48, y: 40 },
+  { id: 'o-lb3', label: 'LB', x: 66, y: 40 },
+  { id: 'o-cb1', label: 'CB', x: 8,  y: 44 },
+  { id: 'o-cb2', label: 'CB', x: 92, y: 44 },
+  { id: 'o-s1',  label: 'S',  x: 36, y: 30 },
+  { id: 'o-s2',  label: 'S',  x: 62, y: 30 },
+];
+
+// Opponent Pistol offense vs our defense — sits above the LOS (y < 30).
+const OPP_OFFENSE_PISTOL: OppMarker[] = [
+  { id: 'o-lt', label: 'OL', x: 34, y: 26 },
+  { id: 'o-lg', label: 'OL', x: 42, y: 26 },
+  { id: 'o-c',  label: 'OL', x: 50, y: 26 },
+  { id: 'o-rg', label: 'OL', x: 58, y: 26 },
+  { id: 'o-rt', label: 'OL', x: 66, y: 26 },
+  { id: 'o-te', label: 'TE', x: 72, y: 26 },
+  { id: 'o-wr1', label: 'WR', x: 8,  y: 26 },
+  { id: 'o-wr2', label: 'WR', x: 92, y: 26 },
+  { id: 'o-slot', label: 'WR', x: 22, y: 24 },
+  { id: 'o-qb', label: 'QB', x: 50, y: 17 },
+  { id: 'o-rb', label: 'RB', x: 50, y: 10 },
+];
 
 // ─── Route / coverage drawing ────────────────────────────────────────────────
 
@@ -904,6 +957,40 @@ function RoutePicker({
   );
 }
 
+// A draggable, name-less opponent marker (the other team's scout look).
+function OpponentMarker({
+  marker, pos,
+}: {
+  marker: OppMarker;
+  pos: { x: number; y: number };
+}) {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: `opp-${marker.id}`,
+    data: { oppId: marker.id },
+  });
+  const style: React.CSSProperties = {
+    position: 'absolute',
+    left: `${pos.x}%`,
+    top: `${pos.y}%`,
+    transform: `translate(-50%, -50%) ${transform ? `translate(${transform.x}px, ${transform.y}px)` : ''}`,
+    zIndex: isDragging ? 40 : 6,
+    touchAction: 'none',
+  };
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={style}
+      className="cursor-grab active:cursor-grabbing select-none flex flex-col items-center"
+    >
+      <div className="w-8 h-8 rounded-full bg-white/15 border-2 border-white/60 flex items-center justify-center shadow-md">
+        <span className="text-white/70 text-[8px] font-black">{marker.label}</span>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function DepthChartPage() {
@@ -951,6 +1038,13 @@ export default function DepthChartPage() {
   // Free-position overrides: slotId -> {x, y} in % coords
   const fieldRef = useRef<HTMLDivElement>(null);
   const [posOverrides, setPosOverrides] = useState<Record<string, { x: number; y: number }>>({});
+
+  // Opponent (scout team) free-position overrides: oppId -> {x, y}
+  const [oppOverrides, setOppOverrides] = useState<Record<string, { x: number; y: number }>>({});
+
+  // Opponent look depends on which side we're viewing:
+  // viewing our offense -> opponent is a 4-3 defense; viewing our defense -> Pistol offense.
+  const opponents = side === 'offense' ? OPP_DEFENSE_43 : OPP_OFFENSE_PISTOL;
 
   // Route drawing state
   const [routeMode, setRouteMode] = useState(false);
@@ -1007,6 +1101,27 @@ export default function DepthChartPage() {
     setOverSlotId(null);
 
     const { active, over } = event;
+
+    // Opponent markers: always free-move by drag delta (no slots / swapping).
+    const oppId = (active.data.current as { oppId?: string })?.oppId;
+    if (oppId) {
+      const fieldEl = fieldRef.current;
+      if (fieldEl) {
+        const rect = fieldEl.getBoundingClientRect();
+        const dx = (event.delta.x / rect.width) * 100;
+        const dy = (event.delta.y / rect.height) * 100;
+        const base = oppOverrides[oppId] ?? opponents.find((o) => o.id === oppId)!;
+        setOppOverrides((prev) => ({
+          ...prev,
+          [oppId]: {
+            x: Math.max(2, Math.min(98, base.x + dx)),
+            y: Math.max(2, Math.min(98, base.y + dy)),
+          },
+        }));
+      }
+      return;
+    }
+
     const fromSlotId = (active.data.current as { slotId: string })?.slotId;
     if (!fromSlotId) return;
 
@@ -1110,6 +1225,7 @@ export default function DepthChartPage() {
     setSelectedField(null);
     setInfoPlayer(null);
     setPosOverrides({});
+    setOppOverrides({});
     setRoutes({});
     setRouteTarget(null);
   }
@@ -1164,6 +1280,7 @@ export default function DepthChartPage() {
                 setSelectedField(null);
                 setInfoPlayer(null);
                 setPosOverrides({});
+                setOppOverrides({});
                 setRoutes({});
                 setRouteTarget(null);
               }}
@@ -1240,6 +1357,14 @@ export default function DepthChartPage() {
 
           {/* Route overlay */}
           <RouteOverlay routes={routes} slots={currentSlots} posOverrides={posOverrides} side={side} />
+
+          {/* Opponent (scout team) markers — drag to reposition */}
+          <div className="absolute inset-0">
+            {opponents.map((m) => {
+              const pos = oppOverrides[m.id] ?? { x: m.x, y: m.y };
+              return <OpponentMarker key={m.id} marker={m} pos={pos} />;
+            })}
+          </div>
 
           {/* Slot nodes */}
           <div className="absolute inset-0">
@@ -1342,6 +1467,10 @@ export default function DepthChartPage() {
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-full bg-green-800 border border-cu-gold/30" />
           <span>Gold dashed line = line of scrimmage</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-3 rounded-full bg-white/15 border-2 border-white/60" />
+          <span>Opponent ({side === 'offense' ? '4-3 defense' : 'Pistol offense'}) &mdash; drag to move</span>
         </div>
         {['FR', 'SO', 'JR', 'SR', 'GR'].map((y) => (
           <span key={y} className={`px-1.5 py-0.5 rounded font-bold text-[10px] ${YEAR_COLORS[y]}`}>{y}</span>

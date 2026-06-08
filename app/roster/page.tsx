@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Filter, Users, ExternalLink } from 'lucide-react';
+import { DL_ROLES } from '@/lib/roster';
 
 interface Player {
   jersey: string;
@@ -272,15 +273,27 @@ export default function RosterPage() {
 
   const filtered = [...OFFICIAL_ROSTER.filter(matchesFilter), ...commitPlayers];
 
+  // Split the old "Defensive Line" group into Defensive Ends and Defensive Tackles
+  // (DT includes the nose tackle). Driven by the shared DL_ROLES classification.
+  const effectiveGroup = (p: Player): string => {
+    if (p.positionGroup !== 'Defensive Line') return p.positionGroup;
+    const role = DL_ROLES[p.name];
+    if (role === 'DE') return 'Defensive Ends';
+    if (role === 'DT' || role === 'NT') return 'Defensive Tackles';
+    // Commits / unclassified DL fall back by position label
+    return p.position === 'DE' || p.position === 'EDGE' ? 'Defensive Ends' : 'Defensive Tackles';
+  };
+
   const grouped = filtered.reduce<Record<string, Player[]>>((acc, p) => {
-    if (!acc[p.positionGroup]) acc[p.positionGroup] = [];
-    acc[p.positionGroup].push(p);
+    const g = effectiveGroup(p);
+    if (!acc[g]) acc[g] = [];
+    acc[g].push(p);
     return acc;
   }, {});
 
   const GROUP_ORDER = [
     'Quarterbacks', 'Running Backs', 'Wide Receivers', 'Tight Ends',
-    'Offensive Line', 'Defensive Line', 'Linebackers', 'Defensive Backs', 'Specialists',
+    'Offensive Line', 'Defensive Ends', 'Defensive Tackles', 'Linebackers', 'Defensive Backs', 'Specialists',
   ];
   const sortedGroups = GROUP_ORDER.filter(g => grouped[g]);
 

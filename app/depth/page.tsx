@@ -30,17 +30,31 @@ const PLAYER_MAP: Record<string, Player> = (() => {
 })();
 
 // Return sorted player ids for a given row pos.
-// DE/DT/NT are filtered subsets of rawRoster.DL.
+// DE  -> DL players classified as edge ends
+// DT / NT -> DL players classified as interior (DT or NT) — share one pool so
+// the nose tackle is available in four-man fronts too.
 function playersForPos(pos: string): string[] {
-  if (pos === 'DE' || pos === 'DT' || pos === 'NT') {
+  if (pos === 'DE') {
     return (rawRoster['DL'] ?? [])
-      .filter((p) => DL_ROLES[p.name] === pos)
+      .filter((p) => DL_ROLES[p.name] === 'DE')
+      .sort((a, b) => a.rank - b.rank)
+      .map((p) => `DL-${p.rank}`);
+  }
+  if (pos === 'DT' || pos === 'NT') {
+    return (rawRoster['DL'] ?? [])
+      .filter((p) => DL_ROLES[p.name] === 'DT' || DL_ROLES[p.name] === 'NT')
       .sort((a, b) => a.rank - b.rank)
       .map((p) => `DL-${p.rank}`);
   }
   return (rawRoster[pos] ?? [])
     .sort((a, b) => a.rank - b.rank)
     .map((p) => `${pos}-${p.rank}`);
+}
+
+// The "pool" key two rows draw from. Rows with the same pool compete for
+// distinct starters. DT and NT share the interior pool.
+function poolKey(pos: string): string {
+  return pos === 'NT' ? 'DT' : pos;
 }
 
 // ─── Formation row layouts ────────────────────────────────────────────────────
@@ -153,68 +167,75 @@ export default function DepthPage() {
     return order[key] ?? playersForPos(row.pos);
   }
 
-  function move(idx: number, row: RowDef, from: number, dir: -1 | 1) {
-    const key = rowKey(idx, row);
-    // Only allow moving among non-blocked players (the regular segment)
-    const allIds = getRowOrder(idx, row);
-    const blockedSet = computeBlocked(idx, row.pos);
-    const regularIds = allIds.filter((pid) => !blockedSet.has(pid));
-    const to = from + dir;
-    if (to < 0 || to >= regularIds.length) return;
-    const newRegular = [...regularIds];
-    [newRegular[from], newRegular[to]] = [newRegular[to], newRegular[from]];
-    // Reconstruct full order: new regular ids + blocked ids at end (in original order)
-    const blockedIds = allIds.filter((pid) => blockedSet.has(pid));
-    setOrder((prev) => ({ ...prev, [key]: [...newRegular, ...blockedIds] }));
-  }
-
-  // Compute which pids are "blocked" in row `rowIdx` (starters in another row of same pool)
-  function computeBlocked(rowIdx: number, pos: string): Set<string> {
-    const blocked = new Set<string>();
-    rows.forEach((otherRow, otherIdx) => {
-      if (otherIdx !== rowIdx && otherRow.pos === pos) {
-        const othersOrder = getRowOrder(otherIdx, otherRow);
-        // Non-blocked starter of the other row
-        const otherBlocked = new Set<string>();
-        rows.forEach((r2, i2) => {
-          if (i2 !== otherIdx && r2.pos === pos) {
-            const o2 = getRowOrder(i2, r2);
-            const o2Regular = o2.filter((p) => !otherBlocked.has(p));
-            if (o2Regular[0]) otherBlocked.add(o2Regular[0]);
-          }
+  // ── Starter assignment ──────────────────────────────────────────────────────
+  // For every pool (rows sharing a pos), assign each row a UNIQUE starter so the
+  // same player can never top two positions. Resolution is a global greedy:
+  // consider every (row, player) ranked by the player's index in that row's order
+  // (lower = stronger claim), tie-broken by row index. The strongest unfilled
+  // claim wins. A player who starts at one row is "blocked" (greyed) in the rest.
+  const starterByRow: Record<number, string> = (() => {
+    const result: Record<number, string> = {};
+    const poolRows: Record<string, number[]> = {};
+    rows.forEach((row, idx) => {
+      const k = poolKey(row.pos);
+      (poolRows[k] ??= []).push(idx);
+    });
+    for (const idxs of Object.values(poolRows)) {
+      const usedPlayers = new Set<string>();
+      const filledRows = new Set<number>();
+      const claims: { rowIdx: number; pid: string; rank: number }[] = [];
+      idxs.forEach((rowIdx) => {
+        getRowOrder(rowIdx, rows[rowIdx]).forEach((pid, rank) => {
+          claims.push({ rowIdx, pid, rank });
         });
-        const otherRegular = othersOrder.filter((p) => !otherBlocked.has(p));
-        if (otherRegular[0]) blocked.add(otherRegular[0]);
+      });
+      claims.sort((a, b) => a.rank - b.rank || a.rowIdx - b.rowIdx);
+      for (const { rowIdx, pid } of claims) {
+        if (filledRows.has(rowIdx) || usedPlayers.has(pid)) continue;
+        result[rowIdx] = pid;
+        filledRows.add(rowIdx);
+        usedPlayers.add(pid);
+      }
+    }
+    return result;
+  })();
+
+  // Players that start in some OTHER row of the same pool are blocked in row idx.
+  function blockedForRow(idx: number, pos: string): Set<string> {
+    const k = poolKey(pos);
+    const blocked = new Set<string>();
+    rows.forEach((row, otherIdx) => {
+      if (otherIdx !== idx && poolKey(row.pos) === k) {
+        const starter = starterByRow[otherIdx];
+        if (starter) blocked.add(starter);
       }
     });
     return blocked;
   }
 
-  // Build: pid -> label of row where they start (for "Starting at X" badge)
-  function buildStarterLabels(): Record<string, string> {
-    const labels: Record<string, string> = {};
-    // Group rows by pos pool
-    const poolRows: Record<string, number[]> = {};
-    rows.forEach((row, idx) => {
-      if (!poolRows[row.pos]) poolRows[row.pos] = [];
-      poolRows[row.pos].push(idx);
-    });
-    for (const rowIndices of Object.values(poolRows)) {
-      // Iteratively find starters: for each row in pool, the starter is the first non-blocked player
-      const claimed = new Set<string>();
-      rowIndices.forEach((rowIdx) => {
-        const ids = getRowOrder(rowIdx, rows[rowIdx]);
-        const starter = ids.find((pid) => !claimed.has(pid));
-        if (starter) {
-          claimed.add(starter);
-          labels[starter] = rows[rowIdx].label;
-        }
-      });
-    }
-    return labels;
-  }
+  // pid -> label of the row where the player is the starter (for "Starting at X")
+  const starterLabels: Record<string, string> = {};
+  Object.entries(starterByRow).forEach(([rowIdx, pid]) => {
+    starterLabels[pid] = rows[Number(rowIdx)].label;
+  });
 
-  const starterLabels = buildStarterLabels();
+  // Move within the eligible (non-blocked) list. Maps eligible positions back to
+  // indices in the full stored order so blocked players keep their place.
+  function move(idx: number, row: RowDef, from: number, dir: -1 | 1) {
+    const key = rowKey(idx, row);
+    const fullOrder = getRowOrder(idx, row).slice();
+    const blocked = blockedForRow(idx, row.pos);
+    const eligibleIndices = fullOrder
+      .map((pid, i) => ({ pid, i }))
+      .filter(({ pid }) => !blocked.has(pid))
+      .map(({ i }) => i);
+    const to = from + dir;
+    if (to < 0 || to >= eligibleIndices.length) return;
+    const a = eligibleIndices[from];
+    const b = eligibleIndices[to];
+    [fullOrder[a], fullOrder[b]] = [fullOrder[b], fullOrder[a]];
+    setOrder((prev) => ({ ...prev, [key]: fullOrder }));
+  }
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -262,7 +283,7 @@ export default function DepthPage() {
       <div className="space-y-4">
         {rows.map((row, idx) => {
           const allIds = getRowOrder(idx, row);
-          const blockedSet = computeBlocked(idx, row.pos);
+          const blockedSet = blockedForRow(idx, row.pos);
           const regularIds = allIds.filter((pid) => !blockedSet.has(pid));
           const blockedIds = allIds.filter((pid) => blockedSet.has(pid));
 
