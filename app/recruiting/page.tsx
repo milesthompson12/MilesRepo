@@ -49,8 +49,16 @@ interface Visit {
 }
 
 // ─── 2027 COMMITS — verified via 247Sports / On3 (most recent first) ──────────────
-// As of June 7, 2026, 4:00pm MT. 13 commits.
+// As of June 8, 2026. 14 commits.
 const commits2027: Commit[] = [
+  {
+    name: 'Samari Howard', position: 'S', stars: 3,
+    hometown: 'Fort Lauderdale', state: 'FL', highSchool: 'St. Thomas Aquinas',
+    height: "5'11\"", weight: '175', date: 'Jun 8, 2026',
+    posRank: 'No. 71 S', overallRank: 'No. 72 in FL',
+    note: 'Committed to Colorado following his official visit to Boulder (June 5–7). The three-star safety from powerhouse St. Thomas Aquinas joins four-star Gabe Jenkins as the second safety committed in the class. Holds offers from Texas A&M, Florida State, Indiana, Ohio State, and Oregon. Physical, instinctive defensive back who projects well in Colorado\'s coverage schemes.',
+    source: '247Sports / On3',
+  },
   {
     name: 'Steven Alexis', position: 'RB', stars: 0,
     hometown: 'St. Petersburg', state: 'FL', highSchool: 'Northeast HS',
@@ -167,8 +175,7 @@ const targets2027: Target[] = [
     name: 'Ryan Ferdinand', position: 'WR', stars: 0,
     hometown: 'West Palm Beach', state: 'FL', highSchool: 'Palm Beach Lakes HS',
     status: 'Target',
-    visitDate: 'Jun 5–7', visitType: 'Official',
-    note: 'Priority WR target — on campus for official visit this weekend.',
+    note: 'Priority WR target — completed official visit to Boulder (Jun 5–7). No decision announced yet.',
     source: '247Sports',
   },
   {
@@ -188,14 +195,6 @@ const targets2027: Target[] = [
     source: '247Sports',
   },
   {
-    name: 'Samari Howard', position: 'S', stars: 3,
-    hometown: 'Fort Lauderdale', state: 'FL', highSchool: 'St. Thomas Aquinas',
-    status: 'Target',
-    visitDate: 'Jun 5–7 (visited)', visitType: 'Official',
-    note: 'No. 71 safety in 2027 class — took official visit this weekend.',
-    source: 'On3 / 247Sports',
-  },
-  {
     name: 'Kingston Thornton', position: 'CB', stars: 0,
     hometown: 'Dallas', state: 'TX', highSchool: 'Parish Episcopal',
     status: 'Offered',
@@ -209,16 +208,9 @@ const upcomingVisits: Visit[] = [
   {
     name: 'Ryan Ferdinand', position: 'WR', stars: 0,
     hometown: 'West Palm Beach', state: 'FL',
-    visitType: 'Official', visitDate: 'Jun 5–7, 2026',
-    note: 'Priority WR target — took official visit this weekend.',
+    visitType: 'Official', visitDate: 'Jun 5–7, 2026 (completed)',
+    note: 'Priority WR target — official visit to Boulder completed. No decision announced yet.',
     source: '247Sports',
-  },
-  {
-    name: 'Samari Howard', position: 'S', stars: 3,
-    hometown: 'Fort Lauderdale', state: 'FL',
-    visitType: 'Official', visitDate: 'Jun 5–7, 2026',
-    note: 'No. 71 safety in 2027 class — took official visit this weekend.',
-    source: 'On3 / 247Sports',
   },
   {
     name: 'Jaden Baldwin', position: 'WR', stars: 3,
@@ -333,14 +325,14 @@ export default function RecruitingPage() {
         <h1 className="text-3xl font-black text-white">
           <span className="text-cu-gold">2027</span> Recruiting
         </h1>
-        <p className="text-gray-400 mt-1">Commits · Targets · Visits · Crystal Ball — as of June 7, 2026, 4:00pm MT</p>
+        <p className="text-gray-400 mt-1">Commits · Targets · Visits · Crystal Ball — as of June 8, 2026</p>
       </div>
 
       {/* Accuracy note */}
       <div className="bg-cu-gray/60 rounded-xl border border-cu-gold/10 p-3 mb-6 flex items-start gap-2">
         <Info size={14} className="text-cu-gold flex-shrink-0 mt-0.5" />
         <p className="text-gray-400 text-xs">
-          Every entry below is verified as of June 7, 2026 (4pm MT). Sourcing is weighted 247Sports first,
+          Every entry below is verified as of June 8, 2026. Sourcing is weighted 247Sports first,
           then On3, with ESPN only as a last resort (≈60% / 30% / 10%). Unconfirmed ratings, rankings, and
           predictions are intentionally omitted rather than estimated.
         </p>
@@ -567,7 +559,7 @@ export default function RecruitingPage() {
                 <Sparkles size={14} className="text-emerald-400 flex-shrink-0 mt-0.5" />
                 <div className="text-gray-400 text-sm">
                   No individual Crystal Ball (247Sports) or RPM Expert Prediction (On3) for a 2027 Colorado
-                  recruit could be 100% confirmed as of June 7, 2026 — those prediction pages are
+                  recruit could be 100% confirmed as of June 8, 2026 — those prediction pages are
                   subscriber-locked. To preserve accuracy, none are listed. Check the live pages below for the latest.
                   <div className="flex flex-wrap gap-3 mt-2">
                     <a href="https://247sports.com/college/colorado/season/2027-football/institutionpredictions/" target="_blank" rel="noopener noreferrer" className="text-cu-gold text-xs underline">247 Crystal Ball</a>
