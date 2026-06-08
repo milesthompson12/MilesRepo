@@ -368,21 +368,26 @@ const DEFENSE_FORMATIONS = ['4-2-5', '3-4', '4-3', 'Nickel', 'Dime'] as const;
 type OffenseFormation = typeof OFFENSE_FORMATIONS[number];
 type DefenseFormation = typeof DEFENSE_FORMATIONS[number];
 
-// ─── Route drawing ───────────────────────────────────────────────────────────
+// ─── Route / coverage drawing ────────────────────────────────────────────────
 
+// Offensive route tree
 const ROUTES = ['Go', 'Post', 'Corner', 'Curl', 'Dig', 'Out', 'Slant', 'Screen', 'Wheel', 'Flat'] as const;
-type RouteType = typeof ROUTES[number];
+// Defensive coverage assignments — zones the player is responsible for, or MAN
+const COVERAGES = ['MAN', 'Flat', 'Curl', 'Hook', 'Deep Third', 'Deep Half', 'Deep Middle', 'Blitz'] as const;
 
-interface RouteEntry { route: RouteType; flip: boolean; color: string }
+type RouteType = typeof ROUTES[number];
+type CoverageType = typeof COVERAGES[number];
+type AssignType = RouteType | CoverageType;
+
+interface RouteEntry { route: AssignType; flip: boolean; color: string; kind: 'route' | 'coverage' }
 
 const ROUTE_COLORS = [
   '#FFD700', '#FF6B6B', '#6BFFB8', '#6BB8FF', '#FF6BFF',
   '#FFA500', '#00FFFF', '#FF4444', '#44FF44', '#FFFF44',
 ];
 
-// Generates SVG path data for a route starting at (x, y) in viewBox coords (0–100).
-// dir: -1 = route goes upward (offense), +1 = downward (defense).
-// flip: mirrors horizontal direction.
+// Generates SVG path data for an offensive route starting at (x, y) in viewBox
+// coords (0–100). dir: -1 = upward (offense). flip: mirrors horizontal direction.
 function routePath(route: RouteType, x: number, y: number, flip: boolean, dir: number): string {
   const h = flip ? -1 : 1;
   switch (route) {
@@ -397,6 +402,26 @@ function routePath(route: RouteType, x: number, y: number, flip: boolean, dir: n
     case 'Screen': return `M ${x} ${y} L ${x - h * 8} ${y - dir * 5}`;
     case 'Wheel':  return `M ${x} ${y} L ${x + h * 10} ${y + dir * 6} L ${x + h * 12} ${y + dir * 28}`;
     default:       return '';
+  }
+}
+
+// For a defensive coverage assignment, returns the zone target (a point to drop
+// to) plus an optional radius so we can draw a zone bubble. dir: +1 = drop back
+// toward the defense's deep field (downward). MAN/Blitz attack the LOS (upward).
+function coverageTarget(
+  cov: CoverageType, x: number, y: number, flip: boolean, dir: number
+): { tx: number; ty: number; r: number; attack: boolean } {
+  const h = flip ? -1 : 1;
+  switch (cov) {
+    case 'MAN':         return { tx: x, ty: y - dir * 8, r: 0, attack: true };
+    case 'Blitz':       return { tx: x, ty: y - dir * 16, r: 0, attack: true };
+    case 'Flat':        return { tx: x + h * 18, ty: y + dir * 8, r: 5, attack: false };
+    case 'Curl':        return { tx: x + h * 10, ty: y + dir * 14, r: 5, attack: false };
+    case 'Hook':        return { tx: x, ty: y + dir * 14, r: 5, attack: false };
+    case 'Deep Third':  return { tx: x + h * 12, ty: y + dir * 30, r: 6, attack: false };
+    case 'Deep Half':   return { tx: x + h * 8,  ty: y + dir * 32, r: 7, attack: false };
+    case 'Deep Middle': return { tx: x, ty: y + dir * 32, r: 6, attack: false };
+    default:            return { tx: x, ty: y, r: 0, attack: false };
   }
 }
 
@@ -589,21 +614,21 @@ function FieldBackground({ side }: { side: Side }) {
 
       {/* End zone */}
       {side === 'offense' ? (
-        <rect x="0" y="0" width="100" height="12" fill="#145222" />
+        <rect x="0" y="0" width="100" height="12" fill="#000000" />
       ) : (
-        <rect x="0" y="88" width="100" height="12" fill="#145222" />
+        <rect x="0" y="88" width="100" height="12" fill="#000000" />
       )}
 
-      {/* BUFFS text in end zone */}
+      {/* COLORADO text in end zone */}
       {side === 'offense' ? (
-        <text x="50" y="8" textAnchor="middle" fontSize="6" fontWeight="bold"
-          fill="#CFB227" opacity="0.7" fontFamily="sans-serif" letterSpacing="3">
-          BUFFS
+        <text x="50" y="8" textAnchor="middle" fontSize="5" fontWeight="bold"
+          fill="#CFB227" opacity="0.85" fontFamily="sans-serif" letterSpacing="2.5">
+          COLORADO
         </text>
       ) : (
-        <text x="50" y="95" textAnchor="middle" fontSize="6" fontWeight="bold"
-          fill="#CFB227" opacity="0.7" fontFamily="sans-serif" letterSpacing="3">
-          BUFFS
+        <text x="50" y="95" textAnchor="middle" fontSize="5" fontWeight="bold"
+          fill="#CFB227" opacity="0.85" fontFamily="sans-serif" letterSpacing="2.5">
+          COLORADO
         </text>
       )}
 
@@ -765,8 +790,37 @@ function RouteOverlay({
         const slot = slots.find((s) => s.id === slotId);
         if (!slot) return null;
         const pos = posOverrides[slotId] || { x: slot.x, y: slot.y };
-        const d = routePath(entry.route, pos.x, pos.y, entry.flip, dir);
         const markerId = `arrow-${entry.color.replace('#', '')}`;
+
+        if (entry.kind === 'coverage') {
+          const cov = entry.route as CoverageType;
+          const { tx, ty, r, attack } = coverageTarget(cov, pos.x, pos.y, entry.flip, dir);
+          return (
+            <g key={slotId}>
+              <path
+                d={`M ${pos.x} ${pos.y} L ${tx} ${ty}`}
+                stroke={entry.color}
+                strokeWidth="1"
+                fill="none"
+                strokeLinecap="round"
+                strokeDasharray={attack ? '0' : '2,1.5'}
+                opacity="0.9"
+                markerEnd={`url(#${markerId})`}
+              />
+              {r > 0 && (
+                <circle cx={tx} cy={ty} r={r} fill={entry.color} opacity="0.12"
+                  stroke={entry.color} strokeWidth="0.4" strokeDasharray="1.5,1" />
+              )}
+              <text x={tx} y={ty + 0.8} textAnchor="middle" fontSize="2.4"
+                fontWeight="bold" fill={entry.color} opacity="0.95"
+                fontFamily="sans-serif">
+                {cov === 'MAN' ? 'MAN' : cov === 'Blitz' ? 'BLZ' : ''}
+              </text>
+            </g>
+          );
+        }
+
+        const d = routePath(entry.route as RouteType, pos.x, pos.y, entry.flip, dir);
         return (
           <path
             key={slotId}
@@ -785,9 +839,11 @@ function RouteOverlay({
   );
 }
 
-// Route picker popover shown when a player is clicked in route-draw mode
+// Route picker popover shown when a player is clicked in route-draw mode.
+// On offense it offers the route tree; on defense it offers coverage zones.
 function RoutePicker({
   slotId,
+  side,
   onSelect,
   onFlip,
   onClear,
@@ -796,22 +852,25 @@ function RoutePicker({
   currentFlip,
 }: {
   slotId: string;
-  onSelect: (slotId: string, route: RouteType) => void;
+  side: Side;
+  onSelect: (slotId: string, route: AssignType) => void;
   onFlip: (slotId: string) => void;
   onClear: (slotId: string) => void;
   onClose: () => void;
-  currentRoute?: RouteType;
+  currentRoute?: AssignType;
   currentFlip?: boolean;
 }) {
   void slotId;
+  const options: readonly AssignType[] = side === 'offense' ? ROUTES : COVERAGES;
+  const title = side === 'offense' ? 'Route Tree' : 'Coverage';
   return (
     <div className="absolute z-50 bg-black/95 border border-cu-gold/60 rounded-xl p-3 shadow-2xl w-52 top-2 left-1/2 -translate-x-1/2">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-cu-gold text-xs font-black uppercase tracking-wide">Route Tree</span>
+        <span className="text-cu-gold text-xs font-black uppercase tracking-wide">{title}</span>
         <button onClick={onClose} className="text-gray-500 hover:text-white text-xs">&#x2715;</button>
       </div>
       <div className="grid grid-cols-2 gap-1 mb-2">
-        {ROUTES.map((r, i) => (
+        {options.map((r, i) => (
           <button
             key={r}
             onClick={() => onSelect(slotId, r)}
@@ -900,10 +959,11 @@ export default function DepthChartPage() {
   const [routeTarget, setRouteTarget] = useState<string | null>(null);
   const routeColorIndex = useRef(0);
 
-  function handleSelectRoute(slotId: string, route: RouteType) {
+  function handleSelectRoute(slotId: string, route: AssignType) {
     const existing = routes[slotId];
     const color = existing?.color ?? ROUTE_COLORS[routeColorIndex.current++ % ROUTE_COLORS.length];
-    setRoutes((prev) => ({ ...prev, [slotId]: { route, flip: existing?.flip ?? false, color } }));
+    const kind: 'route' | 'coverage' = side === 'offense' ? 'route' : 'coverage';
+    setRoutes((prev) => ({ ...prev, [slotId]: { route, flip: existing?.flip ?? false, color, kind } }));
     setRouteTarget(null);
   }
 
@@ -1064,7 +1124,7 @@ export default function DepthChartPage() {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-black text-white">
-          <span className="text-cu-gold">Depth</span> Chart
+          <span className="text-cu-gold">Formation</span> Editor
         </h1>
         <p className="text-gray-400 mt-1 text-sm">
           Interactive 2026 field view &mdash; drag players to swap positions
@@ -1132,18 +1192,22 @@ export default function DepthChartPage() {
               : 'bg-cu-gray border-white/10 text-gray-400 hover:text-white'
           }`}
         >
-          {routeMode ? '✏️ Drawing Routes' : 'Draw Routes'}
+          {routeMode
+            ? (side === 'offense' ? '✏️ Drawing Routes' : '✏️ Drawing Coverage')
+            : (side === 'offense' ? 'Draw Routes' : 'Draw Coverage')}
         </button>
         {Object.keys(routes).length > 0 && (
           <button
             onClick={() => { setRoutes({}); setRouteTarget(null); }}
             className="px-3 py-1.5 rounded-lg text-xs font-bold border border-red-500/40 text-red-400 hover:bg-red-500/10 transition-all"
           >
-            Clear All Routes
+            {side === 'offense' ? 'Clear All Routes' : 'Clear All Coverage'}
           </button>
         )}
         {routeMode && (
-          <span className="text-xs text-gray-400 italic">Click a player to assign a route</span>
+          <span className="text-xs text-gray-400 italic">
+            Click a player to assign {side === 'offense' ? 'a route' : 'coverage'}
+          </span>
         )}
       </div>
 
@@ -1206,6 +1270,7 @@ export default function DepthChartPage() {
                   {isRouteTarget && (
                     <RoutePicker
                       slotId={slot.id}
+                      side={side}
                       onSelect={handleSelectRoute}
                       onFlip={handleFlipRoute}
                       onClear={handleClearRoute}

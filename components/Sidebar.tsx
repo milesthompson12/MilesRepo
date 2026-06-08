@@ -2,14 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, BarChart2, List, Menu, X } from 'lucide-react';
+import { Home, Users, BarChart2, List, LayoutList, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 const navItems = [
   { href: '/', label: 'Overview', icon: Home },
   { href: '/recruiting', label: 'Recruiting', icon: Users },
   { href: '/roster', label: 'Roster & Stats', icon: BarChart2 },
-  { href: '/depth-chart', label: 'Depth Chart', icon: List },
+  { href: '/depth', label: 'Depth Chart', icon: LayoutList },
+  { href: '/depth-chart', label: 'Formation Editor', icon: List },
 ];
 
 export default function Sidebar() {
