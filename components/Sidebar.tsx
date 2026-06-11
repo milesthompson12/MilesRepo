@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, BarChart2, List, LayoutList, Menu, X } from 'lucide-react';
+import { Home, Users, BarChart2, List, LayoutList, Menu, X, Play } from 'lucide-react';
 import { useState } from 'react';
 
 const navItems = [
@@ -11,6 +11,7 @@ const navItems = [
   { href: '/roster', label: 'Roster & Stats', icon: BarChart2 },
   { href: '/depth', label: 'Depth Chart', icon: LayoutList },
   { href: '/depth-chart', label: 'Formation Editor', icon: List },
+  { href: '/simulation', label: 'Simulation', icon: Play },
 ];
 
 export default function Sidebar() {
