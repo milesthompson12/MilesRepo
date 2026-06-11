@@ -35,6 +35,19 @@ interface Target {
   source: string;
 }
 
+interface LostTarget {
+  name: string;
+  position: string;
+  stars: number;
+  hometown: string;
+  state: string;
+  highSchool: string;
+  committedTo: string;
+  committedDate?: string;
+  note?: string;
+  source: string;
+}
+
 interface Visit {
   name: string;
   position: string;
@@ -164,26 +177,10 @@ const commits2027: Commit[] = [
 // visitDate shown next to player name in this section if a visit is scheduled.
 const targets2027: Target[] = [
   {
-    name: 'Zykee Scott', position: 'LB', stars: 3,
-    hometown: 'Philadelphia', state: 'PA', highSchool: 'La Salle College HS',
-    status: 'Target', topSchools: ['UNC', 'Georgia Tech', 'Pitt', 'Michigan St.', 'Colorado'],
-    visitDate: 'Jun 19–21', visitType: 'Official',
-    note: 'Top-50 LB · plans to announce commitment June 25.',
-    source: '247Sports',
-  },
-  {
     name: 'Ryan Ferdinand', position: 'WR', stars: 0,
     hometown: 'West Palm Beach', state: 'FL', highSchool: 'Palm Beach Lakes HS',
     status: 'Target',
     note: 'Priority WR target — completed official visit to Boulder (Jun 5–7). No decision announced yet.',
-    source: '247Sports',
-  },
-  {
-    name: 'Jaden Baldwin', position: 'WR', stars: 3,
-    hometown: 'Chandler', state: 'AZ', highSchool: 'Chandler HS',
-    status: 'Target', topSchools: ['Colorado', 'Iowa State', 'Penn State', 'Pitt'],
-    visitDate: 'Jun 12', visitType: 'Official',
-    note: 'Final four includes CU — plans to announce commitment June 16.',
     source: '247Sports',
   },
   {
@@ -211,47 +208,74 @@ const targets2027: Target[] = [
   },
 ];
 
-// ─── UPCOMING VISITS — verified via 247Sports only ───────────────────────────────
-const upcomingVisits: Visit[] = [
-  {
-    name: 'Ryan Ferdinand', position: 'WR', stars: 0,
-    hometown: 'West Palm Beach', state: 'FL',
-    visitType: 'Official', visitDate: 'Jun 5–7, 2026 (completed)',
-    note: 'Priority WR target — official visit to Boulder completed. No decision announced yet.',
-    source: '247Sports',
-  },
+// ─── TARGETS THAT COMMITTED ELSEWHERE ─────────────────────────────────────────
+const lostTargets2027: LostTarget[] = [
   {
     name: 'Jaden Baldwin', position: 'WR', stars: 3,
-    hometown: 'Chandler', state: 'AZ',
-    visitType: 'Official', visitDate: 'Jun 12, 2026',
-    topSchools: ['Colorado', 'Iowa State', 'Penn State', 'Pitt'],
-    note: 'Final four — plans to announce commitment June 16.',
-    source: '247Sports',
-  },
-  {
-    name: 'Kylan Bobo', position: 'RB', stars: 3,
-    hometown: 'Tupelo', state: 'MS',
-    visitType: 'Official', visitDate: 'Jun 12, 2026',
-    topSchools: ['Colorado', 'Ole Miss', 'Arkansas'],
-    note: 'No. 49 RB in 2027 class — says Colorado leads his recruitment.',
-    source: '247Sports',
-  },
-  {
-    name: 'Drew Sapp', position: 'EDGE', stars: 3,
-    hometown: 'Lakeland', state: 'FL',
-    visitType: 'Official', visitDate: 'Jun 12, 2026',
-    note: 'Also visiting Mississippi State.',
+    hometown: 'Chandler', state: 'AZ', highSchool: 'Chandler HS',
+    committedTo: 'Pitt',
+    note: 'Took official visit to Colorado June 12; chose Pitt. Had finalists Colorado, Iowa State, Penn State, and Pitt.',
     source: '247Sports',
   },
   {
     name: 'Zykee Scott', position: 'LB', stars: 3,
-    hometown: 'Philadelphia', state: 'PA',
-    visitType: 'Official', visitDate: 'Jun 19–21, 2026',
-    topSchools: ['UNC', 'Georgia Tech', 'Pitt', 'Michigan St.', 'Colorado'],
-    note: 'Plans to announce commitment June 25.',
+    hometown: 'Philadelphia', state: 'PA', highSchool: 'La Salle College HS',
+    committedTo: 'UNC',
+    note: 'Had official visit to Colorado scheduled for Jun 19–21; committed to UNC before the visit.',
     source: '247Sports',
   },
 ];
+
+// ─── UPCOMING VISITS — grouped by weekend, verified via 247Sports only ──────────
+interface VisitWeekend {
+  label: string;        // e.g. "June 12, 2026"
+  completed?: boolean;
+  visits: Visit[];
+}
+const visitWeekends: VisitWeekend[] = [
+  {
+    label: 'June 5–7, 2026',
+    completed: true,
+    visits: [
+      {
+        name: 'Ryan Ferdinand', position: 'WR', stars: 0,
+        hometown: 'West Palm Beach', state: 'FL',
+        visitType: 'Official', visitDate: 'Jun 5–7, 2026',
+        note: 'Priority WR target — official visit completed. No decision announced yet.',
+        source: '247Sports',
+      },
+      {
+        name: 'Samari Howard', position: 'S', stars: 3,
+        hometown: 'Fort Lauderdale', state: 'FL',
+        visitType: 'Official', visitDate: 'Jun 5–7, 2026',
+        note: 'Committed to Colorado following this visit.',
+        source: '247Sports / On3',
+      },
+    ],
+  },
+  {
+    label: 'June 12, 2026',
+    visits: [
+      {
+        name: 'Kylan Bobo', position: 'RB', stars: 3,
+        hometown: 'Tupelo', state: 'MS',
+        visitType: 'Official', visitDate: 'Jun 12, 2026',
+        topSchools: ['Colorado', 'Ole Miss', 'Arkansas'],
+        note: 'No. 49 RB in 2027 class — says Colorado leads his recruitment.',
+        source: '247Sports',
+      },
+      {
+        name: 'Drew Sapp', position: 'EDGE', stars: 3,
+        hometown: 'Lakeland', state: 'FL',
+        visitType: 'Official', visitDate: 'Jun 12, 2026',
+        note: 'Also visiting Mississippi State.',
+        source: '247Sports',
+      },
+    ],
+  },
+];
+// Keep flat list for count display
+const upcomingVisits: Visit[] = visitWeekends.flatMap(w => w.visits);
 
 // ─── CRYSTAL BALL / EXPERT PREDICTIONS ───────────────────────────────────────────
 // Intentionally empty: 247Sports Crystal Ball and On3 RPM prediction pages are
@@ -508,38 +532,85 @@ export default function RecruitingPage() {
             </div>
           </section>
 
+          {/* ── COMMITTED ELSEWHERE ──────────────────────────────────────── */}
+          <section id="lost-targets">
+            <h2 className="text-xl font-black text-white mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-red-500 rounded-full inline-block" />
+              Committed Elsewhere
+              <span className="ml-2 text-sm font-normal text-gray-500">({lostTargets2027.length} targets lost)</span>
+            </h2>
+            <div className="space-y-3">
+              {lostTargets2027.map((t, i) => (
+                <div key={i} className="bg-cu-gray rounded-xl border border-red-500/20 p-4 opacity-80">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center flex-shrink-0">
+                      <span className="text-red-400 font-black text-xs">{t.position}</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-gray-300 font-bold">{t.name}</span>
+                        <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-900/40 text-red-400 border border-red-700/40">
+                          Committed to {t.committedTo}
+                        </span>
+                      </div>
+                      <div className="mt-1"><StarRating stars={t.stars} /></div>
+                      <div className="flex items-center gap-1 mt-1 text-gray-500 text-xs">
+                        <MapPin size={10} />
+                        <span>{t.hometown}, {t.state} · {t.highSchool}</span>
+                      </div>
+                      {t.note && <div className="text-xs text-gray-500 mt-1 italic">{t.note}</div>}
+                      <div className="mt-1"><SourceTag source={t.source} /></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
           {/* ── UPCOMING VISITS ──────────────────────────────────────────── */}
           <section id="visits">
             <h2 className="text-xl font-black text-white mb-4 flex items-center gap-2">
               <span className="w-1 h-6 bg-purple-400 rounded-full inline-block" />
-              Upcoming Visits
-              <span className="ml-2 text-sm font-normal text-gray-500">({upcomingVisits.length} verified)</span>
+              Visits
+              <span className="ml-2 text-sm font-normal text-gray-500">({visitWeekends.length} weekends)</span>
             </h2>
-            <div className="space-y-3">
-              {upcomingVisits.map((v, i) => (
-                <div key={i} className="bg-cu-gray rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-all p-4">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
-                      <span className="text-purple-400 font-black text-xs">{v.position}</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-white font-bold">{v.name}</span>
-                        <VisitTypeBadge type={v.visitType} />
+            <div className="space-y-6">
+              {visitWeekends.map((weekend, wi) => (
+                <div key={wi}>
+                  <div className="flex items-center gap-3 mb-3">
+                    <Calendar size={13} className={weekend.completed ? 'text-gray-500' : 'text-purple-400'} />
+                    <span className={`text-sm font-bold ${weekend.completed ? 'text-gray-500' : 'text-purple-300'}`}>
+                      {weekend.label}
+                    </span>
+                    {weekend.completed && (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-700 text-gray-400">Completed</span>
+                    )}
+                    <div className="flex-1 h-px bg-gray-700/60" />
+                  </div>
+                  <div className="space-y-3 pl-4 border-l-2 border-purple-500/20">
+                    {weekend.visits.map((v, i) => (
+                      <div key={i} className={`bg-cu-gray rounded-xl border transition-all p-4 ${weekend.completed ? 'border-gray-600/20 opacity-70' : 'border-purple-500/10 hover:border-purple-500/30'}`}>
+                        <div className="flex items-start gap-4">
+                          <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${weekend.completed ? 'bg-gray-700/40 border border-gray-600/30' : 'bg-purple-500/10 border border-purple-500/20'}`}>
+                            <span className={`font-black text-xs ${weekend.completed ? 'text-gray-500' : 'text-purple-400'}`}>{v.position}</span>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-white font-bold">{v.name}</span>
+                              <VisitTypeBadge type={v.visitType} />
+                            </div>
+                            <div className="mt-1"><StarRating stars={v.stars} /></div>
+                            <div className="flex items-center gap-1 mt-1 text-gray-400 text-xs">
+                              <MapPin size={10} />
+                              <span>{v.hometown}, {v.state}</span>
+                            </div>
+                            {v.note && <div className="text-xs text-gray-400 mt-1 italic">{v.note}</div>}
+                            <TopSchools schools={v.topSchools} />
+                            <div className="mt-1"><SourceTag source={v.source} /></div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="mt-1"><StarRating stars={v.stars} /></div>
-                      <div className="flex items-center gap-1 mt-1 text-gray-400 text-xs">
-                        <MapPin size={10} />
-                        <span>{v.hometown}, {v.state}</span>
-                      </div>
-                      <div className="flex items-center gap-1 mt-1 text-purple-400 text-xs font-semibold">
-                        <Calendar size={10} />
-                        <span>{v.visitDate}</span>
-                      </div>
-                      {v.note && <div className="text-xs text-gray-400 mt-1 italic">{v.note}</div>}
-                      <TopSchools schools={v.topSchools} />
-                      <div className="mt-1"><SourceTag source={v.source} /></div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -598,7 +669,8 @@ export default function RecruitingPage() {
               {[
                 { href: '#commits', label: `Commitments (${commits2027.length})`, color: 'bg-cu-gold' },
                 { href: '#targets', label: `Targets (${targets2027.length})`, color: 'bg-blue-400' },
-                { href: '#visits', label: `Upcoming Visits (${upcomingVisits.length})`, color: 'bg-purple-400' },
+                { href: '#lost-targets', label: `Committed Elsewhere (${lostTargets2027.length})`, color: 'bg-red-500' },
+                { href: '#visits', label: `Visits (${visitWeekends.length} weekends)`, color: 'bg-purple-400' },
                 { href: '#crystal-ball', label: 'Crystal Ball', color: 'bg-emerald-400' },
               ].map(link => (
                 <a key={link.href} href={link.href} className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-cu-gold/10 group transition-colors">
