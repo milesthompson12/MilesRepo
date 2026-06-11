@@ -49,7 +49,7 @@ interface Visit {
 }
 
 // ─── 2027 COMMITS — verified via 247Sports / On3 (most recent first) ──────────────
-// As of June 8, 2026. 14 commits.
+// As of June 10, 2026, 8:00pm MT. 14 commits.
 const commits2027: Commit[] = [
   {
     name: 'Samari Howard', position: 'S', stars: 3,
@@ -195,6 +195,14 @@ const targets2027: Target[] = [
     source: '247Sports',
   },
   {
+    name: 'Kylan Bobo', position: 'RB', stars: 3,
+    hometown: 'Tupelo', state: 'MS', highSchool: 'Tupelo HS',
+    status: 'Target', topSchools: ['Colorado', 'Ole Miss', 'Arkansas'],
+    visitDate: 'Jun 12', visitType: 'Official',
+    note: 'No. 49 RB / No. 640 overall (247 Composite). Said Colorado is leading his recruitment — official visit set for June 12.',
+    source: '247Sports',
+  },
+  {
     name: 'Kingston Thornton', position: 'CB', stars: 0,
     hometown: 'Dallas', state: 'TX', highSchool: 'Parish Episcopal',
     status: 'Offered',
@@ -218,6 +226,14 @@ const upcomingVisits: Visit[] = [
     visitType: 'Official', visitDate: 'Jun 12, 2026',
     topSchools: ['Colorado', 'Iowa State', 'Penn State', 'Pitt'],
     note: 'Final four — plans to announce commitment June 16.',
+    source: '247Sports',
+  },
+  {
+    name: 'Kylan Bobo', position: 'RB', stars: 3,
+    hometown: 'Tupelo', state: 'MS',
+    visitType: 'Official', visitDate: 'Jun 12, 2026',
+    topSchools: ['Colorado', 'Ole Miss', 'Arkansas'],
+    note: 'No. 49 RB in 2027 class — says Colorado leads his recruitment.',
     source: '247Sports',
   },
   {
@@ -325,14 +341,14 @@ export default function RecruitingPage() {
         <h1 className="text-3xl font-black text-white">
           <span className="text-cu-gold">2027</span> Recruiting
         </h1>
-        <p className="text-gray-400 mt-1">Commits · Targets · Visits · Crystal Ball — as of June 8, 2026</p>
+        <p className="text-gray-400 mt-1">Commits · Targets · Visits · Crystal Ball — as of June 10, 2026, 8:00pm MT</p>
       </div>
 
       {/* Accuracy note */}
       <div className="bg-cu-gray/60 rounded-xl border border-cu-gold/10 p-3 mb-6 flex items-start gap-2">
         <Info size={14} className="text-cu-gold flex-shrink-0 mt-0.5" />
         <p className="text-gray-400 text-xs">
-          Every entry below is verified as of June 8, 2026. Sourcing is weighted 247Sports first,
+          Every entry below is verified as of June 10, 2026, 8:00pm MT. Sourcing is weighted 247Sports first,
           then On3, with ESPN only as a last resort (≈60% / 30% / 10%). Unconfirmed ratings, rankings, and
           predictions are intentionally omitted rather than estimated.
         </p>
@@ -559,7 +575,7 @@ export default function RecruitingPage() {
                 <Sparkles size={14} className="text-emerald-400 flex-shrink-0 mt-0.5" />
                 <div className="text-gray-400 text-sm">
                   No individual Crystal Ball (247Sports) or RPM Expert Prediction (On3) for a 2027 Colorado
-                  recruit could be 100% confirmed as of June 8, 2026 — those prediction pages are
+                  recruit could be 100% confirmed as of June 10, 2026, 8:00pm MT — those prediction pages are
                   subscriber-locked. To preserve accuracy, none are listed. Check the live pages below for the latest.
                   <div className="flex flex-wrap gap-3 mt-2">
                     <a href="https://247sports.com/college/colorado/season/2027-football/institutionpredictions/" target="_blank" rel="noopener noreferrer" className="text-cu-gold text-xs underline">247 Crystal Ball</a>
